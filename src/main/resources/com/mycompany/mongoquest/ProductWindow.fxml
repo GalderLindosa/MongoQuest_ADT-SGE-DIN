@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.mongoquest.ProductWindowController">
+   <children>
+      <ImageView fx:id="productimg" fitHeight="253.0" fitWidth="336.0" layoutX="35.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true" />
+      <Label fx:id="lblProductnName" layoutX="432.0" layoutY="22.0" text="[NOMBRE PRODUCTO]" />
+      <Label fx:id="lblIdProduct" layoutX="432.0" layoutY="55.0" text="[ID_PRODUCTO]" />
+      <Label fx:id="lblProductPrize" layoutX="432.0" layoutY="92.0" prefWidth="28.0" text="€" />
+      <Label fx:id="lblProductAmount" layoutX="432.0" layoutY="124.0" prefHeight="18.0" prefWidth="122.0" text="Unidad(es)" />
+      <Spinner fx:id="amountToBuy" layoutX="412.0" layoutY="162.0" />
+      <Button fx:id="addToCart" layoutX="96.0" layoutY="283.0" mnemonicParsing="false" prefHeight="89.0" prefWidth="225.0" text="ADD TO CART">
+         <font>
+            <Font name="System Bold" size="28.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>

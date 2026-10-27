@@ -7,25 +7,24 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.Pane?>
 
-
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.mongoquest.ProfileWindowController">
    <children>
-      <Label fx:id="pfpLbl" alignment="CENTER" layoutY="36.0" prefHeight="149.0" prefWidth="165.0" text="[FOTO DE PERFIL]" />
+      <Label fx:id="lblPfp" alignment="CENTER" layoutY="36.0" prefHeight="149.0" prefWidth="165.0" text="[FOTO DE PERFIL]" />
       <Button layoutY="2.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="139.0" text="Button" />
       <Button layoutX="138.0" layoutY="2.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="149.0" text="Button" />
       <Button layoutX="282.0" layoutY="2.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="157.0" text="Button" />
       <Button layoutX="437.0" layoutY="2.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="165.0" text="Button" />
-      <Label layoutX="336.0" layoutY="68.0" text="Nombre" />
-      <Label layoutX="336.0" layoutY="111.0" text="Apellido" />
-      <Label layoutX="336.0" layoutY="155.0" text="Usuario" />
-      <Label layoutX="336.0" layoutY="200.0" text="Contraseña" />
-      <Label layoutX="336.0" layoutY="301.0" text="DNI" />
-      <CheckBox layoutX="337.0" layoutY="249.0" mnemonicParsing="false" text="Mostrar Contraseña" />
-      <PasswordField layoutX="414.0" layoutY="196.0" />
-      <TextField layoutX="415.0" layoutY="64.0" />
-      <TextField layoutX="415.0" layoutY="107.0" />
-      <TextField layoutX="414.0" layoutY="151.0" />
-      <TextField layoutX="414.0" layoutY="297.0" />
-      <Button layoutX="350.0" layoutY="347.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="149.0" text="Cerrar Sesion" />
+      <Label fx:id="lblName" layoutX="336.0" layoutY="68.0" text="Nombre" />
+      <Label fx:id="lblSur" layoutX="336.0" layoutY="111.0" text="Apellido" />
+      <Label fx:id="lblUser" layoutX="336.0" layoutY="155.0" text="Usuario" />
+      <Label fx:id="lblPass" layoutX="336.0" layoutY="200.0" text="Contraseña" />
+      <Label fx:id="lblDni" layoutX="336.0" layoutY="301.0" text="DNI" />
+      <CheckBox fx:id="showPassword" layoutX="337.0" layoutY="249.0" mnemonicParsing="false" text="Mostrar Contraseña" />
+      <PasswordField fx:id="fieldPass" layoutX="414.0" layoutY="196.0" />
+      <TextField fx:id="fieldName" layoutX="415.0" layoutY="64.0" />
+      <TextField fx:id="fieldSur" layoutX="415.0" layoutY="107.0" />
+      <TextField fx:id="fieldUser" layoutX="414.0" layoutY="151.0" />
+      <TextField fx:id="fieldDni" layoutX="414.0" layoutY="297.0" />
+      <Button fx:id="btnLogOut" layoutX="350.0" layoutY="347.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="149.0" text="Cerrar Sesion" />
    </children>
 </Pane>
