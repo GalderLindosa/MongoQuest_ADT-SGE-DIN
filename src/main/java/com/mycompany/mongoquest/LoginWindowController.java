@@ -13,6 +13,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
+import controller.MongoConnection;
+import com.mongodb.client.MongoDatabase;
 /**
  * FXML Controller class
  *
@@ -32,13 +34,16 @@ public class LoginWindowController implements Initializable {
     private TextField fieldUser;
     @FXML
     private PasswordField fieldPass;
+    
+    private MongoDatabase db;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+      db = MongoConnection.getConnection();
+       System.out.println("Controlador conectado a MongoDB");
     }
 
     @FXML
