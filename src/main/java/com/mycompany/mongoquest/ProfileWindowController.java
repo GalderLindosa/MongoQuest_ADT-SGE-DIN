@@ -23,7 +23,6 @@ import javafx.scene.control.TextField;
  */
 public class ProfileWindowController implements Initializable {
 
-    @FXML
     private Tab tabUser;
     @FXML
     private Label lblPfp;

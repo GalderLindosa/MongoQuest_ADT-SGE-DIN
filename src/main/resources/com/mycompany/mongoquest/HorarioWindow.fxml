@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.HBox?>
+
+
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="819.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.mongoquest.HorarioWindowController">
+   <children>
+      <TableView fx:id="ScheduleTable" prefHeight="400.0" prefWidth="531.0">
+        <columns>
+          <TableColumn fx:id="mondayColumn" prefWidth="75.0" text="Lunes" />
+          <TableColumn fx:id="tuesdayColumn" prefWidth="75.0" text="Martes" />
+            <TableColumn fx:id="wednesdayColumn" prefWidth="75.0" text="Miercoles" />
+            <TableColumn fx:id="thursdayColumn" prefWidth="75.0" text="Jueves" />
+            <TableColumn fx:id="fridayColumn" prefWidth="75.0" text="Viernes" />
+            <TableColumn fx:id="saturdayRow" prefWidth="75.0" text="Sabado" />
+            <TableColumn fx:id="sundayRow" prefWidth="75.0" text="Domingo" />
+        </columns>
+      </TableView>
+   </children>
+</HBox>

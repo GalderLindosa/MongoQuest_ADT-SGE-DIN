@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.mongoquest.EmployeeListWindowController">
+   <children>
+      <ListView fx:id="employeeList" layoutX="16.0" layoutY="16.0" prefHeight="358.0" prefWidth="292.0" />
+      <Button fx:id="addEmployee" layoutX="16.0" layoutY="347.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="292.0" text="Añadir" />
+      <Label fx:id="userLabel" layoutX="338.0" layoutY="48.0" text="Usuario" />
+      <Label fx:id="passLabel" layoutX="338.0" layoutY="90.0" text="Contraseña" />
+      <Label fx:id="nameLabel" layoutX="338.0" layoutY="130.0" text="Nombre" />
+      <Label fx:id="surLabel" layoutX="338.0" layoutY="174.0" text="Apellido" />
+      <Label fx:id="dniLabel" layoutX="338.0" layoutY="214.0" text="DNI" />
+      <Label fx:id="dateLabel" layoutX="338.0" layoutY="267.0" text="Fecha" />
+      <TextField fx:id="userField" layoutX="437.0" layoutY="44.0" />
+      <TextField fx:id="passField" layoutX="438.0" layoutY="86.0" />
+      <TextField fx:id="nameField" layoutX="439.0" layoutY="126.0" />
+      <TextField fx:id="surField" layoutX="440.0" layoutY="170.0" />
+      <TextField fx:id="dniFIeld" layoutX="440.0" layoutY="210.0" />
+      <TextField fx:id="dateField" layoutX="441.0" layoutY="263.0" />
+      <Button fx:id="deleteButton" layoutX="459.0" layoutY="312.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="105.0" text="Borrar" />
+      <Button fx:id="modifyButton" layoutX="325.0" layoutY="312.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="106.0" text="Modificar" />
+   </children>
+</AnchorPane>
