@@ -14,14 +14,19 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
+import controller.*;
+import model.*;
 import controller.MongoConnection;
 import com.mongodb.client.MongoDatabase;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+
+import java.io.File;
 
 /**
  * FXML Controller class
@@ -47,6 +52,8 @@ public class LoginWindowController implements Initializable {
 
     private MongoDatabase db;
 
+    ImplementacionBD instanceBD = ImplementacionBD.getInstance();
+    GymControlador controlador = new GymControlador();
     /**
      * Initializes the controller class.
      */
@@ -69,5 +76,7 @@ public class LoginWindowController implements Initializable {
         Stage ventanaActual = (Stage) ((Node) event.getSource()).getScene().getWindow();
         ventanaActual.close();
     }
-
+    //a los metodos los llamamos como controlador.metodo 
+    //el metodo de implementacion sea mirar si existe y devolver PERSONA 
+    //aqui hacer un instance of y mirar que tipo de persona es y abrir una ventana dependiendo de el tipo que sea 
 }
