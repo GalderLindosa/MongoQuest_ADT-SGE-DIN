@@ -4,17 +4,22 @@
  */
 package com.mycompany.mongoquest;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 /**
  * FXML Controller class
@@ -23,7 +28,6 @@ import javafx.scene.control.TextField;
  */
 public class ProfileWindowController implements Initializable {
 
-    private Tab tabUser;
     @FXML
     private Label lblPfp;
     @FXML
@@ -41,15 +45,15 @@ public class ProfileWindowController implements Initializable {
     @FXML
     private Button btnLogOut;
     @FXML
-    private TextField fieldName;
+    private Label userName;
     @FXML
-    private TextField fieldSur;
+    private Label userSur;
     @FXML
-    private TextField fieldUser;
+    private Label user;
     @FXML
-    private TextField fieldDni;
+    private Label userPass;
     @FXML
-    private PasswordField fieldPass;
+    private Label userDNI;
 
     /**
      * Initializes the controller class.
@@ -57,11 +61,9 @@ public class ProfileWindowController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        
-        tabUser.setText("Perfil");
-    }    
- 
 
-    
-    
+    }
+
+
+
 }

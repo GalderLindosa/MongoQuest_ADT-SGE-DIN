@@ -20,6 +20,7 @@ public class App extends Application {
         scene = new Scene(loadFXML("LoginWindow"), 360, 277);
         stage.setScene(scene);
         stage.show();
+        stage.setTitle("Inicio de sesion");
     }
 
     static void setRoot(String fxml) throws IOException {
