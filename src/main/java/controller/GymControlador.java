@@ -18,5 +18,6 @@ public class GymControlador {
         this.dao = ImplementacionBD.getInstance();
       
     }
+    
 
 }
