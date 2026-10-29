@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
  */
 package com.mycompany.mongoquest;
+
 import java.io.IOException;
 
 import java.net.URL;
@@ -37,6 +38,8 @@ public class LoginWindowController implements Initializable {
 
     private static Scene scene;
 
+    public static Person usuario;
+
     @FXML
     private Label Titulo;
     @FXML
@@ -54,6 +57,7 @@ public class LoginWindowController implements Initializable {
 
     ImplementacionBD instanceBD = ImplementacionBD.getInstance();
     GymControlador controlador = new GymControlador();
+
     /**
      * Initializes the controller class.
      */
