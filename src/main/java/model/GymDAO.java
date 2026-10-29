@@ -1,6 +1,7 @@
 package model;
 
+import java.util.ArrayList;
+
 public interface GymDAO {
-  
-    public Person login(int id) ;
+   
 }
