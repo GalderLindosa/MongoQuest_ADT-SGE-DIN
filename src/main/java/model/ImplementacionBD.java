@@ -18,7 +18,7 @@ import org.bson.Document;
 
 import static com.mongodb.client.model.Filters.eq;
 
-import java.sql.SQLException;
+
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -39,16 +39,6 @@ public class ImplementacionBD implements GymDAO {
     private MongoClient mongoClient;
     private MongoDatabase database;
 
-    /* Sentencias SQL
-    final String SQL_CustomerId = "SELECT * FROM CUSTOMER_S WHERE ID = ?";
-    final String SQL_InsertProduct = "INSERT INTO PRODUCT (ID, NAME_P, PRICE, CATEGORY, STOCK, ROOT) VALUES (?, ?, ?, ?, ?, ?)";
-    final String SQL_InsertClient = "INSERT INTO CLIENT_S (ID, NAME_C, EMAIL, PHONE, ADDRESS) VALUES (?, ?, ?, ?, ?)";
-    final String SQL_VerProductos = "SELECT * FROM PRODUCT WHERE STOCK > 0";
-    final String SQL_OrdersByCustomer = "SELECT orderId, orderDate, total FROM ORDERS WHERE customerId = ?";
-    final String SQL_UpdateStock = "UPDATE PRODUCT SET STOCK=? WHERE ID=?";
-    final String SQL_ProductExists = "SELECT ID FROM PRODUCT WHERE ID=?";
-    final String SQL_GetProduct = "SELECT * FROM product WHERE id = ?";
-*/
     // Singleton
     private static ImplementacionBD instance;
 
@@ -56,12 +46,7 @@ public class ImplementacionBD implements GymDAO {
         mongoClient = MongoClients.create("mongodb://localhost:27017");
         database = mongoClient.getDatabase("G2_Life");
     }
-   /* private ImplementacionBD() {
-        this.configFile = ResourceBundle.getBundle("configClase");
-        this.urlBD = this.configFile.getString("Conn");
-        this.userBD = this.configFile.getString("DBUser");
-        this.passwordBD = this.configFile.getString("DBPass");
-    }*/
+  
     
     public static ImplementacionBD getInstance(){
         if(instance == null){
