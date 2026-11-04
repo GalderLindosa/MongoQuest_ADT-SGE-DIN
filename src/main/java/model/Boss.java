@@ -32,6 +32,6 @@ public class Boss extends Person{
 
     @Override
     public String toString() {
-        return "Boss{" + "gymId=" + gymId + '}';
+        return super.toString() + "Boss{" + "gymId=" + gymId + '}';
     }
 }
