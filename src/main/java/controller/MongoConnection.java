@@ -2,7 +2,12 @@ package controller;
 
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import java.util.ArrayList;
+import java.util.List;
+import model.Product;
+import org.bson.Document; 
 
 public class MongoConnection {
 
@@ -22,6 +27,21 @@ public class MongoConnection {
         return database;
     }
 
+    public ArrayList<Product> obtenerProductos(){
+        MongoCollection<Document> productos = MongoConnection.getConnection().getCollection("Productos");
+        ArrayList<Product> lista = new ArrayList<>();
+        
+        for (Document doc : productos.find()) {
+            Product p = new Product(((Number) doc.get("_id")).intValue(),
+                                    doc.getString("name"),
+                                    ((Number) doc.get("price")).floatValue(),
+                                    ((Number) doc.get("stock")).intValue());
+            lista.add(p);
+        }
+        
+        return lista;
+    }
+    
     // Método para cerrar la conexión (opcional)
     public static void close() {
         if (client != null) {
