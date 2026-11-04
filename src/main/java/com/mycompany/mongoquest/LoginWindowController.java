@@ -26,7 +26,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
+import model.ImplementacionBD;
 import java.io.File;
 
 /**
@@ -35,6 +35,8 @@ import java.io.File;
  * @author Usuario
  */
 public class LoginWindowController implements Initializable {
+
+    private ImplementacionBD bd = ImplementacionBD.getInstance();
 
     private static Scene scene;
 
@@ -69,6 +71,11 @@ public class LoginWindowController implements Initializable {
 
     @FXML
     private void sesionIniciada(ActionEvent event) throws IOException {
+
+        usuario = bd.buscar(fieldUser.getText(), fieldPass.getText());
+
+       
+        
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("ProfileWindow.fxml"));
         Parent root = fxmlLoader.load();
 
