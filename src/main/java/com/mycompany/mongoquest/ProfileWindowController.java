@@ -61,9 +61,12 @@ public class ProfileWindowController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        userName.setText(LoginWindowController.usuario.getName());
+        userSur.setText(LoginWindowController.usuario.getLastName());
+        user.setText(LoginWindowController.usuario.getUserName());
+        userPass.setText(LoginWindowController.usuario.getPassword());
+        userDNI.setText(LoginWindowController.usuario.getDni());
 
     }
-
-
 
 }
