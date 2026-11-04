@@ -1,13 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ScrollBar?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.FlowPane?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.mongoquest.ShopWindowController">
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.mongoquest.ShopWindowController">
    <children>
-      <Button fx:id="btnCarrito" layoutX="521.0" layoutY="14.0" mnemonicParsing="false" text="Carrito" />
-      <Button fx:id="btsHistorial" layoutX="439.0" layoutY="14.0" mnemonicParsing="false" text="Historial" />
-      <ScrollBar fx:id="scrollBar" layoutX="600.0" layoutY="-3.0" orientation="VERTICAL" prefHeight="406.0" prefWidth="14.0" />
+      <!-- Navegación entre ventanas -->
+      <Button fx:id="btn1" mnemonicParsing="false" prefHeight="34.0" prefWidth="160.0" text="Button" />
+      <Button fx:id="btn2" layoutX="160.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="160.0" text="Button" />
+      <Button fx:id="btn3" layoutX="320.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="160.0" text="Button" />
+      <Button fx:id="btn4" layoutX="480.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="160.0" text="Button" />
+
+      <!-- Historial y carrito -->
+      <Button fx:id="btnHistorial" layoutX="489.0" layoutY="48.0" mnemonicParsing="false" onAction="#history" text="Historial" />
+      <Button fx:id="btnCarrito" layoutX="560.0" layoutY="48.0" mnemonicParsing="false" onAction="#cart" text="Carrito" />
+
+      <!-- Zona de productos con su propio scroll -->
+      <ScrollPane fx:id="scrollPane" fitToWidth="true" hbarPolicy="NEVER" layoutY="83.2" prefHeight="317.0" prefWidth="640.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="83.0">
+         <content>
+            <FlowPane fx:id="contenedorProductos" hgap="10" vgap="10">
+               <padding>
+                  <Insets bottom="10" left="10" right="10" top="10" />
+               </padding>
+            </FlowPane>
+         </content>
+      </ScrollPane>
    </children>
 </AnchorPane>
