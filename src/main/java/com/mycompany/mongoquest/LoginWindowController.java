@@ -28,6 +28,9 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import model.ImplementacionBD;
 import java.io.File;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 
 /**
  * FXML Controller class
@@ -39,6 +42,8 @@ public class LoginWindowController implements Initializable {
     private ImplementacionBD bd = ImplementacionBD.getInstance();
 
     private static Scene scene;
+
+    public static Product pr;
 
     public static Person usuario;
 
@@ -59,6 +64,8 @@ public class LoginWindowController implements Initializable {
 
     ImplementacionBD instanceBD = ImplementacionBD.getInstance();
     GymControlador controlador = new GymControlador();
+    @FXML
+    private VBox vBoxLogin;
 
     /**
      * Initializes the controller class.
@@ -66,7 +73,7 @@ public class LoginWindowController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         db = MongoConnection.getConnection();
-        System.out.println("Controlador conectado a MongoDB");
+
     }
 
     @FXML
@@ -74,19 +81,28 @@ public class LoginWindowController implements Initializable {
 
         usuario = bd.buscar(fieldUser.getText(), fieldPass.getText());
 
-       
-        
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("ProfileWindow.fxml"));
-        Parent root = fxmlLoader.load();
+        if (usuario==null) {
+            Label userNull = new Label("USER OR PASSWORD IS INCORRECT");
+            userNull.setTextFill(Color.web("#FF0000"));
+            userNull.setFont(new Font("Arial", 10));
 
-        Stage stage = new Stage();
-        stage.setTitle("Perfil");
-        stage.setScene(new Scene(root));
-        stage.show();
+            vBoxLogin.getChildren().add(userNull);
 
-        Stage ventanaActual = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        ventanaActual.close();
+        } else {
+            FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("ProfileWindow.fxml"));
+            Parent root = fxmlLoader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Perfil");
+            stage.setScene(new Scene(root));
+            stage.show();
+
+            Stage ventanaActual = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            ventanaActual.close();
+        }
+
     }
+
     //a los metodos los llamamos como controlador.metodo 
     //el metodo de implementacion sea mirar si existe y devolver PERSONA 
     //aqui hacer un instance of y mirar que tipo de persona es y abrir una ventana dependiendo de el tipo que sea 
