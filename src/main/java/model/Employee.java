@@ -27,8 +27,8 @@ public class Employee extends Person{
         this.gymId = gymId;
     }
     
-        public Employee(String discountCode, int gymId, String userName, String password, String name, String lastName, String dni) {
-        super(userName, password, name, lastName, dni);
+        public Employee(String discountCode, int gymId, String userName, String password, String name, String lastName, String dni, float balance) {
+        super(userName, password, name, lastName, dni, balance);
         this.discountCode = discountCode;
         this.gymId = gymId;
     }
