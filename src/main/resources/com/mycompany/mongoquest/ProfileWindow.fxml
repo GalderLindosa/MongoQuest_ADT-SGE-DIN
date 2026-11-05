@@ -24,5 +24,7 @@
       <Label fx:id="user" alignment="CENTER" layoutX="429.0" layoutY="155.0" prefHeight="17.0" prefWidth="118.0" text="[USER]" />
       <Label fx:id="userPass" alignment="CENTER" layoutX="429.0" layoutY="200.0" prefHeight="17.0" prefWidth="118.0" text="PASSWORD" />
       <Label fx:id="userDNI" alignment="CENTER" layoutX="429.0" layoutY="293.0" prefHeight="17.0" prefWidth="118.0" text="DNI" />
+      <Label layoutX="82.0" layoutY="285.0" text="Balance:" />
+      <Label fx:id="balancelbl" layoutX="165.0" layoutY="285.0" text="[ BALANCE ]" />
    </children>
 </Pane>
