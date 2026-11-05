@@ -20,6 +20,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import model.Person;
 
 /**
  * FXML Controller class
@@ -64,9 +65,20 @@ public class ProfileWindowController implements Initializable {
         userName.setText(LoginWindowController.usuario.getName());
         userSur.setText(LoginWindowController.usuario.getLastName());
         user.setText(LoginWindowController.usuario.getUserName());
-        userPass.setText(LoginWindowController.usuario.getPassword());
         userDNI.setText(LoginWindowController.usuario.getDni());
 
+        mostrarContraseña();
+
+    }
+    
+
+    @FXML
+    public void mostrarContraseña() {
+        if (showPassword.isSelected()) {
+            userPass.setText(LoginWindowController.usuario.getPassword());
+        } else {
+            userPass.setText("****");
+        }
     }
 
 }
