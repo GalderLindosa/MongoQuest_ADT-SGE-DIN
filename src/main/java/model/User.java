@@ -24,6 +24,11 @@ public class User extends Person{
         this.shoppingHistory = shoppingHistory;
     }
     
+        public User(String userName, String password, String name, String lastName, String dni) {
+        super(userName, password, name, lastName, dni);
+        
+    }
+    
     public User() {
         super();
         this.trainings = new ArrayList<>();
