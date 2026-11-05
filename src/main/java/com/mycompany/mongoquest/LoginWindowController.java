@@ -43,7 +43,6 @@ public class LoginWindowController implements Initializable {
 
     private static Scene scene;
 
-    public static Product pr;
 
     public static Person usuario;
 
