@@ -72,7 +72,7 @@ public class LoginWindowController implements Initializable {
     @FXML
     private void sesionIniciada(ActionEvent event) throws IOException {
 
-        usuario = bd.buscar(fieldUser.getText(), fieldPass.getText());
+        //usuario = bd.buscar(fieldUser.getText(), fieldPass.getText());
 
        
         

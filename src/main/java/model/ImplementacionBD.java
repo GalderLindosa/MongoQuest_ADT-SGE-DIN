@@ -74,7 +74,7 @@ public class ImplementacionBD implements GymDAO {
             e.printStackTrace();
         }
     }*/
-    public Person buscar(String usuario, String contraseña) {
+    /*public Person buscar(String usuario, String contraseña) {
         Person persona = new Boss(1, "A", "B", "C", "D", "E");
 
         {
@@ -111,7 +111,7 @@ public class ImplementacionBD implements GymDAO {
             }
         }
         return persona;
-    }
+    }*/
 
     public ArrayList<Product> obtenerProductos(){
         MongoCollection<Document> productos = MongoConnection.getConnection().getCollection("Productos");
