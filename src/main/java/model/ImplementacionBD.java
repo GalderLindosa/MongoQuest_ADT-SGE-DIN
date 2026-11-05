@@ -74,8 +74,8 @@ public class ImplementacionBD implements GymDAO {
             e.printStackTrace();
         }
     }*/
-    /*public Person buscar(String usuario, String contraseña) {
-        Person persona = new Boss(1, "A", "B", "C", "D", "E");
+    public Person buscar(String usuario, String contraseña) {
+        Person persona = null;
 
         {
             try {
@@ -84,26 +84,19 @@ public class ImplementacionBD implements GymDAO {
                 if (doc == null || !contraseña.equals(doc.getString("password"))) {
                     System.out.println("MALA CONTRASEÑA");
                     return null;
-                }
-                String type = doc.getString("role");
+                } else {
+                    String type = doc.getString("role");
 
-                System.out.println(doc);
-                System.out.println(doc);
-                System.out.println(doc);
-                System.out.println(doc);
-                System.out.println(doc);
-                System.out.println(doc);
-                
-                if ("member".equals(type)) {
-                    System.out.println("ENTRA EN MIEMBRO");
-                    return new User();
-                } else if ("manager".equals(type)) {
-                    System.out.println("ENTRA EN JEFE");
-                    persona = new Boss(doc.getInteger("gym_id"), doc.getString("username"), doc.getString("password"), doc.getString("first_name"), doc.getString("last_name"), doc.getString("national_id"));
-                } else if ("employee".equals(type)) {
-                    System.out.println("ENTRA EN EMPLEADO");
-
-                    return new Employee();
+                    if ("member".equals(type)) {
+                        System.out.println("ENTRA EN MIEMBRO");
+                        return new User(doc.getString("username"), doc.getString("password"), doc.getString("first_name"), doc.getString("last_name"), doc.getString("national_id"),doc.getInteger("balance"));
+                    } else if ("manager".equals(type)) {
+                        System.out.println("ENTRA EN JEFE");
+                        return new Boss(doc.getInteger("gym_id"), doc.getString("username"), doc.getString("password"), doc.getString("first_name"), doc.getString("last_name"), doc.getString("national_id"),doc.getInteger("balance"));
+                    } else if ("employee".equals(type)) {
+                        System.out.println("ENTRA EN EMPLEADO");
+                        return new Employee(doc.getString("discount_code"), doc.getInteger("gym_id"), doc.getString("username"), doc.getString("password"), doc.getString("first_name"), doc.getString("last_name"), doc.getString("national_id"),doc.getInteger("balance"));
+                    }
                 }
 
             } catch (MongoException ex) {
