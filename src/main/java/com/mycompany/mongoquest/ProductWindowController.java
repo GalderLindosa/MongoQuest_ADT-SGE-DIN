@@ -36,7 +36,7 @@ public class ProductWindowController implements Initializable {
     @FXML
     private Label lblProductAmount;
     @FXML
-    private Spinner<?> amountToBuy;
+    private Spinner<Integer> amountToBuy;
     @FXML
     private Button addToCart;
     @FXML
@@ -49,16 +49,21 @@ public class ProductWindowController implements Initializable {
         //productimg.setImage(ShopWindowController.pr.getImage()); <---- Para cuando tengamos imagenes
         lblProductnName.setText(ShopWindowController.pr.getName());
         lblProductPrice.setText(Float.toString(ShopWindowController.pr.getPrice()) + "€");
-        lblProductAmount.setText(Integer.toString(ShopWindowController.pr.getStock()));
+        lblProductAmount.setText("Stock: " + Integer.toString(ShopWindowController.pr.getStock()));
     }
     
     @FXML
-    private void addToCart() {
+    private void addToCart(ActionEvent event) throws IOException {
+        ShopWindowController.pr.setStock(ShopWindowController.pr.getStock() - amountToBuy.getValue());
         
+        //Añadir la cantidad de objetos de este tipo que se 
+        
+        Stage ventanaActual = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        ventanaActual.close();
     }
     
     @FXML
-    private void goBack(ActionEvent event) throws IOException{        
+    private void goBack(ActionEvent event) throws IOException {        
         Stage ventanaActual = (Stage) ((Node) event.getSource()).getScene().getWindow();
         ventanaActual.close();
     }

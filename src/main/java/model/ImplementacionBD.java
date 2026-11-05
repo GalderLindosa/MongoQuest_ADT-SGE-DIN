@@ -104,7 +104,7 @@ public class ImplementacionBD implements GymDAO {
             }
         }
         return persona;
-    }
+    }*/
 
     public ArrayList<Product> obtenerProductos(){
         MongoCollection<Document> productos = MongoConnection.getConnection().getCollection("Productos");
