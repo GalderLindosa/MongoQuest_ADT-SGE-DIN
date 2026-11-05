@@ -19,6 +19,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import model.Person;
 
@@ -55,6 +56,10 @@ public class ProfileWindowController implements Initializable {
     private Label userPass;
     @FXML
     private Label userDNI;
+    @FXML
+    private Pane profilePane;
+    @FXML
+    private Label balancelbl;
 
     /**
      * Initializes the controller class.
@@ -66,7 +71,7 @@ public class ProfileWindowController implements Initializable {
         userSur.setText(LoginWindowController.usuario.getLastName());
         user.setText(LoginWindowController.usuario.getUserName());
         userDNI.setText(LoginWindowController.usuario.getDni());
-
+        balancelbl.setText(Float.toString(LoginWindowController.usuario.getBalance()));
         mostrarContraseña();
 
     }
