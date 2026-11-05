@@ -15,11 +15,18 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.event.ActionEvent;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import model.ImplementacionBD;
 import model.Product;
 import org.bson.Document;
 /**
@@ -29,7 +36,8 @@ import org.bson.Document;
  */
 public class ShopWindowController implements Initializable {
 
-    MongoConnection conexion = new MongoConnection();
+    ImplementacionBD implementacion = ImplementacionBD.getInstance();
+    public static Product pr;
 
     @FXML
     private Button btnCarrito;
@@ -50,18 +58,66 @@ public class ShopWindowController implements Initializable {
     /**
      * Initializes the controller class.
      */
-    @Override
+    /*@Override
     public void initialize(URL url, ResourceBundle rb) {
         contenedorProductos.getChildren().clear();
 
-        for (Product p : conexion.obtenerProductos()) {
+        for (Product p : implementacion.obtenerProductos()) {
             Button boton = new Button(p.getName());
             boton.setPrefSize(150, 80);
             boton.setOnAction(e -> product());
 
             contenedorProductos.getChildren().add(boton);
         }
-    }    
+    }*/
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        contenedorProductos.getChildren().clear();
+
+        for (Product p : implementacion.obtenerProductos()) {
+            contenedorProductos.getChildren().add(crearTarjeta(p));
+        }
+    }
+
+    private VBox crearTarjeta(Product p) {
+        // Imagen
+        ImageView imagen = new ImageView(cargarImagen(p));
+        imagen.setFitWidth(120);
+        imagen.setFitHeight(120);
+        imagen.setPreserveRatio(true);
+
+        // Nombre y precio
+        Label lblNombre = new Label(p.getName());
+        lblNombre.setStyle("-fx-font-weight: bold;");
+        lblNombre.setWrapText(true);
+        lblNombre.setMaxWidth(140);
+
+        Label lblPrecio = new Label(p.getPrice() + " €");
+
+        // Contenedor de la tarjeta
+        VBox tarjeta = new VBox(8, imagen, lblNombre, lblPrecio); //Se añaden los elementos del producto al VBox (la tarjetita del producto
+        tarjeta.setAlignment(Pos.CENTER);
+        tarjeta.setPadding(new Insets(10));
+        tarjeta.setPrefWidth(160);
+        tarjeta.setStyle(
+            "-fx-border-color: #cccccc; -fx-border-radius: 8; " +
+            "-fx-background-radius: 8; -fx-background-color: white; " +
+            "-fx-cursor: hand;");
+
+        // Toda la tarjeta clickable
+        tarjeta.setOnMouseClicked(e -> product(p));
+
+        return tarjeta;
+    }
+    
+    private Image cargarImagen(Product p) {
+        try {
+            // Si guardas la ruta/URL como String en el producto:
+            return null ;//new Image(p.getImage(), 120, 120, true, true, true);  <---- Para cuando tengamos imagenes de productos
+        } catch (Exception ex) {
+            return null ;//new Image(getClass().getResourceAsStream("sin-imagen.png"));
+        }
+    }
     
     @FXML
     private void history(ActionEvent event) throws IOException{
@@ -89,7 +145,8 @@ public class ShopWindowController implements Initializable {
         ventanaActual.close();
     }
     
-    private void product() {
+    private void product(Product p) {
+        pr = p;
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("ProductWindow.fxml"));
         Parent root;
         try {

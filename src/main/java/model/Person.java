@@ -17,13 +17,15 @@ public class Person {
     private String name;
     private String lastName;
     private String dni;
+    private float balance;
 
-    public Person(String userName, String password, String name, String lastName, String dni) {
+    public Person(String userName, String password, String name, String lastName, String dni, float balance) {
         this.userName = userName;
         this.password = password;
         this.name = name;
         this.lastName = lastName;
         this.dni = dni;
+        this.balance = balance;
     }
     
     public Person() {
@@ -32,6 +34,7 @@ public class Person {
         this.name = "";
         this.lastName = "";
         this.dni = "";
+        this.balance = 0;
     }
 
     public String getUserName() {
@@ -53,6 +56,10 @@ public class Person {
     public String getDni() {
         return dni;
     }
+    
+    public float getBalance() {
+        return balance;
+    }
 
     public void setUserName(String userName) {
         this.userName = userName;
@@ -72,6 +79,10 @@ public class Person {
 
     public void setDni(String dni) {
         this.dni = dni;
+    }
+    
+    public void setBalance(float balance) {
+        this.balance = balance;
     }
 
     @Override

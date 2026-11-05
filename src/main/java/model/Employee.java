@@ -18,8 +18,9 @@ public class Employee extends Person{
     private int gymId;
 
     public Employee(ArrayList<Integer> classes, ArrayList<Integer> shoppingHistory,
-            String discountCode, int gymId, String userName, String password, String name, String lastName, String dni) {
-        super(userName, password, name, lastName, dni);
+            String discountCode, int gymId, String userName, String password, String name,
+            String lastName, String dni, float balance) {
+        super(userName, password, name, lastName, dni, balance);
         this.classes = classes;
         this.shoppingHistory = shoppingHistory;
         this.discountCode = discountCode;

@@ -26,21 +26,6 @@ public class MongoConnection {
         }
         return database;
     }
-
-    public ArrayList<Product> obtenerProductos(){
-        MongoCollection<Document> productos = MongoConnection.getConnection().getCollection("Productos");
-        ArrayList<Product> lista = new ArrayList<>();
-        
-        for (Document doc : productos.find()) {
-            Product p = new Product(((Number) doc.get("_id")).intValue(),
-                                    doc.getString("name"),
-                                    ((Number) doc.get("price")).floatValue(),
-                                    ((Number) doc.get("stock")).intValue());
-            lista.add(p);
-        }
-        
-        return lista;
-    }
     
     // Método para cerrar la conexión (opcional)
     public static void close() {
