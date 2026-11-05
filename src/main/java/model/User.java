@@ -17,8 +17,8 @@ public class User extends Person{
     private ArrayList<Integer> shoppingHistory;
 
     public User(ArrayList<Training> trainings, ArrayList<Integer> classes, ArrayList<Integer> shoppingHistory,
-            String userName, String password, String name, String lastName, String dni) {
-        super(userName, password, name, lastName, dni);
+            String userName, String password, String name, String lastName, String dni, float balance) {
+        super(userName, password, name, lastName, dni, balance);
         this.trainings = trainings;
         this.classes = classes;
         this.shoppingHistory = shoppingHistory;

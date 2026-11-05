@@ -7,9 +7,11 @@ package com.mycompany.mongoquest;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 
@@ -24,16 +26,13 @@ import javafx.stage.Stage;
  * @author Usuario
  */
 public class ProductWindowController implements Initializable {
-
-
+    
     @FXML
     private ImageView productimg;
     @FXML
     private Label lblProductnName;
     @FXML
-    private Label lblIdProduct;
-    @FXML
-    private Label lblProductPrize;
+    private Label lblProductPrice;
     @FXML
     private Label lblProductAmount;
     @FXML
@@ -47,17 +46,21 @@ public class ProductWindowController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        //productimg.setImage(ShopWindowController.pr.getImage()); <---- Para cuando tengamos imagenes
+        lblProductnName.setText(ShopWindowController.pr.getName());
+        lblProductPrice.setText(Float.toString(ShopWindowController.pr.getPrice()) + "€");
+        lblProductAmount.setText(Integer.toString(ShopWindowController.pr.getStock()));
     }
     
     @FXML
-    private void goBack() throws IOException{
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("ShopWindow.fxml"));
-        Parent root = fxmlLoader.load();
+    private void addToCart() {
         
-        Stage stage = new Stage();
-        stage.setScene(new Scene(root));
-        stage.show();
+    }
+    
+    @FXML
+    private void goBack(ActionEvent event) throws IOException{        
+        Stage ventanaActual = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        ventanaActual.close();
     }
     
 }

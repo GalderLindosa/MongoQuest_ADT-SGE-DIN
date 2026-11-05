@@ -24,6 +24,7 @@ import static com.mongodb.client.model.Filters.lt;
 import static com.mongodb.client.model.Filters.or;
 import com.mongodb.client.model.Projections;
 import com.mongodb.client.model.Sorts;
+import controller.MongoConnection;
 
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -110,6 +111,21 @@ public class ImplementacionBD implements GymDAO {
             }
         }
         return persona;
+    }
+
+    public ArrayList<Product> obtenerProductos(){
+        MongoCollection<Document> productos = MongoConnection.getConnection().getCollection("Productos");
+        ArrayList<Product> lista = new ArrayList<>();
+        
+        for (Document doc : productos.find()) {
+            Product p = new Product(((Number) doc.get("_id")).intValue(),
+                                    doc.getString("name"),
+                                    ((Number) doc.get("price")).floatValue(),
+                                    ((Number) doc.get("stock")).intValue());
+            lista.add(p);
+        }
+        
+        return lista;
     }
 
 }
