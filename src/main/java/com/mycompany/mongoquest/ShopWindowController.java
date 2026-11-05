@@ -58,28 +58,17 @@ public class ShopWindowController implements Initializable {
     /**
      * Initializes the controller class.
      */
-    /*@Override
-    public void initialize(URL url, ResourceBundle rb) {
-        contenedorProductos.getChildren().clear();
-
-        for (Product p : implementacion.obtenerProductos()) {
-            Button boton = new Button(p.getName());
-            boton.setPrefSize(150, 80);
-            boton.setOnAction(e -> product());
-
-            contenedorProductos.getChildren().add(boton);
-        }
-    }*/
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         contenedorProductos.getChildren().clear();
 
         for (Product p : implementacion.obtenerProductos()) {
-            contenedorProductos.getChildren().add(crearTarjeta(p));
+            contenedorProductos.getChildren().add(crearTarjetaProducto(p));
         }
     }
 
-    private VBox crearTarjeta(Product p) {
+    private VBox crearTarjetaProducto(Product p) {
         // Imagen
         ImageView imagen = new ImageView(cargarImagen(p));
         imagen.setFitWidth(120);
@@ -106,7 +95,13 @@ public class ShopWindowController implements Initializable {
 
         // Toda la tarjeta clickable
         tarjeta.setOnMouseClicked(e -> product(p));
-
+        /*tarjeta.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                product(p);
+            }
+        });*/
+        
         return tarjeta;
     }
     
