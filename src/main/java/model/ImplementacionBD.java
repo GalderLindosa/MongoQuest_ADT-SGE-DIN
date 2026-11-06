@@ -66,14 +66,7 @@ public class ImplementacionBD implements GymDAO {
         return instance;
     }
 
-    /*private void openConnection() {
-        try {
-            con = DriverManager.getConnection(urlBD, userBD, passwordBD);
-        } catch (SQLException e) {
-            System.out.println("Error opening the database");
-            e.printStackTrace();
-        }
-    }*/
+
     public Person buscar(String usuario, String contraseña) {
         Person persona = null;
 
@@ -82,19 +75,15 @@ public class ImplementacionBD implements GymDAO {
                 Document doc = PROFILES.find(and(eq("username", usuario), eq("password", contraseña))).first();
 
                 if (doc == null || !contraseña.equals(doc.getString("password"))) {
-                    System.out.println("MALA CONTRASEÑA");
                     return null;
                 } else {
                     String type = doc.getString("role");
 
                     if ("member".equals(type)) {
-                        System.out.println("ENTRA EN MIEMBRO");
                         return new User(doc.getString("username"), doc.getString("password"), doc.getString("first_name"), doc.getString("last_name"), doc.getString("national_id"),doc.getInteger("balance"));
                     } else if ("manager".equals(type)) {
-                        System.out.println("ENTRA EN JEFE");
                         return new Boss(doc.getInteger("gym_id"), doc.getString("username"), doc.getString("password"), doc.getString("first_name"), doc.getString("last_name"), doc.getString("national_id"),doc.getInteger("balance"));
                     } else if ("employee".equals(type)) {
-                        System.out.println("ENTRA EN EMPLEADO");
                         return new Employee(doc.getString("discount_code"), doc.getInteger("gym_id"), doc.getString("username"), doc.getString("password"), doc.getString("first_name"), doc.getString("last_name"), doc.getString("national_id"),doc.getInteger("balance"));
                     }
                 }
@@ -104,7 +93,7 @@ public class ImplementacionBD implements GymDAO {
             }
         }
         return persona;
-    }*/
+    }
 
     public ArrayList<Product> obtenerProductos(){
         MongoCollection<Document> productos = MongoConnection.getConnection().getCollection("Productos");
