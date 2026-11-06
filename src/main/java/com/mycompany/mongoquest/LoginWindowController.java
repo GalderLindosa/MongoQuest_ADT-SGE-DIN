@@ -43,9 +43,9 @@ public class LoginWindowController implements Initializable {
 
     private static Scene scene;
 
-
     public static Person usuario;
 
+    private boolean errorMessage = false;
     @FXML
     private Label Titulo;
     @FXML
@@ -78,14 +78,16 @@ public class LoginWindowController implements Initializable {
     @FXML
     private void sesionIniciada(ActionEvent event) throws IOException {
 
-        //usuario = bd.buscar(fieldUser.getText(), fieldPass.getText());
+        usuario = bd.buscar(fieldUser.getText(), fieldPass.getText());
 
-        if (usuario==null) {
+        if (usuario == null) {
             Label userNull = new Label("USER OR PASSWORD IS INCORRECT");
             userNull.setTextFill(Color.web("#FF0000"));
             userNull.setFont(new Font("Arial", 10));
-
-            vBoxLogin.getChildren().add(userNull);
+            if (!errorMessage) {
+                errorMessage=true;
+                vBoxLogin.getChildren().add(userNull);
+            }
 
         } else {
             FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("ProfileWindow.fxml"));
