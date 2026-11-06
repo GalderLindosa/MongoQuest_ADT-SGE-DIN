@@ -5,6 +5,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  *
@@ -16,9 +17,9 @@ public class Employee extends Person{
     private ArrayList<Integer> shoppingHistory;
     private String discountCode;
     private int gymId;
-    private ArrayList<Product> cart;
+    private HashMap<Product, Integer> cart;
 
-    public Employee(ArrayList<Integer> classes, ArrayList<Integer> shoppingHistory, ArrayList<Product> cart,
+    public Employee(ArrayList<Integer> classes, ArrayList<Integer> shoppingHistory,
             String discountCode, int gymId, String userName, String password, String name,
             String lastName, String dni, float balance) {
         super(userName, password, name, lastName, dni, balance);
@@ -26,7 +27,7 @@ public class Employee extends Person{
         this.shoppingHistory = shoppingHistory;
         this.discountCode = discountCode;
         this.gymId = gymId;
-        this.cart = cart;
+        this.cart = new HashMap<>();
     }
     
         public Employee(String discountCode, int gymId, String userName, String password, String name, String lastName, String dni, float balance) {
@@ -41,7 +42,7 @@ public class Employee extends Person{
         this.shoppingHistory = new ArrayList<>();
         this.discountCode = "";
         this.gymId = 0;
-        this.cart = new ArrayList<>();
+        this.cart = new HashMap<>();
     }
 
     public ArrayList<Integer> getClasses() {
@@ -60,7 +61,7 @@ public class Employee extends Person{
         return gymId;
     }
     
-    public ArrayList<Product> getCart() {
+    public HashMap<Product, Integer> getCart() {
         return cart;
     }
 
@@ -80,8 +81,8 @@ public class Employee extends Person{
         this.gymId = gymId;
     }
     
-    public void setCart(ArrayList<Product> cart) {
-        this.cart = cart;
+    public void setCart(Product p, int cantidad) {
+        this.cart.put(p, cantidad);
     }
 
     @Override

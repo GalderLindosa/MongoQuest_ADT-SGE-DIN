@@ -63,9 +63,9 @@ public class ProductWindowController implements Initializable {
         ShopWindowController.pr.setStock(ShopWindowController.pr.getStock() - amountToBuy.getValue());
         
         if (LoginWindowController.usuario instanceof User) {
-            ((User)LoginWindowController.usuario).getCart();
+            ((User)LoginWindowController.usuario).setCart(ShopWindowController.pr, amountToBuy.getValue());
         } else if (LoginWindowController.usuario instanceof Employee) {
-            ((Employee)LoginWindowController.usuario).getCart();
+            ((Employee)LoginWindowController.usuario).setCart(ShopWindowController.pr, amountToBuy.getValue());
         }
         
         Stage ventanaActual = (Stage) ((Node) event.getSource()).getScene().getWindow();

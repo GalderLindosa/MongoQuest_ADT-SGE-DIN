@@ -128,16 +128,13 @@ public class ShopWindowController implements Initializable {
     }
     
     @FXML
-    private void cart(ActionEvent event) throws IOException{
+    private void cart() throws IOException{
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("CartWindow.fxml"));
         Parent root = fxmlLoader.load();
         
         Stage stage = new Stage();
         stage.setScene(new Scene(root));
         stage.show();
-        
-        Stage ventanaActual = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        ventanaActual.close();
     }
     
     private void product(Product p) {

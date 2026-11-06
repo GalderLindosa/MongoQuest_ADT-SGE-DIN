@@ -5,6 +5,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  *
@@ -15,15 +16,15 @@ public class User extends Person{
     private ArrayList<Training> trainings;
     private ArrayList<Integer> classes;
     private ArrayList<Integer> shoppingHistory;
-    private ArrayList<Product> cart;
+    private HashMap<Product, Integer> cart;
 
     public User(ArrayList<Training> trainings, ArrayList<Integer> classes, ArrayList<Integer> shoppingHistory,
-            ArrayList<Product> cart, String userName, String password, String name, String lastName, String dni, float balance) {
+                String userName, String password, String name, String lastName, String dni, float balance) {
         super(userName, password, name, lastName, dni, balance);
         this.trainings = trainings;
         this.classes = classes;
         this.shoppingHistory = shoppingHistory;
-        this.cart = cart;
+        this.cart = new HashMap<>();
     }
     
         public User(String userName, String password, String name, String lastName, String dni, float balance) {
@@ -36,7 +37,7 @@ public class User extends Person{
         this.trainings = new ArrayList<>();
         this.classes = new ArrayList<>();
         this.shoppingHistory = new ArrayList<>();
-        this.cart = new ArrayList<>();
+        this.cart = new HashMap<>();
     }
 
     public void setTrainings(ArrayList<Training> trainings) {
@@ -51,8 +52,8 @@ public class User extends Person{
         this.shoppingHistory = shoppingHistory;
     }
     
-    public void setCart(ArrayList<Product> cart) {
-        this.cart = cart;
+    public void setCart(Product p, int cantidad) {
+        this.cart.put(p, cantidad);
     }
 
     public ArrayList<Training> getTrainings() {
@@ -67,7 +68,7 @@ public class User extends Person{
         return shoppingHistory;
     }
     
-    public ArrayList<Product> getCart() {
+    public HashMap<Product, Integer> getCart() {
         return cart;
     }
 
