@@ -24,13 +24,18 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import model.Employee;
+import model.Person;
+import model.Product;
 import model.User;
+import model.WithCart;
 /**
  * FXML Controller class
  *
  * @author Usuario
  */
 public class ProductWindowController implements Initializable {
+    
+    Product product = ShopWindowController.pr;
     
     @FXML
     private ImageView productimg;
@@ -60,12 +65,10 @@ public class ProductWindowController implements Initializable {
     
     @FXML
     private void addToCart(ActionEvent event) throws IOException {
-        ShopWindowController.pr.setStock(ShopWindowController.pr.getStock() - amountToBuy.getValue());
+        product.setStock(product.getStock() - amountToBuy.getValue());
         
-        if (LoginWindowController.usuario instanceof User) {
-            ((User)LoginWindowController.usuario).setCart(ShopWindowController.pr, amountToBuy.getValue());
-        } else if (LoginWindowController.usuario instanceof Employee) {
-            ((Employee)LoginWindowController.usuario).setCart(ShopWindowController.pr, amountToBuy.getValue());
+        if (LoginWindowController.usuario instanceof WithCart) {
+            ((WithCart)LoginWindowController.usuario).setCart(product, amountToBuy.getValue());
         }
         
         Stage ventanaActual = (Stage) ((Node) event.getSource()).getScene().getWindow();

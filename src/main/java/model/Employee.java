@@ -11,7 +11,7 @@ import java.util.HashMap;
  *
  * @author ire22
  */
-public class Employee extends Person{
+public class Employee extends Person implements WithCart{
     
     private ArrayList<Integer> classes;
     private ArrayList<Integer> shoppingHistory;
@@ -61,6 +61,7 @@ public class Employee extends Person{
         return gymId;
     }
     
+    @Override
     public HashMap<Product, Integer> getCart() {
         return cart;
     }
@@ -81,7 +82,8 @@ public class Employee extends Person{
         this.gymId = gymId;
     }
     
-    public void setCart(Product p, int cantidad) {
+    @Override
+    public void setCart(Product p, Integer cantidad) {
         this.cart.put(p, cantidad);
     }
 

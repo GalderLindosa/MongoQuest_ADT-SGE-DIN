@@ -88,10 +88,10 @@ public class ShopWindowController implements Initializable {
         tarjeta.setAlignment(Pos.CENTER);
         tarjeta.setPadding(new Insets(10));
         tarjeta.setPrefWidth(160);
-        tarjeta.setStyle(
+        /*tarjeta.setStyle(
             "-fx-border-color: #cccccc; -fx-border-radius: 8; " +
             "-fx-background-radius: 8; -fx-background-color: white; " +
-            "-fx-cursor: hand;");
+            "-fx-cursor: hand;");*/
 
         // Toda la tarjeta clickable
         tarjeta.setOnMouseClicked(e -> product(p));

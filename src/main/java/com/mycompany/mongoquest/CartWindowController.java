@@ -5,6 +5,9 @@
 package com.mycompany.mongoquest;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,10 +20,12 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import model.Person;
 import model.Product;
-import model.User;
+import model.WithCart;
 
 /**
  * FXML Controller class
@@ -28,52 +33,75 @@ import model.User;
  * @author Unai.Ibarguren
  */
 public class CartWindowController implements Initializable {
+    
+    private Map<Product, Integer> cart;
 
     @FXML
     private ScrollPane scrollPane;
     @FXML
     private Button btnBack;
+    @FXML
+    private FlowPane contenedorProductos;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        Person p = LoginWindowController.usuario;
+
+        if (!(p instanceof WithCart)) {
+            return;   // Jefe u otro tipo sin carrito
+        }
+
+        cart = ((WithCart) p).getCart();
+
+        if (cart == null || cart.isEmpty()) {
+            contenedorProductos.getChildren().add(new Label("El carrito está vacío"));
+            return;
+        }
+
+        for (VBox tarjeta : crearTarjetaProducto(cart)) {
+            contenedorProductos.getChildren().add(tarjeta);
+        }
     }
     
-    /*
-    
-    CAMBIAR ESTO, HAY QUE RECORRER EL MAPA DEL CARRITO CON .entrySet() Y LUEGO PILLAR LA CLAVE CON .getKey()
-    PARA LUEGO ASIGNAR A CADA ELEMENTO LO QUE PROCEDA
-    
-    private VBox crearTarjetaProducto() {
-        // Imagen
-        ImageView imagen = new ImageView(cargarImagen(((User) LoginWindowController.usuario).getCart().getKey()));
-        imagen.setFitWidth(120);
-        imagen.setFitHeight(120);
-        imagen.setPreserveRatio(true);
-
-        // Nombre y precio
-        Label lblNombre = new Label(((User) LoginWindowController.usuario).getCart().getKey().getName());
-        lblNombre.setStyle("-fx-font-weight: bold;");
-        lblNombre.setWrapText(true);
-        lblNombre.setMaxWidth(140);
-
-        Label lblPrecio = new Label(p.getPrice() + " €");
-
-        // Contenedor de la tarjeta
-        VBox tarjeta = new VBox(8, imagen, lblNombre, lblPrecio);
-        tarjeta.setAlignment(Pos.CENTER);
-        tarjeta.setPadding(new Insets(10));
-        tarjeta.setPrefWidth(160);
-        tarjeta.setStyle(
-            "-fx-border-color: #cccccc; -fx-border-radius: 8; " +
-            "-fx-background-radius: 8; -fx-background-color: white; " +
-            "-fx-cursor: hand;");
+    private List<VBox> crearTarjetaProducto(Map<Product, Integer> cart) {
         
-        return tarjeta;
-    }*/
+        ArrayList<VBox> lista = new ArrayList<>();
+    
+        for (Map.Entry<Product, Integer> e : cart.entrySet()) {
+            // Imagen
+            ImageView imagen = new ImageView(cargarImagen(e.getKey()));
+            imagen.setFitWidth(120);
+            imagen.setFitHeight(120);
+            imagen.setPreserveRatio(true);
+
+            // Nombre, cantidad y precio
+            Label lblNombre = new Label(e.getKey().getName());
+            lblNombre.setStyle("-fx-font-weight: bold;");
+            lblNombre.setWrapText(true);
+            lblNombre.setMaxWidth(140);
+            
+            Label lblCantidad = new Label(Integer.toString(e.getValue()));
+
+            Label lblPrecio = new Label(e.getValue() * e.getKey().getPrice() + " €");
+
+            // Contenedor de la tarjeta
+            VBox tarjeta = new VBox(8, imagen, lblNombre, lblCantidad, lblPrecio);
+            tarjeta.setAlignment(Pos.CENTER);
+            tarjeta.setPadding(new Insets(10));
+            tarjeta.setPrefWidth(160);
+            /*tarjeta.setStyle(
+                "-fx-border-color: #cccccc; -fx-border-radius: 8; " +
+                "-fx-background-radius: 8; -fx-background-color: white; " +
+                "-fx-cursor: hand;");*/
+            
+            lista.add(tarjeta);
+        }
+        
+        return lista;
+    }
     
     private Image cargarImagen(Product p) {
         try {
@@ -84,7 +112,6 @@ public class CartWindowController implements Initializable {
         }
     }
     
-    @FXML
     private void goBack(ActionEvent event) throws java.io.IOException {        
         Stage ventanaActual = (Stage) ((Node) event.getSource()).getScene().getWindow();
         ventanaActual.close();
