@@ -11,6 +11,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -18,14 +19,23 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import model.Employee;
+import model.Person;
+import model.Product;
+import model.User;
+import model.WithCart;
 /**
  * FXML Controller class
  *
  * @author Usuario
  */
 public class ProductWindowController implements Initializable {
+    
+    Product product = ShopWindowController.pr;
     
     @FXML
     private ImageView productimg;
@@ -50,13 +60,16 @@ public class ProductWindowController implements Initializable {
         lblProductnName.setText(ShopWindowController.pr.getName());
         lblProductPrice.setText(Float.toString(ShopWindowController.pr.getPrice()) + "€");
         lblProductAmount.setText("Stock: " + Integer.toString(ShopWindowController.pr.getStock()));
+        amountToBuy.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, ShopWindowController.pr.getStock(), 0));
     }
     
     @FXML
     private void addToCart(ActionEvent event) throws IOException {
-        ShopWindowController.pr.setStock(ShopWindowController.pr.getStock() - amountToBuy.getValue());
+        product.setStock(product.getStock() - amountToBuy.getValue());
         
-        //Añadir la cantidad de objetos de este tipo que se 
+        if (LoginWindowController.usuario instanceof WithCart) {
+            ((WithCart)LoginWindowController.usuario).setCart(product, amountToBuy.getValue());
+        }
         
         Stage ventanaActual = (Stage) ((Node) event.getSource()).getScene().getWindow();
         ventanaActual.close();

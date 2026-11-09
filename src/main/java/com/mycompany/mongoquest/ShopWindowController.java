@@ -58,28 +58,17 @@ public class ShopWindowController implements Initializable {
     /**
      * Initializes the controller class.
      */
-    /*@Override
-    public void initialize(URL url, ResourceBundle rb) {
-        contenedorProductos.getChildren().clear();
-
-        for (Product p : implementacion.obtenerProductos()) {
-            Button boton = new Button(p.getName());
-            boton.setPrefSize(150, 80);
-            boton.setOnAction(e -> product());
-
-            contenedorProductos.getChildren().add(boton);
-        }
-    }*/
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         contenedorProductos.getChildren().clear();
 
         for (Product p : implementacion.obtenerProductos()) {
-            contenedorProductos.getChildren().add(crearTarjeta(p));
+            contenedorProductos.getChildren().add(crearTarjetaProducto(p));
         }
     }
 
-    private VBox crearTarjeta(Product p) {
+    private VBox crearTarjetaProducto(Product p) {
         // Imagen
         ImageView imagen = new ImageView(cargarImagen(p));
         imagen.setFitWidth(120);
@@ -99,14 +88,20 @@ public class ShopWindowController implements Initializable {
         tarjeta.setAlignment(Pos.CENTER);
         tarjeta.setPadding(new Insets(10));
         tarjeta.setPrefWidth(160);
-        tarjeta.setStyle(
+        /*tarjeta.setStyle(
             "-fx-border-color: #cccccc; -fx-border-radius: 8; " +
             "-fx-background-radius: 8; -fx-background-color: white; " +
-            "-fx-cursor: hand;");
+            "-fx-cursor: hand;");*/
 
         // Toda la tarjeta clickable
         tarjeta.setOnMouseClicked(e -> product(p));
-
+        /*tarjeta.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                product(p);
+            }
+        });*/
+        
         return tarjeta;
     }
     
@@ -133,16 +128,13 @@ public class ShopWindowController implements Initializable {
     }
     
     @FXML
-    private void cart(ActionEvent event) throws IOException{
+    private void cart() throws IOException{
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("CartWindow.fxml"));
         Parent root = fxmlLoader.load();
         
         Stage stage = new Stage();
         stage.setScene(new Scene(root));
         stage.show();
-        
-        Stage ventanaActual = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        ventanaActual.close();
     }
     
     private void product(Product p) {
