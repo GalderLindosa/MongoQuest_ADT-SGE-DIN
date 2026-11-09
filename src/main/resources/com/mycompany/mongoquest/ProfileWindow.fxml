@@ -4,27 +4,31 @@
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
 
 <Pane fx:id="profilePane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.mongoquest.ProfileWindowController">
    <children>
       <Label fx:id="lblPfp" alignment="CENTER" layoutY="36.0" prefHeight="193.0" prefWidth="313.0" text="[PROFILE PICTURE]" />
-      <Button layoutY="2.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="139.0" text="Button" />
-      <Button layoutX="138.0" layoutY="2.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="149.0" text="Button" />
-      <Button layoutX="282.0" layoutY="2.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="157.0" text="Button" />
-      <Button layoutX="437.0" layoutY="2.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="165.0" text="Button" />
+      <Button fx:id="button1" layoutY="2.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="139.0" text="[BUTTON 1]" />
+      <Button fx:id="button2" layoutX="138.0" layoutY="2.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="149.0" text="[BUTTON 2]" />
+      <Button fx:id="button3" layoutX="282.0" layoutY="2.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="157.0" text="[BUTTON 3]" />
+      <Button fx:id="button4" layoutX="437.0" layoutY="2.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="165.0" text="[BUTTON 4]" />
       <Label fx:id="lblName" layoutX="336.0" layoutY="68.0" text="Name" />
       <Label fx:id="lblSur" layoutX="336.0" layoutY="111.0" text="Surname" />
       <Label fx:id="lblUser" layoutX="336.0" layoutY="155.0" text="User" />
       <Label fx:id="lblPass" layoutX="336.0" layoutY="200.0" text="Password" />
       <Label fx:id="lblDni" layoutX="337.0" layoutY="293.0" text="DNI" />
       <CheckBox fx:id="showPassword" layoutX="337.0" layoutY="249.0" mnemonicParsing="false" onAction="#mostrarContraseña" text="Show password" />
-      <Button fx:id="btnLogOut" layoutX="350.0" layoutY="347.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="149.0" text="Log Out" />
+      <Button fx:id="btnLogOut" layoutX="350.0" layoutY="347.0" mnemonicParsing="false" onAction="#goBackToLogin" prefHeight="25.0" prefWidth="149.0" text="Log Out" />
       <Label fx:id="userName" alignment="CENTER" layoutX="429.0" layoutY="68.0" prefHeight="17.0" prefWidth="118.0" text="[USER REAL NAME]" />
       <Label fx:id="userSur" alignment="CENTER" layoutX="429.0" layoutY="111.0" prefHeight="17.0" prefWidth="118.0" text="[ UER SURNAME ]" />
       <Label fx:id="user" alignment="CENTER" layoutX="429.0" layoutY="155.0" prefHeight="17.0" prefWidth="118.0" text="[USER]" />
       <Label fx:id="userPass" alignment="CENTER" layoutX="429.0" layoutY="200.0" prefHeight="17.0" prefWidth="118.0" text="PASSWORD" />
       <Label fx:id="userDNI" alignment="CENTER" layoutX="429.0" layoutY="293.0" prefHeight="17.0" prefWidth="118.0" text="DNI" />
       <Label layoutX="82.0" layoutY="285.0" text="Balance:" />
-      <Label fx:id="balancelbl" layoutX="165.0" layoutY="285.0" text="[ BALANCE ]" />
+      <Label fx:id="balancelbl" layoutX="138.0" layoutY="280.0" text="[ BALANCE ]">
+         <font>
+            <Font size="19.0" />
+         </font></Label>
    </children>
 </Pane>
