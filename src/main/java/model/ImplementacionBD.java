@@ -109,5 +109,19 @@ public class ImplementacionBD implements GymDAO {
         
         return lista;
     }
+    
+    public ArrayList<Gym> obtenerGimnasios(){
+        MongoCollection<Document> gyms = MongoConnection.getConnection().getCollection("Gimnasios");
+        ArrayList<Gym> lista = new ArrayList<>();
+        
+        for (Document doc : gyms.find()) {
+            Gym g = new Gym(((Number) doc.get("id_gym")).intValue(),
+                                    doc.getString("dir"),
+                                    ((Number) doc.get("pc")).intValue());
+            lista.add(g);
+        }
+        
+        return lista;
+    }
 
 }
