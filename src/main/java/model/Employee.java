@@ -4,6 +4,7 @@
  */
 package model;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 /**
@@ -18,8 +19,8 @@ public class Employee extends Person{
     private int gymId;
 
     public Employee(ArrayList<Integer> classes, ArrayList<Integer> shoppingHistory,
-            String discountCode, int gymId, String userName, String password, String name, String lastName, String dni) {
-        super(userName, password, name, lastName, dni);
+            String discountCode, int gymId, String userName, String password, String name, String lastName, String dni, LocalDate startDate) { 
+        super(userName, password, name, lastName, dni, startDate);
         this.classes = classes;
         this.shoppingHistory = shoppingHistory;
         this.discountCode = discountCode;

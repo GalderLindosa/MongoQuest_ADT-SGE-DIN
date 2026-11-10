@@ -4,6 +4,7 @@
  */
 package model;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 /**
@@ -16,9 +17,8 @@ public class User extends Person{
     private ArrayList<Integer> classes;
     private ArrayList<Integer> shoppingHistory;
 
-    public User(ArrayList<Training> trainings, ArrayList<Integer> classes, ArrayList<Integer> shoppingHistory,
-            String userName, String password, String name, String lastName, String dni) {
-        super(userName, password, name, lastName, dni);
+    public User(ArrayList<Training> trainings, ArrayList<Integer> classes, ArrayList<Integer> shoppingHistory, String userName, String password, String name, String lastName, String dni, LocalDate startDate) {
+        super(userName, password, name, lastName, dni, startDate);
         this.trainings = trainings;
         this.classes = classes;
         this.shoppingHistory = shoppingHistory;
@@ -29,6 +29,10 @@ public class User extends Person{
         this.trainings = new ArrayList<>();
         this.classes = new ArrayList<>();
         this.shoppingHistory = new ArrayList<>();
+    }
+
+    public User(String userName, String password, String name, String lastName, String dni, LocalDate startDate, LocalDate endDate) {
+        super(userName, password, name, lastName, dni, startDate); 
     }
 
     public void setTrainings(ArrayList<Training> trainings) {
@@ -55,8 +59,8 @@ public class User extends Person{
         return shoppingHistory;
     }
 
+//Cambio el toString para que cuando lo muetsr en la lista solo enseñe el nombre 
     @Override
     public String toString() {
-        return "User{" + "trainings=" + trainings + ", classes=" + classes + ", shoppingHistory=" + shoppingHistory + '}';
-    }
+        return getUserName();  }
 }
