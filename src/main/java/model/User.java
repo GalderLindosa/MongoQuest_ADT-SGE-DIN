@@ -6,6 +6,7 @@ package model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  *
@@ -13,12 +14,12 @@ import java.util.HashMap;
  */
 public class User extends Person implements WithCart{
     
-    private ArrayList<Training> trainings;
-    private ArrayList<Integer> classes;
-    private ArrayList<Integer> shoppingHistory;
+    private List<Training> trainings;
+    private List<Integer> classes;
+    private List<Integer> shoppingHistory;
     private HashMap<Product, Integer> cart;
 
-    public User(ArrayList<Training> trainings, ArrayList<Integer> classes, ArrayList<Integer> shoppingHistory,
+    public User(List<Training> trainings, List<Integer> classes, List<Integer> shoppingHistory,
                 String userName, String password, String name, String lastName, String dni, float balance) {
         super(userName, password, name, lastName, dni, balance);
         this.trainings = trainings;
@@ -57,15 +58,15 @@ public class User extends Person implements WithCart{
         this.cart.put(p, cantidad);
     }
 
-    public ArrayList<Training> getTrainings() {
+    public List<Training> getTrainings() {
         return trainings;
     }
 
-    public ArrayList<Integer> getClasses() {
+    public List<Integer> getClasses() {
         return classes;
     }
 
-    public ArrayList<Integer> getShoppingHistory() {
+    public List<Integer> getShoppingHistory() {
         return shoppingHistory;
     }
     

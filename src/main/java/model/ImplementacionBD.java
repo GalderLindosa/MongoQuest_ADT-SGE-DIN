@@ -80,7 +80,7 @@ public class ImplementacionBD implements GymDAO {
                     String type = doc.getString("role");
 
                     if ("member".equals(type)) {
-                        return new User(doc.getString("username"), doc.getString("password"), doc.getString("first_name"), doc.getString("last_name"), doc.getString("national_id"),doc.getInteger("balance"));
+                        return new User(doc.getList(doc, Training.class),doc.getList(doc, Integer.class),doc.getList(doc, Integer.class),doc.getString("username"), doc.getString("password"), doc.getString("first_name"), doc.getString("last_name"), doc.getString("national_id"),doc.getInteger("balance"));
                     } else if ("manager".equals(type)) {
                         return new Boss(doc.getInteger("gym_id"), doc.getString("username"), doc.getString("password"), doc.getString("first_name"), doc.getString("last_name"), doc.getString("national_id"),doc.getInteger("balance"));
                     } else if ("employee".equals(type)) {
