@@ -4,6 +4,7 @@
  */
 package controller;
 
+import java.util.ArrayList;
 import model.*;
 
 /**
@@ -19,5 +20,23 @@ public class GymControlador {
       
     }
     
-
+    public Person login(String usuario, String password) {
+        return dao.buscar(usuario, password);
+    }
+    public ArrayList<User> getUsers(){
+        return dao.getUsers();
+    }
+    public ArrayList<Employee> getEmployee(){
+        return dao.getEmployee();
+    }
+    public boolean insertarPerson (Person p){
+        return dao.insertarPerson(p);
+    }
+    public boolean modificarPerson(Person p){
+        return dao.modificarPerson(p);
+    }
+    public boolean eliminarPerson(Person p) {
+        return dao.modificarPerson(p);
+    }
+     
 }

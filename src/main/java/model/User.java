@@ -4,6 +4,7 @@
  */
 package model;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -18,20 +19,19 @@ public class User extends Person implements WithCart{
     private ArrayList<Integer> shoppingHistory;
     private HashMap<Product, Integer> cart;
 
+
     public User(ArrayList<Training> trainings, ArrayList<Integer> classes, ArrayList<Integer> shoppingHistory,
-                String userName, String password, String name, String lastName, String dni, float balance) {
-        super(userName, password, name, lastName, dni, balance);
+                String userName, String password, String name, String lastName, String dni, float balance,LocalDate startDate) {
+        super(userName, password, name, lastName, dni, balance, startDate);
         this.trainings = trainings;
         this.classes = classes;
         this.shoppingHistory = shoppingHistory;
         this.cart = new HashMap<>();
     }
-    
-        public User(String userName, String password, String name, String lastName, String dni, float balance) {
-        super(userName, password, name, lastName, dni, balance);
+    public User(String userName, String password, String name, String lastName, String dni, float balance,LocalDate startDate) {
+        super(userName, password, name, lastName, dni, balance, startDate);
         
     }
-    
     public User() {
         super();
         this.trainings = new ArrayList<>();
@@ -39,7 +39,6 @@ public class User extends Person implements WithCart{
         this.shoppingHistory = new ArrayList<>();
         this.cart = new HashMap<>();
     }
-
     public void setTrainings(ArrayList<Training> trainings) {
         this.trainings = trainings;
     }
@@ -74,8 +73,9 @@ public class User extends Person implements WithCart{
         return cart;
     }
 
+//Cambio el toString para que cuando lo muetsr en la lista solo enseñe el nombre 
     @Override
     public String toString() {
-        return "User{" + "trainings=" + trainings + ", classes=" + classes + ", shoppingHistory=" + shoppingHistory + ", cart=" + cart + '}';
+        return getUserName();  
     }
 }

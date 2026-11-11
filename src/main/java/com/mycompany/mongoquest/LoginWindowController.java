@@ -104,7 +104,6 @@ public class LoginWindowController implements Initializable {
 
     }
 
-    //a los metodos los llamamos como controlador.metodo 
-    //el metodo de implementacion sea mirar si existe y devolver PERSONA 
-    //aqui hacer un instance of y mirar que tipo de persona es y abrir una ventana dependiendo de el tipo que sea 
-}
+ }
+
+
