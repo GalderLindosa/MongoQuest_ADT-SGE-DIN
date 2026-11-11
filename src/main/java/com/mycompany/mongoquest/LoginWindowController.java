@@ -26,8 +26,11 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
+import model.ImplementacionBD;
 import java.io.File;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 
 /**
  * FXML Controller class
@@ -36,10 +39,13 @@ import java.io.File;
  */
 public class LoginWindowController implements Initializable {
 
+    private ImplementacionBD bd = ImplementacionBD.getInstance();
+
     private static Scene scene;
 
     public static Person usuario;
 
+    private boolean errorMessage = false;
     @FXML
     private Label Titulo;
     @FXML
@@ -57,6 +63,8 @@ public class LoginWindowController implements Initializable {
 
     ImplementacionBD instanceBD = ImplementacionBD.getInstance();
     GymControlador controlador = new GymControlador();
+    @FXML
+    private VBox vBoxLogin;
 
     /**
      * Initializes the controller class.
@@ -64,20 +72,38 @@ public class LoginWindowController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         db = MongoConnection.getConnection();
-        System.out.println("Controlador conectado a MongoDB");
+
     }
 
     @FXML
     private void sesionIniciada(ActionEvent event) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("ProfileWindow.fxml"));
-        Parent root = fxmlLoader.load();
 
-        Stage stage = new Stage();
-        stage.setTitle("Perfil");
-        stage.setScene(new Scene(root));
-        stage.show();
+        usuario = bd.buscar(fieldUser.getText(), fieldPass.getText());
 
-        Stage ventanaActual = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        ventanaActual.close();
+        if (usuario == null) {
+            Label userNull = new Label("USER OR PASSWORD IS INCORRECT");
+            userNull.setTextFill(Color.web("#FF0000"));
+            userNull.setFont(new Font("Arial", 10));
+            if (!errorMessage) {
+                errorMessage=true;
+                vBoxLogin.getChildren().add(userNull);
+            }
+
+        } else {
+            FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("ProfileWindow.fxml"));
+            Parent root = fxmlLoader.load();
+
+            Stage stage = new Stage();
+            stage.setTitle("Perfil");
+            stage.setScene(new Scene(root));
+            stage.show();
+
+            Stage ventanaActual = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            ventanaActual.close();
+        }
+
     }
+
  }
+
+

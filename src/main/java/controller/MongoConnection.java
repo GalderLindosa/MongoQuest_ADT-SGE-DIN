@@ -2,7 +2,12 @@ package controller;
 
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import java.util.ArrayList;
+import java.util.List;
+import model.Product;
+import org.bson.Document; 
 
 public class MongoConnection {
 
@@ -21,7 +26,7 @@ public class MongoConnection {
         }
         return database;
     }
-
+    
     // Método para cerrar la conexión (opcional)
     public static void close() {
         if (client != null) {

@@ -19,7 +19,10 @@ public class GymControlador {
         this.dao = ImplementacionBD.getInstance();
       
     }
-   
+    
+    public Person login(String usuario, String password) {
+        return dao.buscar(usuario, password);
+    }
     public ArrayList<User> getUsers(){
         return dao.getUsers();
     }

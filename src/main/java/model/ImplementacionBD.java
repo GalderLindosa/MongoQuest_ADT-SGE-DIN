@@ -8,34 +8,36 @@ package model;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;*/
-
+import com.mongodb.MongoException;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import java.util.Date;
-
+import static com.mongodb.client.model.Filters.and;
 import org.bson.Document;
-
 import static com.mongodb.client.model.Filters.eq;
 import com.mongodb.client.result.DeleteResult;
 import excepciones.DniException;
 import excepciones.PasswordException;
 import java.time.LocalDate;
 import java.time.ZoneId;
-
-
+import static com.mongodb.client.model.Filters.lt;
+import static com.mongodb.client.model.Filters.or;
+import com.mongodb.client.model.Projections;
+import com.mongodb.client.model.Sorts;
+import controller.MongoConnection;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.ResourceBundle;
+import org.bson.conversions.Bson;
 
 /**
  *
  * @author ire22
  */
 public class ImplementacionBD {
-    
     // Atributos
     private ResourceBundle configFile;
     private String urlBD;
@@ -43,35 +45,65 @@ public class ImplementacionBD {
     private String passwordBD;
     private MongoClient mongoClient;
     private MongoDatabase database;
-
     // Singleton
     private static ImplementacionBD instance;
+    private final MongoCollection<Document> PROFILES;
 
     private ImplementacionBD() {
         mongoClient = MongoClients.create("mongodb://localhost:27017");
         database = mongoClient.getDatabase("G2_Life");
+        PROFILES = database.getCollection("People");
+
     }
-  
-    
-    public static ImplementacionBD getInstance(){
-        if(instance == null){
-             instance = new ImplementacionBD();
+
+    public static ImplementacionBD getInstance() {
+        if (instance == null) {
+            instance = new ImplementacionBD();
+
         }
         return instance;
     }
 
-    /*private void openConnection() {
-        try {
-            //con = DriverManager.getConnection(urlBD, userBD, passwordBD);
-        } catch (SQLException e) {
-            System.out.println("Error opening the database");
-            e.printStackTrace();
-        }
-    }*/
+
+    public Person buscar(String usuario, String contraseña) {
+        Person persona = null;
+        
+            try {
+                Document doc = PROFILES.find(and(eq("username", usuario), eq("password", contraseña))).first();
+
+                if (doc == null || !contraseña.equals(doc.getString("password"))) {
+                    return null;
+                } else {
+                    String type = doc.getString("role");
+                    
+                    Date fechaMongo = doc.getDate("start_date");
+                    LocalDate fecha = null;
+
+                    if (fechaMongo != null) {
+                        fecha = fechaMongo.toInstant()
+                          .atZone(ZoneId.systemDefault())
+                        .toLocalDate();
+                    }
+                    
+                    if ("member".equals(type)) {
+                        return new User(doc.getString("username"), doc.getString("password"), doc.getString("first_name"), doc.getString("last_name"), doc.getString("national_id"),doc.getInteger("balance"),fecha);
+                    } else if ("manager".equals(type)) {
+                        return new Boss(doc.getInteger("gym_id"), doc.getString("username"), doc.getString("password"), doc.getString("first_name"), doc.getString("last_name"), doc.getString("national_id"),doc.getInteger("balance"),fecha);
+                    } else if ("employee".equals(type)) {
+                        return new Employee(doc.getString("discount_code"), doc.getInteger("gym_id"), doc.getString("username"), doc.getString("password"), doc.getString("first_name"), doc.getString("last_name"), doc.getString("national_id"),doc.getInteger("balance"),fecha);
+                    }
+                }
+
+            } catch (MongoException ex) {
+
+            }
+        return persona;
+        
+        
+    }
     
     public ArrayList<User> getUsers() {
         ArrayList<User> users = new ArrayList<>();
-
         MongoCollection<Document> collection =  database.getCollection("people"); //Consigo la collecion de "Person" = "db.Persons.find()"
 
         // Document porue MongoDB devuelve BSON/JSON y en java estos documentos se representan con la clase Document
@@ -108,6 +140,7 @@ public class ImplementacionBD {
          }
             return users;
     }
+    
     public ArrayList<Employee> getEmployee() {
         ArrayList<Employee> aEmployee = new ArrayList<>();
 
@@ -207,4 +240,19 @@ public class ImplementacionBD {
         }
     }
     
+
+    public ArrayList<Product> obtenerProductos(){
+        MongoCollection<Document> productos = MongoConnection.getConnection().getCollection("Productos");
+        ArrayList<Product> lista = new ArrayList<>();
+        
+        for (Document doc : productos.find()) {
+            Product p = new Product(((Number) doc.get("_id")).intValue(),
+                                    doc.getString("name"),
+                                    ((Number) doc.get("price")).floatValue(),
+                                    ((Number) doc.get("stock")).intValue());
+            lista.add(p);
+        }
+        
+        return lista;
+    }
 }

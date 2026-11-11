@@ -14,8 +14,9 @@ public class Boss extends Person{
     
     private int gymId;
 
-    public Boss(int gymId, String userName, String password, String name, String lastName, String dni, LocalDate startDate) {
-        super(userName, password, name, lastName, dni, startDate);
+
+    public Boss(int gymId, String userName, String password, String name, String lastName, String dni, float balance,LocalDate startDate) {
+        super(userName, password, name, lastName, dni, balance, startDate);
         this.gymId = gymId;
     }
     
@@ -34,6 +35,6 @@ public class Boss extends Person{
 
     @Override
     public String toString() {
-        return "Boss{" + "gymId=" + gymId + '}';
+        return super.toString() + "Boss{" + "gymId=" + gymId + '}';
     }
 }

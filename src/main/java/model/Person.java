@@ -14,23 +14,31 @@ import excepciones.*;
  */
 public class Person {
     
-    private String userName;
-    private String password;
-    private String name;
-    private String lastName;
-    private String dni;
-    private LocalDate startDate;
-
-    public Person(String userName, String password, String name, String lastName, String dni, LocalDate startDate) {
+    protected String userName;
+    protected String password;
+    protected String name;
+    protected String lastName;
+    protected String dni;
+    protected LocalDate startDate;
+    protected float balance;
+    
+    public Person(String userName, String password, String name, String lastName, String dni, float balance,LocalDate startDate) {
         this.userName = userName;
         this.password = password;
         this.name = name;
         this.lastName = lastName;
         this.dni = dni;
         this.startDate = startDate;
+        this.balance = balance;
     }
 
     public Person() {
+        this.userName = "";
+        this.password = "";
+        this.name = "";
+        this.lastName = "";
+        this.dni = "";
+        this.balance = 0;
     }
 
     public String getUserName() {
@@ -51,6 +59,10 @@ public class Person {
 
     public String getDni() {
         return dni;
+    }
+    
+    public float getBalance() {
+        return balance;
     }
 
     public void setUserName(String userName) {
@@ -87,6 +99,10 @@ public class Person {
 
     public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
+    }
+    
+    public void setBalance(float balance) {
+        this.balance = balance;
     }
 
     @Override
