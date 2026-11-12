@@ -12,8 +12,8 @@
 
 <AnchorPane id="AnchorPane" prefHeight="508.0" prefWidth="688.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.mongoquest.EmployeeListWindowController">
    <children>
-      <ListView fx:id="userList" layoutX="33.0" layoutY="54.0" onMouseClicked="#seleccionarUsuario" prefHeight="416.0" prefWidth="282.0" />
-      <Button fx:id="addUserButton" layoutX="467.0" layoutY="411.0" mnemonicParsing="false" onAction="#añadirUser" prefHeight="46.0" prefWidth="89.0" text="AÑADIR" />
+      <ListView fx:id="employeeList" layoutX="33.0" layoutY="54.0" onMouseClicked="#seleccionarUsuario" prefHeight="416.0" prefWidth="282.0" />
+      <Button fx:id="addUserButton" layoutX="467.0" layoutY="411.0" mnemonicParsing="false" onAction="#anadirPerson" prefHeight="46.0" prefWidth="89.0" text="AÑADIR" />
       <Label fx:id="userLabel" layoutX="345.0" layoutY="56.0" text="User" />
       <Label fx:id="passLabel" layoutX="341.0" layoutY="104.0" text="Password " />
       <Label fx:id="nameLabel" layoutX="342.0" layoutY="199.0" text="Name" />
@@ -25,19 +25,24 @@
       <TextField fx:id="surField" layoutX="445.0" layoutY="241.0" onAction="#seleccionarUsuario" prefHeight="25.0" prefWidth="189.0" />
       <TextField fx:id="dniField" layoutX="445.0" layoutY="282.0" onAction="#seleccionarUsuario" prefHeight="25.0" prefWidth="189.0" />
       <TextField fx:id="dateField" layoutX="445.0" layoutY="330.0" onAction="#seleccionarUsuario" prefHeight="25.0" prefWidth="189.0" />
-      <Button fx:id="modifyUser" layoutX="467.0" layoutY="411.0" mnemonicParsing="false" onAction="#modificarUser" prefHeight="46.0" prefWidth="89.0" text="MODIFICAR" />
+      <Button fx:id="modifyUser" layoutX="467.0" layoutY="411.0" mnemonicParsing="false" onAction="#modificarEmployee" prefHeight="46.0" prefWidth="89.0" text="MODIFICAR" />
       <RadioButton fx:id="cancelRegistration" layoutX="374.0" layoutY="368.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="215.0" text="To cancel someone's registration" />
       <Label fx:id="mensaje" layoutX="12.0" layoutY="5.0" prefHeight="46.0" prefWidth="583.0" />
       <PasswordField fx:id="passField" layoutX="448.0" layoutY="100.0" onAction="#seleccionarUsuario" />
-      <CheckBox fx:id="verContra1" layoutX="626.0" layoutY="103.0" mnemonicParsing="false" prefWidth="47.0" text="👁">
+      <TextField fx:id="passVisibleField" layoutX="448.0" layoutY="100.0" managed="false" onAction="#verContrasena" prefWidth="149.0" visible="false" />
+      
+      <CheckBox fx:id="verContra1" layoutX="626.0" layoutY="103.0" mnemonicParsing="false" onAction="#verContrasena" prefWidth="47.0" text="👁">
          <font>
             <Font size="14.0" />
          </font>
       </CheckBox>
+      
       <Label fx:id="passLabel1" layoutX="344.0" layoutY="146.0" prefHeight="17.0" prefWidth="117.0" text="Repeat " />
       <PasswordField fx:id="passField1" layoutX="448.0" layoutY="145.0" onAction="#seleccionarUsuario" />
+      <TextField fx:id="passVisibleField1" layoutX="448.0" layoutY="145.0" managed="false" onAction="#verContrasena1" prefWidth="149.0" visible="false" />
+      
       <Label fx:id="passLabel11" layoutX="344.0" layoutY="158.0" prefHeight="17.0" prefWidth="117.0" text="the password" />
-      <CheckBox fx:id="verContra2" layoutX="626.0" layoutY="145.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="53.0" text="👁">
+      <CheckBox fx:id="verContra2" layoutX="626.0" layoutY="145.0" mnemonicParsing="false" onAction="#verContrasena1" prefHeight="25.0" prefWidth="53.0" text="👁">
          <font>
             <Font size="14.0" />
          </font>

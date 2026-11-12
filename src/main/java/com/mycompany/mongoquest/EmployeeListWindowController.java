@@ -55,7 +55,7 @@ public class EmployeeListWindowController implements Initializable {
     @FXML
     private TextField userField;
     @FXML
-    private TextField passField;
+    private PasswordField passField;
     @FXML
     private TextField nameField;
     @FXML
@@ -73,8 +73,10 @@ public class EmployeeListWindowController implements Initializable {
     
     private GymControlador cont;
     private Employee anadirEmployee;
+    
     @FXML
     private Label passLabel1;
+    
     @FXML
     private PasswordField passField1;
     @FXML
@@ -83,6 +85,11 @@ public class EmployeeListWindowController implements Initializable {
     private CheckBox verContra1;
     @FXML
     private CheckBox verContra2;
+    
+    @FXML
+    private TextField passVisibleField;
+    @FXML
+    private TextField passVisibleField1;
     /**
      * Initializes the controller class.
      */
@@ -100,6 +107,9 @@ public class EmployeeListWindowController implements Initializable {
        
        addUserButton.setVisible(false);
        modifyUser.setVisible(false);
+       
+       passVisibleField.setVisible(false);
+       passVisibleField1.setVisible(false);
     }
     
     private void mostrarInfo(String msg) {
@@ -115,8 +125,11 @@ public class EmployeeListWindowController implements Initializable {
    //Metodo para rellenar los text con la informacion
     @FXML 
     private void seleccionarUsuario() {
+        ocultarContrasenas();
         Employee user = employeeList.getSelectionModel().getSelectedItem();
-        
+        if (user == null) {
+            return;
+        }
         if (user.getUserName().equals("+Añadir")) { 
             userField.clear();
             userField.setEditable(true);
@@ -142,7 +155,8 @@ public class EmployeeListWindowController implements Initializable {
             surField.setText(user.getLastName());
             dniField.setText(user.getDni());
             dateField.setText(user.getStartDate().toString());
-             cancelRegistration.setVisible(true);
+            cancelRegistration.setVisible(true);
+            cancelRegistration.setSelected(false);
         }
         dateField.setEditable(false);
     }
@@ -161,10 +175,11 @@ public class EmployeeListWindowController implements Initializable {
         Employee seleccionado = employeeList.getSelectionModel().getSelectedItem();
         boolean dniCorrecto = true, passwordCorrecto=true;
 
-        if (userField.getText().isBlank()) {
+        if (userField.getText().isBlank() || seleccionado == null ) {
             mostrarError("You must select a user.");
         } else {
             if (cancelRegistration.isSelected()) {
+                System.out.println("Entrando a eliminar");
                 Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
                 alerta.setTitle("Confirmation");
                 alerta.setHeaderText("Cancel someone's registration");
@@ -173,9 +188,18 @@ public class EmployeeListWindowController implements Initializable {
                 Optional<ButtonType> resultado = alerta.showAndWait();
 
                 if (resultado.isPresent() && resultado.get() == ButtonType.OK) {
-                    if (cont.eliminarPerson(seleccionado)) {
+                   System.out.println("Usuario seleccionado: "
+                + seleccionado.getUserName());
+                   
+                    boolean eliminado = cont.eliminarPerson(seleccionado);
+
+                    System.out.println("Resultado eliminación: " + eliminado);
+                    if (eliminado) {
                         employeeList.getItems().remove(seleccionado);
+                        employeeList.getSelectionModel().clearSelection();
                         mostrarInfo("User deleted from the database");
+                        cancelRegistration.setSelected(false);
+                        
                     } else {
                         mostrarError("Error deleting user");
                     }
@@ -235,7 +259,7 @@ public class EmployeeListWindowController implements Initializable {
     
     @FXML
     //comprobar que todo los datos estan rellenados (en metodo mejor)
-    private void añadirPerson() {
+    private void anadirPerson() {
         boolean dniCorrecto=true,passwordCorrecto=true;
         if (comprobacion()) {
             String nomUser = userField.getText();
@@ -313,4 +337,56 @@ public class EmployeeListWindowController implements Initializable {
            return false;
        }
    }
+   
+   @FXML
+    private void verContrasena() {
+        if (verContra1.isSelected()) {
+            passVisibleField.setText(passField.getText());
+            passVisibleField.setVisible(true);
+            passVisibleField.setManaged(true);
+            passField.setVisible(false);
+            passField.setManaged(false);
+        } else {
+            passField.setText(passVisibleField.getText());
+            passField.setVisible(true);
+            passField.setManaged(true);
+            passVisibleField.setVisible(false);
+            passVisibleField.setManaged(false);
+        }
+    }
+    
+    @FXML
+    private void verContrasena1() {
+        if (verContra2.isSelected()) {
+            passVisibleField1.setText(passField1.getText());
+            passVisibleField1.setVisible(true);
+            passVisibleField1.setManaged(true);
+            passField1.setVisible(false);
+            passField1.setManaged(false);
+
+        } else {
+            passField1.setText(passVisibleField1.getText());
+            passField1.setVisible(true);
+            passField1.setManaged(true);
+            passVisibleField1.setVisible(false);
+            passVisibleField1.setManaged(false);
+        }
+    }
+    
+    private void ocultarContrasenas() {
+        verContra1.setSelected(false);
+        verContra2.setSelected(false);
+
+        passField.setVisible(true);
+        passField.setManaged(true);
+
+        passVisibleField.setVisible(false);
+        passVisibleField.setManaged(false);
+
+        passField1.setVisible(true);
+        passField1.setManaged(true);
+
+        passVisibleField1.setVisible(false);
+        passVisibleField1.setManaged(false);
+    }
 }

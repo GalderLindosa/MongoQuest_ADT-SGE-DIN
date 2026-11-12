@@ -36,7 +36,7 @@ public class GymControlador {
         return dao.modificarPerson(p);
     }
     public boolean eliminarPerson(Person p) {
-        return dao.modificarPerson(p);
+        return dao.eliminarPerson(p);
     }
      
 }

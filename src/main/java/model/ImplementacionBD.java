@@ -52,7 +52,7 @@ public class ImplementacionBD {
     private ImplementacionBD() {
         mongoClient = MongoClients.create("mongodb://localhost:27017");
         database = mongoClient.getDatabase("G2_Life");
-        PROFILES = database.getCollection("People");
+        PROFILES = database.getCollection("people");
 
     }
 
@@ -65,13 +65,13 @@ public class ImplementacionBD {
     }
 
 
-    public Person buscar(String usuario, String contraseña) {
+    public Person buscar(String usuario, String contrasena) {
         Person persona = null;
         
             try {
-                Document doc = PROFILES.find(and(eq("username", usuario), eq("password", contraseña))).first();
+                Document doc = PROFILES.find(and(eq("username", usuario), eq("password", contrasena))).first();
 
-                if (doc == null || !contraseña.equals(doc.getString("password"))) {
+                if (doc == null || !contrasena.equals(doc.getString("password"))) {
                     return null;
                 } else {
                     String type = doc.getString("role");
@@ -227,17 +227,24 @@ public class ImplementacionBD {
     }
    
     public boolean eliminarPerson(Person p) {
-        try {
-            MongoCollection<Document> collection = database.getCollection("people");
-            DeleteResult resultado = collection.deleteOne(
-                    Filters.eq("username", p.getUserName())
-            );
-            return resultado.getDeletedCount() > 0;
+       try {
+        MongoCollection<Document> collection = database.getCollection("people");
+        System.out.println("Base de datos: " + database.getName());
+        System.out.println("Usuario a eliminar: " + p.getUserName());
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
+        DeleteResult resultado = collection.deleteOne(
+                Filters.eq("username", p.getUserName())
+        );
+        
+        System.out.println("Documentos eliminados: "
+                + resultado.getDeletedCount());
+
+        return resultado.getDeletedCount() > 0;
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        return false;
+    }
     }
     
 

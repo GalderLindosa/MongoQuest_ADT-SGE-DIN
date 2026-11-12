@@ -83,6 +83,11 @@ public class UserListWindowController implements Initializable {
     private CheckBox verContra1;
     @FXML
     private CheckBox verContra2;
+    
+    @FXML
+    private TextField passVisibleField;
+    @FXML
+    private TextField passVisibleField1;
     /**
      * Initializes the controller class.
      */
@@ -117,7 +122,7 @@ public class UserListWindowController implements Initializable {
     private void seleccionarUsuario() {
         User user = userList.getSelectionModel().getSelectedItem();
         
-        if (user.getUserName().equals("+Añadir")) { 
+        if (user.getUserName().equals("+Añadir") || user == null) { 
             userField.clear();
             userField.setEditable(true);
             passField.clear();
@@ -142,7 +147,8 @@ public class UserListWindowController implements Initializable {
             surField.setText(user.getLastName());
             dniField.setText(user.getDni());
             dateField.setText(user.getStartDate().toString());
-             cancelRegistration.setVisible(true);
+            cancelRegistration.setVisible(true);
+            cancelRegistration.setSelected(false);
         }
         dateField.setEditable(false);
     }
@@ -176,6 +182,7 @@ public class UserListWindowController implements Initializable {
                     if (cont.eliminarPerson(seleccionado)) {
                         userList.getItems().remove(seleccionado);
                         mostrarInfo("User deleted from the database");
+                        cancelRegistration.setSelected(false);
                     } else {
                         mostrarError("Error deleting user");
                     }
@@ -235,7 +242,7 @@ public class UserListWindowController implements Initializable {
     
     @FXML
     //comprobar que todo los datos estan rellenados (en metodo mejor)
-    private void añadirUser() {
+    private void anadirUser() {
         boolean dniCorrecto=true,passwordCorrecto=true;
         if (comprobacion()) {
             String nomUser = userField.getText();
@@ -261,37 +268,37 @@ public class UserListWindowController implements Initializable {
                 }
                 
                 if (passwordCorrecto){
-                nuevo.setName(nameField.getText());
-                nuevo.setLastName(surField.getText());
+                    nuevo.setName(nameField.getText());
+                    nuevo.setLastName(surField.getText());
 
-                try {
-                    nuevo.setDni(dniField.getText());
-                } catch (DniException e) {
-                    mostrarError("Incorrect ID format");
-                    dniCorrecto = false;
-                }
-                if (dniCorrecto){
-                    try{
-                        DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-                        LocalDate fecha = LocalDate.parse(dateField.getText(), formato);
-
-                        nuevo.setStartDate(fecha);
-                    }catch(DateTimeException e){
-                        mostrarError("Error en la fecha");
-                        System.out.print(e);
+                    try {
+                        nuevo.setDni(dniField.getText());
+                    } catch (DniException e) {
+                        mostrarError("Incorrect ID format");
+                        dniCorrecto = false;
                     }
-                    if (cont.insertarPerson(nuevo)) {
-                        userList.getItems().remove(añadirUser);
-                        userList.getItems().add(nuevo);
-                        userList.getSelectionModel().selectFirst();
-                        userList.getItems().add(añadirUser);
+                    if (dniCorrecto){
+                        try{
+                            DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                            LocalDate fecha = LocalDate.parse(dateField.getText(), formato);
 
-                        mostrarInfo("New user registered");
+                            nuevo.setStartDate(fecha);
+                        }catch(DateTimeException e){
+                            mostrarError("Invalid date format.");
+                            System.out.print(e);
+                        }
+                        if (cont.insertarPerson(nuevo)) {
+                            userList.getItems().remove(añadirUser);
+                            userList.getItems().add(nuevo);
+                            userList.getSelectionModel().selectFirst(); //soba?
+                            userList.getItems().add(añadirUser);
 
-                    } else {
-                        mostrarError("Error registering the user");
+                            mostrarInfo("New user registered");
+
+                        } else {
+                            mostrarError("Error registering the user");
+                        }
                     }
-                }
                 }
             }
        }
@@ -313,4 +320,55 @@ public class UserListWindowController implements Initializable {
            return false;
        }
    }
+   @FXML
+    private void verContrasena() {
+        if (verContra1.isSelected()) {
+            passVisibleField.setText(passField.getText());
+            passVisibleField.setVisible(true);
+            passVisibleField.setManaged(true);
+            passField.setVisible(false);
+            passField.setManaged(false);
+        } else {
+            passField.setText(passVisibleField.getText());
+            passField.setVisible(true);
+            passField.setManaged(true);
+            passVisibleField.setVisible(false);
+            passVisibleField.setManaged(false);
+        }
+    }
+    
+    @FXML
+    private void verContrasena1() {
+        if (verContra2.isSelected()) {
+            passVisibleField1.setText(passField1.getText());
+            passVisibleField1.setVisible(true);
+            passVisibleField1.setManaged(true);
+            passField1.setVisible(false);
+            passField1.setManaged(false);
+
+        } else {
+            passField1.setText(passVisibleField1.getText());
+            passField1.setVisible(true);
+            passField1.setManaged(true);
+            passVisibleField1.setVisible(false);
+            passVisibleField1.setManaged(false);
+        }
+    }
+    
+    private void ocultarContrasenas() {
+        verContra1.setSelected(false);
+        verContra2.setSelected(false);
+
+        passField.setVisible(true);
+        passField.setManaged(true);
+
+        passVisibleField.setVisible(false);
+        passVisibleField.setManaged(false);
+
+        passField1.setVisible(true);
+        passField1.setManaged(true);
+
+        passVisibleField1.setVisible(false);
+        passVisibleField1.setManaged(false);
+    }
 }
