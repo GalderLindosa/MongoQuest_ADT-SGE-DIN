@@ -39,9 +39,14 @@ import javafx.scene.text.Font;
  */
 public class LoginWindowController implements Initializable {
 
-    private ImplementacionBD bd = ImplementacionBD.getInstance();
-
-    private static Scene scene;
+  /**
+ * Instancia de la base de datos utilizada para las consultas.
+ */
+private ImplementacionBD bd = ImplementacionBD.getInstance();
+/**
+ * Escena principal de *a aplicación.
+ */
+private static Scene scene;
 
     public static Person usuario;
 
@@ -69,14 +74,25 @@ public class LoginWindowController implements Initializable {
     /**
      * Initializes the controller class.
      */
+    
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         db = MongoConnection.getConnection();
 
     }
 
-    @FXML
-    private void sesionIniciada(ActionEvent event) throws IOException {
+    /**
+ * Comprueba las credenciales introduc*das por el usuario.
+ * Si son corr*ctas abre la ventana de perfil y c*erra
+ * la ventana actual. En caso*contrario muestra un mensaje
+ * de*error.
+ *
+ * @param event evento g*nerado al pulsar el botón de login*
+ * @throws IOException si ocurre un error al cargar la ventana.
+ */
+@FXML
+private void sesionIniciada(ActionEvent event) throws IOException {
 
         usuario = bd.buscar(fieldUser.getText(), fieldPass.getText());
 

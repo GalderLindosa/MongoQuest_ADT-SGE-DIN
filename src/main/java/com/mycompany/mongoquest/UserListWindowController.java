@@ -28,13 +28,18 @@ import java.time.DateTimeException;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.PasswordField;
 /**
- * FXML Controller class
+ * Controlador de la ventana de gestión de usuarios.
+ * Permite añadir, modificar y eliminar usuarios
+ * registrados en la aplicación.
  *
  * @author Usuario
  */
-public class UserListWindowController implements Initializable {
-    @FXML
-    private ListView<User> userList;
+public class UserListWindowController implements Initializable  {
+/**
+ * Lista de usu*rios registrados.
+ */
+@FXML
+private ListView<User> userList;
     @FXML
     private Button addUserButton;
     @FXML
@@ -49,6 +54,10 @@ public class UserListWindowController implements Initializable {
     private Label dniLabel;
     @FXML
     private Label dateLabel;
+   /**
+ * Etiqueta utilizada para mostr*r mensajes
+ * informativos y de er*or.
+ */
     @FXML
     private Label mensaje;
     
@@ -71,8 +80,14 @@ public class UserListWindowController implements Initializable {
     @FXML
     private RadioButton cancelRegistration;
     
-    private GymControlador cont;
-    private User añadirUser;
+ /**
+ * Controlador encargado d* la gestión de usuarios.
+ */
+private GymControlador cont;
+/**
+ * Usuario especial utilizado*para la opción de añadir.
+ */
+private User añadirUser;
     @FXML
     private Label passLabel1;
     @FXML
@@ -88,11 +103,15 @@ public class UserListWindowController implements Initializable {
     private TextField passVisibleField;
     @FXML
     private TextField passVisibleField1;
-    /**
-     * Initializes the controller class.
-     */
-   @Override
-    public void initialize(URL url, ResourceBundle rb) {
+   /**
+ * Inicializa la ventana cargando todos los usuarios
+ * registrados y añadiendo la opción de crear uno nuevo.
+ *
+ * @param url ubicación utilizada para resolver rutas relativas.
+ * @param rb recursos de internacionalización.
+ */
+@Override
+public void initialize(URL url, ResourceBundle rb) {
         cont = new GymControlador();
         
         añadirUser = new User();
@@ -106,20 +125,31 @@ public class UserListWindowController implements Initializable {
        addUserButton.setVisible(false);
        modifyUser.setVisible(false);
     }
-    
-    private void mostrarInfo(String msg) {
+/**
+ * Muestra un mensaje informativo al usuario.
+ *
+ * @param msg mensaje a mostrar.
+ */
+private void mostrarInfo(String msg) {
         mensaje.setStyle("-fx-text-fill: green;");
         mensaje.setText(msg);
     }
-    
-    private void mostrarError(String msg) {
+/**
+ * Muestra un mensaje de error al usuario.
+ *
+ * @param msg mensaje de error.
+ */
+private void mostrarError(String msg) {
         mensaje.setStyle("-fx-text-fill: red;");
         mensaje.setText(msg);
     }
      
-   //Metodo para rellenar los text con la informacion
-    @FXML 
-    private void seleccionarUsuario() {
+/**
+ * Carga en los campos de texto la información
+ * del usuario seleccionado en la lista.
+ */
+@FXML
+private void seleccionarUsuario(){
         User user = userList.getSelectionModel().getSelectedItem();
         
         if (user.getUserName().equals("+Añadir") || user == null) { 
@@ -153,8 +183,14 @@ public class UserListWindowController implements Initializable {
         dateField.setEditable(false);
     }
     
-    //Metodo para mirar si sigue todo igual; lo que hace es coger el user y mirar is es igual a los text 
-    private boolean igual(User user) {
+/**
+ * Comprueba si los datos introducidos son iguales
+ * a los del usuario seleccionado.
+ *
+ * @param user usuario seleccionado.
+ * @return true si los datos coinciden, false en caso contrario.
+ */
+private boolean igual(User user) {
         return user.getPassword().equals(passField.getText())
             && user.getPassword().equals(passField1.getText())
             && user.getName().equals(nameField.getText())
@@ -162,8 +198,12 @@ public class UserListWindowController implements Initializable {
             && user.getDni().equals(dniField.getText());
     }
     
-    @FXML
-    private void modificarUser() {
+/**
+ * Modifica los datos del usuario seleccionado o
+ * elimina su registro si se ha marcado la opción correspondiente.
+ */
+@FXML
+private void modificarUser() {
         User seleccionado = userList.getSelectionModel().getSelectedItem();
         boolean dniCorrecto = true, passwordCorrecto=true;
 
@@ -226,7 +266,13 @@ public class UserListWindowController implements Initializable {
         }
     }
     
-    private boolean comprobacion() {
+/**
+ * Comprueba que todos los campos obligatorios
+ * contienen datos.
+ *
+ * @return true si todos los campos están rellenos.
+ */
+private boolean comprobacion(){
         if (userField.getText().isBlank()
                 || passField.getText().isBlank()
                 || passField1.getText().isBlank()
@@ -240,9 +286,11 @@ public class UserListWindowController implements Initializable {
         return true;
     }
     
-    @FXML
-    //comprobar que todo los datos estan rellenados (en metodo mejor)
-    private void anadirUser() {
+/**
+ * Registra un nuevo usuario en la aplicación.
+ */
+@FXML
+private void anadirUser() {
         boolean dniCorrecto=true,passwordCorrecto=true;
         if (comprobacion()) {
             String nomUser = userField.getText();
@@ -303,8 +351,13 @@ public class UserListWindowController implements Initializable {
             }
        }
     }
-
-   private boolean userNameRepe(String userName) {
+/**
+ * Comprueba si un nombre de usuario ya existe.
+ *
+ * @param userName nombre de usuario a comprobar.
+ * @return true si ya existe, false en caso contrario.
+ */
+private boolean userNameRepe(String userName) {
         for (User u : cont.getUsers()) {
              if (u.getUserName().equalsIgnoreCase(userName)) {
                  return true;
@@ -313,15 +366,25 @@ public class UserListWindowController implements Initializable {
          return false;
    }
    
-   private boolean contrasIguales(String cont1, String cont2){
+/**
+ * Comprueba si las dos contraseñas introducidas son iguales.
+ *
+ * @param cont1 primera contraseña.
+ * @param cont2 segunda contraseña.
+ * @return true si coinciden, false en caso contrario.
+ */
+private boolean contrasIguales(String cont1, String cont2){
        if (cont1.equals(cont2)){
            return true;
        }else{
            return false;
        }
    }
-   @FXML
-    private void verContrasena() {
+/**
+ * Muestra u oculta la pri*era contraseña.
+ */
+@FXML
+private void verContrasena() {
         if (verContra1.isSelected()) {
             passVisibleField.setText(passField.getText());
             passVisibleField.setVisible(true);
@@ -337,8 +400,11 @@ public class UserListWindowController implements Initializable {
         }
     }
     
-    @FXML
-    private void verContrasena1() {
+/**
+ * Muestra u oculta la segunda c*ntraseña.
+ */
+@FXML
+private void verContrasena1() {
         if (verContra2.isSelected()) {
             passVisibleField1.setText(passField1.getText());
             passVisibleField1.setVisible(true);
@@ -355,7 +421,11 @@ public class UserListWindowController implements Initializable {
         }
     }
     
-    private void ocultarContrasenas() {
+/**
+ **Oculta ambas contraseñas y restaur*
+ * los campos de tipo PasswordFie*d.
+ */
+private void ocultarContrasenas() {
         verContra1.setSelected(false);
         verContra2.setSelected(false);
 

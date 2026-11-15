@@ -43,15 +43,19 @@ public class CartWindowController implements Initializable {
     @FXML
     private FlowPane contenedorProductos;
 
-    /**
-     * Initializes the controller class.
-     */
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
+/**
+ * Inicializa la ventana del carrito cargando los productos
+ * almacenados en el carrito del usuario actual.
+ *
+ * @param url ubicación utilizada para resolver rutas relativas.
+ * @param rb recursos utilizados para la internacionalización.
+ */
+@Override
+public void initialize(URL url, ResourceBundle rb) {
         Person p = LoginWindowController.usuario;
 
         if (!(p instanceof WithCart)) {
-            return;   // Jefe u otro tipo sin carrito
+            return;   
         }
 
         cart = ((WithCart) p).getCart();
@@ -65,19 +69,25 @@ public class CartWindowController implements Initializable {
             contenedorProductos.getChildren().add(tarjeta);
         }
     }
-    
-    private List<VBox> crearTarjetaProducto(Map<Product, Integer> cart) {
+/**
+ * Crea las tarjetas visuales de los productos contenidos
+ * en el carrito de compra.
+ *
+ * @param cart mapa con los productos y sus cantidades.
+ * @return lista de tarjetas de productos.
+ */
+private List<VBox> crearTarjetaProducto(Map<Product, Integer> cart) {
         
         ArrayList<VBox> lista = new ArrayList<>();
     
         for (Map.Entry<Product, Integer> e : cart.entrySet()) {
-            // Imagen
+            
             ImageView imagen = new ImageView(cargarImagen(e.getKey()));
             imagen.setFitWidth(120);
             imagen.setFitHeight(120);
             imagen.setPreserveRatio(true);
 
-            // Nombre, cantidad y precio
+
             Label lblNombre = new Label(e.getKey().getName());
             lblNombre.setStyle("-fx-font-weight: bold;");
             lblNombre.setWrapText(true);
@@ -87,32 +97,37 @@ public class CartWindowController implements Initializable {
 
             Label lblPrecio = new Label(e.getValue() * e.getKey().getPrice() + " €");
 
-            // Contenedor de la tarjeta
             VBox tarjeta = new VBox(8, imagen, lblNombre, lblCantidad, lblPrecio);
             tarjeta.setAlignment(Pos.CENTER);
             tarjeta.setPadding(new Insets(10));
             tarjeta.setPrefWidth(160);
-            /*tarjeta.setStyle(
-                "-fx-border-color: #cccccc; -fx-border-radius: 8; " +
-                "-fx-background-radius: 8; -fx-background-color: white; " +
-                "-fx-cursor: hand;");*/
             
             lista.add(tarjeta);
         }
         
         return lista;
     }
-    
-    private Image cargarImagen(Product p) {
+/**
+ * Carga la imagen asociada a un producto.
+ *
+ * @param p producto del que se desea obtener la imagen.
+ * @return imagen del producto.
+ */
+private Image cargarImagen(Product p){
         try {
-            // Si guardas la ruta/URL como String en el producto:
-            return null ;//new Image(p.getImage(), 120, 120, true, true, true);  <---- Para cuando tengamos imagenes de productos
+                return null ;
         } catch (Exception ex) {
-            return null ;//new Image(getClass().getResourceAsStream("sin-imagen.png"));
+            return null ;
         }
     }
     
-    private void goBack(ActionEvent event) throws java.io.IOException {        
+  /**
+ * Cierra la ventana actual y vuelve a la pantalla anterior.
+ *
+ * @param event evento generado al pulsar el botón volver.
+ * @throws java.io.IOException si ocurre un error durante el proceso.
+ */
+private void goBack(ActionEvent event) throws java.io.IOException {        
         Stage ventanaActual = (Stage) ((Node) event.getSource()).getScene().getWindow();
         ventanaActual.close();
     }

@@ -68,7 +68,16 @@ public class Person {
     public void setUserName(String userName) {
         this.userName = userName;
     }
-
+/**
+ * Establece la contraseña del usuario.
+ * La contraseña debe tener al menos 8 caracteres,
+ * una letra mayúscula, una letra minúscula,
+ * un número y un carácter especial.
+ *
+ * @param password contraseña a asignar.
+ * @throws PasswordException si la contraseña no cumple
+ *         los requisitos de seguridad establecidos.
+ */
     public void setPassword(String password) throws PasswordException  {
       if (!password.matches("^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[_@#$%^&+=!]).{8,}$")) {
         throw new PasswordException("The password must be at least 8 characters long and include an uppercase letter, a lowercase letter, a number, and a special character.");
@@ -84,7 +93,14 @@ public class Person {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
-
+/**
+ * Valida y asigna el DNI de la persona.
+ * El formato válido consiste en 8 dígitos
+ * seguidos de una letra (por ejemplo: 12345678A).
+ *
+ * @param dni DNI que se desea asignar.
+ * @throws DniException si el DNI no cumple el formato establecido.
+ */
    public void setDni(String dni) throws DniException {
         if (!dni.matches("\\d{8}[A-Za-z]")) {
             throw new DniException("The DNI must have 8 numbers and one letter.");

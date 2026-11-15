@@ -73,7 +73,13 @@ public class User extends Person implements WithCart{
         return cart;
     }
 
-//Cambio el toString para que cuando lo muetsr en la lista solo enseñe el nombre 
+/**
+ * Devuelve el nombre de usuario para su representación
+ * en texto. Se utiliza para mostrar únicamente el nombre
+ * de usuario en componentes como ListView.
+ *
+ * @return nombre de usuario.
+ */
     @Override
     public String toString() {
         return getUserName();  

@@ -28,7 +28,9 @@ import java.time.DateTimeException;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.PasswordField;
 /**
- * FXML Controller class
+ * Controlador de la ventana de gestión de empleados.
+ * Permite registrar, modificar y eliminar empleados
+ * de la base de datos.
  *
  * @author Usuario
  */
@@ -90,11 +92,15 @@ public class EmployeeListWindowController implements Initializable {
     private TextField passVisibleField;
     @FXML
     private TextField passVisibleField1;
-    /**
-     * Initializes the controller class.
-     */
-   @Override
-    public void initialize(URL url, ResourceBundle rb) {
+/**
+ * Inicializa la ventana cargando los empleados
+ * existentes y la opción de añadir uno nuevo.
+ *
+ * @param url ubicación utilizada para resolver rutas relativas.
+ * @param rb recursos de internacionalización.
+ */
+@Override
+public void initialize(URL url, ResourceBundle rb) {
         cont = new GymControlador();
         
         anadirEmployee = new Employee();
@@ -111,20 +117,32 @@ public class EmployeeListWindowController implements Initializable {
        passVisibleField.setVisible(false);
        passVisibleField1.setVisible(false);
     }
-    
-    private void mostrarInfo(String msg) {
+/**
+ * Muestra un mensaje informativo al usuario.
+ *
+ * @param msg mensaje a mostrar.
+ */
+private void mostrarInfo(String msg){
         mensaje.setStyle("-fx-text-fill: green;");
         mensaje.setText(msg);
     }
     
-    private void mostrarError(String msg) {
+/**
+ * Muestra un mensaje de error al usuario.
+ *
+ * @param msg mensaje de error.
+ */
+private void mostrarError(String msg){
         mensaje.setStyle("-fx-text-fill: red;");
         mensaje.setText(msg);
     }
      
-   //Metodo para rellenar los text con la informacion
-    @FXML 
-    private void seleccionarUsuario() {
+/**
+ * Carga en los campos del formulario los datos
+ * del empleado seleccionado. Tambien configuracionpara  algunos campos en especifico no se puedan modificar 
+ */
+@FXML
+private void seleccionarUsuario(){
         ocultarContrasenas();
         Employee user = employeeList.getSelectionModel().getSelectedItem();
         if (user == null) {
@@ -148,7 +166,7 @@ public class EmployeeListWindowController implements Initializable {
             addUserButton.setVisible(false);
             modifyUser.setVisible(true);
             userField.setText(user.getUserName());
-            userField.setEditable(false); // para que no se pueda moficar 
+            userField.setEditable(false); 
             passField.setText(user.getPassword());
             passField1.setText(user.getPassword());
             nameField.setText(user.getName());
@@ -161,8 +179,14 @@ public class EmployeeListWindowController implements Initializable {
         dateField.setEditable(false);
     }
     
-    //Metodo para mirar si sigue todo igual; lo que hace es coger el user y mirar is es igual a los text 
-    private boolean igual(Employee user) {
+/**
+ * Comprueba si los datos introducidos coinciden
+ * con los del empleado seleccionado.
+ *
+ * @param user empleado seleccionado.
+ * @return true si no se han realizado modificaciones.
+ */
+private boolean igual(Employee user) {
         return user.getPassword().equals(passField.getText())
             && user.getPassword().equals(passField1.getText())
             && user.getName().equals(nameField.getText())
@@ -170,8 +194,12 @@ public class EmployeeListWindowController implements Initializable {
             && user.getDni().equals(dniField.getText());
     }
     
-    @FXML
-    private void modificarEmployee() {
+  /**
+ * Modifica los datos de un empleado o elimina
+ * su registro si se ha solicitado.
+ */
+@FXML
+private void modificarEmployee(){
         Employee seleccionado = employeeList.getSelectionModel().getSelectedItem();
         boolean dniCorrecto = true, passwordCorrecto=true;
 
@@ -243,7 +271,13 @@ public class EmployeeListWindowController implements Initializable {
         }
     }
     
-    private boolean comprobacion() {
+/**
+ * Verifica que todos los campos obligatorios
+ * estén cumplimentados.
+ *
+ * @return true si todos los campos contienen información.
+ */
+private boolean comprobacion() {
         if (userField.getText().isBlank()
                 || passField.getText().isBlank()
                 || passField1.getText().isBlank()
@@ -257,9 +291,11 @@ public class EmployeeListWindowController implements Initializable {
         return true;
     }
     
-    @FXML
-    //comprobar que todo los datos estan rellenados (en metodo mejor)
-    private void anadirPerson() {
+/**
+ * Registra un nuevo empleado en la aplicación.
+ */
+@FXML
+private void anadirPerson() {
         boolean dniCorrecto=true,passwordCorrecto=true;
         if (comprobacion()) {
             String nomUser = userField.getText();
@@ -321,7 +357,13 @@ public class EmployeeListWindowController implements Initializable {
        }
     }
 
-   private boolean userNameRepe(String userName) {
+/**
+ * Comprueba si el nombre de usuario ya existe.
+ *
+ * @param userName nombre de usuario a comprobar.
+ * @return true si ya existe.
+ */
+private boolean userNameRepe(String userName) {
         for (Employee u : cont.getEmployee()) {
              if (u.getUserName().equalsIgnoreCase(userName)) {
                  return true;
@@ -330,7 +372,14 @@ public class EmployeeListWindowController implements Initializable {
          return false;
    }
    
-   private boolean contrasIguales(String cont1, String cont2){
+/**
+ * Comprueba si ambas contraseñas son iguales.
+ *
+ * @param cont1 primera contraseña.
+ * @param cont2 segunda contraseña.
+ * @return true si coinciden.
+ */
+private boolean contrasIguales(String cont1, String cont2){
        if (cont1.equals(cont2)){
            return true;
        }else{
@@ -338,8 +387,11 @@ public class EmployeeListWindowController implements Initializable {
        }
    }
    
-   @FXML
-    private void verContrasena() {
+/**
+ * Muestra u oculta la primera contraseña.
+ */
+@FXML
+private void verContrasena() {
         if (verContra1.isSelected()) {
             passVisibleField.setText(passField.getText());
             passVisibleField.setVisible(true);
@@ -355,8 +407,11 @@ public class EmployeeListWindowController implements Initializable {
         }
     }
     
-    @FXML
-    private void verContrasena1() {
+/**
+ * Muestra u oculta la segunda contraseña.
+ */
+@FXML
+private void verContrasena1() {
         if (verContra2.isSelected()) {
             passVisibleField1.setText(passField1.getText());
             passVisibleField1.setVisible(true);
@@ -372,8 +427,11 @@ public class EmployeeListWindowController implements Initializable {
             passVisibleField1.setManaged(false);
         }
     }
-    
-    private void ocultarContrasenas() {
+/**
+ * Oculta ambas contraseñas y restablece
+ * los campos de contraseña originales.
+ */
+private void ocultarContrasenas(){
         verContra1.setSelected(false);
         verContra2.setSelected(false);
 

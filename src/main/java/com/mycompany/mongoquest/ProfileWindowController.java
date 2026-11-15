@@ -33,7 +33,9 @@ import javafx.stage.Stage;
 import javafx.scene.Scene;
 
 /**
- * FXML Controller class
+ * Controlador de la ventana de perfil.
+ * Muestra la información del usuario autenticado y
+ * configura las opciones disponibles según su rol.
  *
  * @author Usuario
  */
@@ -79,11 +81,15 @@ public class ProfileWindowController implements Initializable {
     @FXML
     private Button button4;
 
-    /**
-     * Initializes the controller class.
-     */
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
+   /**
+ * Inicializa la ventana cargando los datos del usuario
+ * y configurando los botones según su tipo.
+ *
+ * @param url ubicación utilizada para resolver rutas relativas.
+ * @param rb recursos de internacionalización.
+ */
+@Override
+public void initialize(URL url, ResourceBundle rb) {
         try {
             // TODO
             userName.setText(LoginWindowController.usuario.getName());
@@ -100,8 +106,12 @@ public class ProfileWindowController implements Initializable {
         }
     }
 
-    @FXML
-    public void mostrarContraseña() {
+/**
+ * Muestra u oculta la contraseña del usuario
+ * según el estado del CheckBox.
+ */
+@FXML
+public void mostrarContraseña() {
         if (showPassword.isSelected()) {
             userPass.setText(LoginWindowController.usuario.getPassword());
         } else {
@@ -109,7 +119,12 @@ public class ProfileWindowController implements Initializable {
         }
     }
 
-    public void cargaInfoUser(Person person) {
+/**
+ * Carga información adicional del usuario en la interfaz.
+ *
+ * @param person usuario del que se desea mostrar información.
+ */
+public void cargaInfoUser(Person person){
 
         if (person instanceof User | person instanceof Employee) {
             Label balancelbl = new Label();
@@ -120,7 +135,13 @@ public class ProfileWindowController implements Initializable {
         }
     }
 
-    public void setButtons(Person person) throws IOException {
+/**
+ * Configura los botones visibles según el tipo de usuario.
+ *
+ * @param person usuario autenticado.
+ * @throws IOException si ocurre un error al cargar una ventana.
+ */
+public void setButtons(Person person) throws IOException {
 
         if (person instanceof User) {
             setClassButton();
@@ -140,7 +161,12 @@ public class ProfileWindowController implements Initializable {
 
     }
 
-    public void setClassButton() throws IOException {
+/**
+ * Configura el botón de acceso a las clases.
+ *
+ * @throws IOException si ocurre un error al cargar la ventana.
+ */
+public void setClassButton() throws IOException{
 
         button2.setText("Classes");
         button2.setOnAction(new EventHandler<ActionEvent>() {
@@ -161,9 +187,12 @@ public class ProfileWindowController implements Initializable {
             }
         });
     }
-
-    public void setShopButton() throws IOException {
-
+/**
+ * Configura el botón de acceso a la tienda.
+ *
+ * @throws IOException si ocurre un error al cargar la ventana.
+ */
+public void setShopButton() throws IOException{
         button4.setText("Shop");
         button4.setOnAction(new EventHandler<ActionEvent>() {
             private Scene scene;
@@ -251,14 +280,26 @@ public class ProfileWindowController implements Initializable {
     }
 
 
-
-    private static Parent loadFXML(String fxml) throws IOException {
+/**
+ * Carga un archivo FXML y devuelve su nodo raíz.
+ *
+ * @param fxml nombre del archivo FXML sin extensión.
+ * @return nodo raíz cargado.
+ * @throws IOException si ocurre un error durante la carga.
+ */
+private static Parent loadFXML(String fxml) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
         return fxmlLoader.load();
     }
 
-    @FXML
-    public void goBackToLogin(ActionEvent event) throws IOException {
+ /**
+ * Cierra la sesión actual y vuelve a la ventana de inicio de sesión.
+ *
+ * @param event evento generado al pulsar el botón de cerrar sesión.
+ * @throws IOException si ocurre un error al cargar la ventana.
+ */
+@FXML
+public void goBackToLogin(ActionEvent event) throws IOException{
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("LoginWindow.fxml"));
         Parent root = fxmlLoader.load();
 
