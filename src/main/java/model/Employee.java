@@ -91,6 +91,7 @@ public class Employee extends Person implements WithCart{
 
     @Override
     public String toString() {
-        return "Employee{" + "classes=" + classes + ", shoppingHistory=" + shoppingHistory + ", discountCode=" + discountCode + ", gymId=" + gymId + ", cart=" + cart + '}';
+    //Cambio el toString para que cuando lo muetsr en la lista solo enseñe el nombre 
+        return getUserName();
     }
 }

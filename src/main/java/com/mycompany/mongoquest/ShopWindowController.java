@@ -30,11 +30,14 @@ import model.ImplementacionBD;
 import model.Product;
 import org.bson.Document;
 /**
- * FXML Controller class
+ * Controlador de la ventana de la tienda.
+ * Permite visualizar los productos disponibles,
+ * acceder al carrito, consultar el historial de compras
+ * y seleccionar productos para añadirlos al carrito.
  *
  * @author Usuario
  */
-public class ShopWindowController implements Initializable {
+public class ShopWindowController implements Initializable  {
 
     ImplementacionBD implementacion = ImplementacionBD.getInstance();
     public static Product pr;
@@ -51,10 +54,16 @@ public class ShopWindowController implements Initializable {
     private Button btn3;
     @FXML
     private Button btn4;
-    @FXML
-    private ScrollPane scrollPane;
-    @FXML
-    private FlowPane contenedorProductos;
+ /**
+ * Panel desplazable que muestra los productos.
+ */
+@FXML
+private ScrollPane scrollPane;
+/**
+ * Contenedor donde se añaden dinámicamente los productos.
+ */
+@FXML
+private FlowPane contenedorProductos;
     /**
      * Initializes the controller class.
      */
@@ -68,7 +77,13 @@ public class ShopWindowController implements Initializable {
         }
     }
 
-    private VBox crearTarjetaProducto(Product p) {
+/**
+ * Crea la tarjeta gráfica asociada a un producto.
+ *
+ * @param p producto a mostrar.
+ * @return tarjeta visual del producto.
+ */
+private VBox crearTarjetaProducto(Product p) {
         // Imagen
         ImageView imagen = new ImageView(cargarImagen(p));
         imagen.setFitWidth(120);
@@ -104,8 +119,13 @@ public class ShopWindowController implements Initializable {
         
         return tarjeta;
     }
-    
-    private Image cargarImagen(Product p) {
+/**
+ * Carga la imagen asociada a un producto.
+ *
+ * @param p producto cuya imagen se desea cargar.
+ * @return imagen del producto.
+ */
+private Image cargarImagen(Product p) {
         try {
             // Si guardas la ruta/URL como String en el producto:
             return null ;//new Image(p.getImage(), 120, 120, true, true, true);  <---- Para cuando tengamos imagenes de productos
@@ -114,8 +134,14 @@ public class ShopWindowController implements Initializable {
         }
     }
     
-    @FXML
-    private void history(ActionEvent event) throws IOException{
+/**
+ * Abre la ventana del historial de compras.
+ *
+ * @param event evento generado al pulsar el botón.
+ * @throws IOException si ocurre un error al cargar la ventana.
+ */
+@FXML
+private void history(ActionEvent event) throws IOException{
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("PurchaseHistory.fxml"));
         Parent root = fxmlLoader.load();
         
@@ -127,8 +153,13 @@ public class ShopWindowController implements Initializable {
         ventanaActual.close();
     }
     
-    @FXML
-    private void cart() throws IOException{
+/**
+ * Abre la ventana del carrito de compra.
+ *
+ * @throws IOException si ocurre un error al cargar la ventana.
+ */
+@FXML
+private void cart() throws IOException{
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("CartWindow.fxml"));
         Parent root = fxmlLoader.load();
         
@@ -137,7 +168,12 @@ public class ShopWindowController implements Initializable {
         stage.show();
     }
     
-    private void product(Product p) {
+/**
+ * Abre la ventana de información del producto seleccionado.
+ *
+ * @param p producto seleccionado.
+ */
+private void product(Product p) {
         pr = p;
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("ProductWindow.fxml"));
         Parent root;

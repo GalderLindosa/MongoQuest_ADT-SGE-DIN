@@ -5,12 +5,15 @@
 package com.mycompany.mongoquest;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import model.GymClass;
+import model.Schedule;
 /**
  * FXML Controller class
  *
@@ -40,7 +43,7 @@ public class HorarioWindowController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        
     }    
-    
+   
 }

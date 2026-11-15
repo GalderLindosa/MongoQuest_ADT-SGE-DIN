@@ -30,33 +30,49 @@ import com.mongodb.client.model.Projections;
 import com.mongodb.client.model.Sorts;
 import controller.MongoConnection;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import org.bson.conversions.Bson;
 
 /**
+ * Implementación de acceso a datos de la aplicación.
+ * Gestiona las operaciones CRUD sobre usuarios,
+ * empleados, clases y productos almacenados en MongoDB.
+ *
+ * Implementa el patrón Singleton para disponer de
+ * una única instancia de acceso a la base de datos.
  *
  * @author ire22
  */
 public class ImplementacionBD {
-    // Atributos
+   
     private ResourceBundle configFile;
     private String urlBD;
     private String userBD;
     private String passwordBD;
     private MongoClient mongoClient;
     private MongoDatabase database;
-    // Singleton
+    
+    
     private static ImplementacionBD instance;
     private final MongoCollection<Document> PROFILES;
 
-    private ImplementacionBD() {
+/**
+ * Constructor privado que inicializa la conexión
+ * con la base de datos y la colección de personas.
+ */
+private ImplementacionBD() {
         mongoClient = MongoClients.create("mongodb://localhost:27017");
         database = mongoClient.getDatabase("G2_Life");
-        PROFILES = database.getCollection("People");
+        PROFILES = database.getCollection("people");
 
     }
-
-    public static ImplementacionBD getInstance() {
+/**
+ * Obtiene la única instancia de la clase.
+ *
+ * @return instancia de ImplementacionBD.
+ */
+public static ImplementacionBD getInstance() {
         if (instance == null) {
             instance = new ImplementacionBD();
 
@@ -64,14 +80,22 @@ public class ImplementacionBD {
         return instance;
     }
 
-
-    public Person buscar(String usuario, String contraseña) {
+/**
+ * Busca un usuario en la base de datos a partir
+ * de su nombre de usuario y contraseña.
+ *
+ * @param usuario nombre de usuario.
+ * @param contrasena contraseña del usuario.
+ * @return objeto Person correspondiente o null si no existe.
+ */
+public Person buscar(String usuario, String contrasena)
+ {
         Person persona = null;
         
             try {
-                Document doc = PROFILES.find(and(eq("username", usuario), eq("password", contraseña))).first();
+                Document doc = PROFILES.find(and(eq("username", usuario), eq("password", contrasena))).first();
 
-                if (doc == null || !contraseña.equals(doc.getString("password"))) {
+                if (doc == null || !contrasena.equals(doc.getString("password"))) {
                     return null;
                 } else {
                     String type = doc.getString("role");
@@ -102,7 +126,12 @@ public class ImplementacionBD {
         
     }
     
-    public ArrayList<User> getUsers() {
+/**
+ * Obtiene todos los usuarios registrados con rol member.
+ *
+ * @return lista de usuarios.
+ */
+public ArrayList<User> getUsers(){
         ArrayList<User> users = new ArrayList<>();
         MongoCollection<Document> collection =  database.getCollection("people"); //Consigo la collecion de "Person" = "db.Persons.find()"
 
@@ -141,7 +170,13 @@ public class ImplementacionBD {
             return users;
     }
     
-    public ArrayList<Employee> getEmployee() {
+/**
+ * Obtiene todos los empleados registrados.
+ *
+ * @return lista de empleados.
+ */
+public ArrayList<Employee> getEmployee()
+ {
         ArrayList<Employee> aEmployee = new ArrayList<>();
 
         MongoCollection<Document> collection =  database.getCollection("people"); //Consigo la collecion de "Person" = "db.Persons.find()"
@@ -181,7 +216,13 @@ public class ImplementacionBD {
             return aEmployee;
     }
     
-        public boolean insertarPerson (Person p) {
+/**
+ * Inserta una persona en la base de datos.
+ *
+ * @param p persona a insertar.
+ * @return true si la inserción se realiza correctamente.
+ */
+public boolean insertarPerson(Person p) {
         try {
             MongoCollection<Document> collection = database.getCollection("people");
             Document doc = new Document();
@@ -206,7 +247,12 @@ public class ImplementacionBD {
             return false;
         }
     }
-    
+   /**
+ * Actualiza los datos de una persona existente.
+ *
+ * @param p persona con los datos modificados.
+ * @return true si la modificación se realiza correctamente.
+ */ 
     public boolean modificarPerson(Person p) {
         try {
             MongoCollection<Document> collection =database.getCollection("people");
@@ -225,23 +271,40 @@ public class ImplementacionBD {
             return false;
         }
     }
-   
-    public boolean eliminarPerson(Person p) {
-        try {
-            MongoCollection<Document> collection = database.getCollection("people");
-            DeleteResult resultado = collection.deleteOne(
-                    Filters.eq("username", p.getUserName())
-            );
-            return resultado.getDeletedCount() > 0;
+/**
+ * Elimina una persona de la base de datos.
+ *
+ * @param p persona a eliminar.
+ * @return true si se elimina correctamente.
+ */
+public boolean eliminarPerson(Person p) {
+       try {
+        MongoCollection<Document> collection = database.getCollection("people");
+        System.out.println("Base de datos: " + database.getName());
+        System.out.println("Usuario a eliminar: " + p.getUserName());
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
+        DeleteResult resultado = collection.deleteOne(
+                Filters.eq("username", p.getUserName())
+        );
+        
+        System.out.println("Documentos eliminados: "
+                + resultado.getDeletedCount());
+
+        return resultado.getDeletedCount() > 0;
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        return false;
+    }
     }
     
-
-    public ArrayList<Product> obtenerProductos(){
+/**
+ * Obtiene todos los productos almacenados
+ * en la colección de productos.
+ *
+ * @return lista de productos.
+ */
+public ArrayList<Product> obtenerProductos(){
         MongoCollection<Document> productos = MongoConnection.getConnection().getCollection("Productos");
         ArrayList<Product> lista = new ArrayList<>();
         
@@ -255,4 +318,53 @@ public class ImplementacionBD {
         
         return lista;
     }
+/**
+ * Obtiene todas las clases registradas
+ * en la base de datos.
+ *
+ * @return lista de clases del gimnasio.
+ */
+public ArrayList<GymClass> getAllClasses(){
+
+    ArrayList<GymClass> classes = new ArrayList<>();
+
+    MongoCollection<Document> collection =
+            database.getCollection("classes");
+
+    FindIterable<Document> documents = collection.find();
+
+    for (Document doc : documents) {
+
+        ArrayList<Schedule> schedules = new ArrayList<>();
+
+        List<Document> scheduleDocuments =
+                doc.getList("schedule", Document.class);
+
+        for (Document s : scheduleDocuments) {
+
+            Schedule schedule = new Schedule(
+                    s.getString("day"),
+                    s.getInteger("hour")
+            );
+
+            schedules.add(schedule);
+        }
+
+        ArrayList<String> members =
+                new ArrayList<>(doc.getList("members", String.class));
+
+        GymClass gymClass = new GymClass(
+                doc.getInteger("_id"),
+                doc.getString("class_name"),
+                schedules,
+                doc.getString("employee_username"),
+                members,
+                doc.getInteger("gym_id")
+        );
+
+        classes.add(gymClass);
+    }
+
+    return classes;
+}
 }

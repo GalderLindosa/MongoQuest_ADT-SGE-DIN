@@ -13,7 +13,7 @@
 <AnchorPane id="AnchorPane" prefHeight="508.0" prefWidth="688.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.mongoquest.UserListWindowController">
    <children>
       <ListView fx:id="userList" layoutX="33.0" layoutY="54.0" onMouseClicked="#seleccionarUsuario" prefHeight="416.0" prefWidth="282.0" />
-      <Button fx:id="addUserButton" layoutX="467.0" layoutY="411.0" mnemonicParsing="false" onAction="#añadirUser" prefHeight="46.0" prefWidth="89.0" text="AÑADIR" />
+      <Button fx:id="addUserButton" layoutX="467.0" layoutY="411.0" mnemonicParsing="false" onAction="#anadirUser" prefHeight="46.0" prefWidth="89.0" text="AÑADIR" />
       <Label fx:id="userLabel" layoutX="345.0" layoutY="56.0" text="User" />
       <Label fx:id="passLabel" layoutX="341.0" layoutY="104.0" text="Password " />
       <Label fx:id="nameLabel" layoutX="342.0" layoutY="199.0" text="Name" />
@@ -29,7 +29,7 @@
       <RadioButton fx:id="cancelRegistration" layoutX="374.0" layoutY="368.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="215.0" text="To cancel someone's registration" />
       <Label fx:id="mensaje" layoutX="12.0" layoutY="5.0" prefHeight="46.0" prefWidth="583.0" />
       <PasswordField fx:id="passField" layoutX="448.0" layoutY="100.0" onAction="#seleccionarUsuario" />
-      <CheckBox fx:id="verContra1" layoutX="626.0" layoutY="103.0" mnemonicParsing="false" prefWidth="47.0" text="👁">
+      <CheckBox fx:id="verContra1" layoutX="626.0" layoutY="103.0" mnemonicParsing="false" onAction="#verContrasena" prefWidth="47.0" text="👁">
          <font>
             <Font size="14.0" />
          </font>
@@ -37,7 +37,7 @@
       <Label fx:id="passLabel1" layoutX="344.0" layoutY="146.0" prefHeight="17.0" prefWidth="117.0" text="Repeat " />
       <PasswordField fx:id="passField1" layoutX="448.0" layoutY="145.0" onAction="#seleccionarUsuario" />
       <Label fx:id="passLabel11" layoutX="344.0" layoutY="158.0" prefHeight="17.0" prefWidth="117.0" text="the password" />
-      <CheckBox fx:id="verContra2" layoutX="626.0" layoutY="145.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="53.0" text="👁">
+      <CheckBox fx:id="verContra2" layoutX="626.0" layoutY="145.0" mnemonicParsing="false" onAction="#verContrasena1" prefHeight="25.0" prefWidth="53.0" text="👁">
          <font>
             <Font size="14.0" />
          </font>
