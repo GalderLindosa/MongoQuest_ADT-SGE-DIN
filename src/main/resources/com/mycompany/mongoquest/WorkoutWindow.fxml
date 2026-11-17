@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
-<AnchorPane id="AnchorPane" fx:id="workoutsAnchor" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/26" fx:controller="com.mycompany.mongoquest.WorkoutWindowController">
+<AnchorPane id="AnchorPane" fx:id="workoutsAnchor" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.mongoquest.WorkoutWindowController">
    <children>
-      <ListView fx:id="workoutLists" layoutX="47.0" layoutY="76.0" prefHeight="284.0" prefWidth="227.0" />
+      <ListView fx:id="workoutLists" layoutX="47.0" layoutY="58.0" onEditStart="#infoWorkouts" prefHeight="284.0" prefWidth="227.0" />
       <Label layoutX="388.0" layoutY="90.0" text="Name:" />
-      <Label fx:id="exerName" layoutX="388.0" layoutY="116.0" text="[NAME]" />
+      <Label fx:id="exerName" alignment="CENTER" contentDisplay="BOTTOM" layoutX="459.0" layoutY="90.0" text="[NAME]" />
       <Label layoutX="388.0" layoutY="163.0" text="Reps:" />
-      <Label fx:id="amountReps" layoutX="388.0" layoutY="189.0" text="[REPS]" />
+      <Label fx:id="amountReps" alignment="CENTER" layoutX="463.0" layoutY="163.0" text="[REPS]" />
       <Label layoutX="388.0" layoutY="231.0" text="Weight:" />
-      <Label fx:id="exerWeight" layoutX="388.0" layoutY="257.0" text="[WEIGHT]" />
+      <Label fx:id="exerWeight" alignment="CENTER" layoutX="463.0" layoutY="231.0" text="[WEIGHT]" />
       <Label layoutX="388.0" layoutY="294.0" text="Sets:" />
-      <Label fx:id="amountSets" layoutX="388.0" layoutY="328.0" text="[SETS]" />
+      <Label fx:id="amountSets" alignment="CENTER" layoutX="463.0" layoutY="294.0" text="[SETS]" />
+      <Button layoutX="135.0" layoutY="360.0" mnemonicParsing="false" onAction="#infoWorkouts" text="Show" />
    </children>
 </AnchorPane>

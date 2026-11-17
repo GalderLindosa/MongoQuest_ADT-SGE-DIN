@@ -15,8 +15,7 @@ public class Training {
     private int reps;
     private int weight;
 
-    public Training(int idt,String trainingName, int set, int reps, int weight) {
-        this.idT = idt;
+    public Training(String trainingName, int set, int reps, int weight) {
         this.trainingName = trainingName;
         this.set = set;
         this.reps = reps;
@@ -70,6 +69,11 @@ public class Training {
         this.idT = idT;
     }
 
+    
+    
+
+    
+    
     @Override
     public String toString() {
         return "Training{" + "trainingName=" + trainingName + ", set=" + set + ", reps=" + reps + ", weight=" + weight + '}';
