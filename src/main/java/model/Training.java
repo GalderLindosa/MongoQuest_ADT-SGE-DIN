@@ -9,13 +9,14 @@ package model;
  * @author ire22
  */
 public class Training {
-    
+    private int idT;
     private String trainingName;
     private int set;
     private int reps;
     private int weight;
 
-    public Training(String trainingName, int set, int reps, int weight) {
+    public Training(int idt,String trainingName, int set, int reps, int weight) {
+        this.idT = idt;
         this.trainingName = trainingName;
         this.set = set;
         this.reps = reps;
@@ -59,6 +60,14 @@ public class Training {
 
     public int getWeight() {
         return weight;
+    }
+
+    public int getIdT() {
+        return idT;
+    }
+
+    public void setIdT(int idT) {
+        this.idT = idT;
     }
 
     @Override
