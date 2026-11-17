@@ -223,7 +223,7 @@ public void setShopButton() throws IOException{
             public void handle(ActionEvent e) {
 
                 try {
-                    scene = new Scene(loadFXML("HorarioWindow"), 819, 400);
+                    scene = new Scene(loadFXML("WorkoutWindow"), 819, 400);
                 } catch (IOException ex) {
                     System.getLogger(ProfileWindowController.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
                 }
