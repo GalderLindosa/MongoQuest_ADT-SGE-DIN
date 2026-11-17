@@ -27,6 +27,7 @@ import com.mongodb.client.model.Sorts;
 import controller.MongoConnection;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import org.bson.conversions.Bson;
 
@@ -66,10 +67,11 @@ public class ImplementacionBD implements GymDAO {
         return instance;
     }
 
-
     public Person buscar(String usuario, String contraseña) {
         Person persona = null;
-
+        List<Integer> classes;
+        List<Integer> purchases;
+        List<Training> workouts;
         {
             try {
                 Document doc = PROFILES.find(and(eq("username", usuario), eq("password", contraseña))).first();
@@ -80,11 +82,18 @@ public class ImplementacionBD implements GymDAO {
                     String type = doc.getString("role");
 
                     if ("member".equals(type)) {
-                        return new User(doc.getList(doc, Training.class),doc.getList(doc, Integer.class),doc.getList(doc, Integer.class),doc.getString("username"), doc.getString("password"), doc.getString("first_name"), doc.getString("last_name"), doc.getString("national_id"),doc.getInteger("balance"));
+                        classes = doc.getList("classes", Integer.class);
+                        purchases = doc.getList("purchases", Integer.class);
+                        workouts = doc.getList("workouts", Training.class);
+
+                        return new User(workouts, classes, purchases, doc.getString("username"), doc.getString("password"), doc.getString("first_name"), doc.getString("last_name"), doc.getString("national_id"), doc.getInteger("balance"));
                     } else if ("manager".equals(type)) {
-                        return new Boss(doc.getInteger("gym_id"), doc.getString("username"), doc.getString("password"), doc.getString("first_name"), doc.getString("last_name"), doc.getString("national_id"),doc.getInteger("balance"));
+
+                        return new Boss(doc.getInteger("gym_id"), doc.getString("username"), doc.getString("password"), doc.getString("first_name"), doc.getString("last_name"), doc.getString("national_id"), doc.getInteger("balance"));
                     } else if ("employee".equals(type)) {
-                        return new Employee(doc.getString("discount_code"), doc.getInteger("gym_id"), doc.getString("username"), doc.getString("password"), doc.getString("first_name"), doc.getString("last_name"), doc.getString("national_id"),doc.getInteger("balance"));
+                        classes = doc.getList("classes", Integer.class);
+                        purchases = doc.getList("purchases", Integer.class);
+                        return new Employee(classes, purchases, doc.getString("discount_code"), doc.getInteger("gym_id"), doc.getString("username"), doc.getString("password"), doc.getString("first_name"), doc.getString("last_name"), doc.getString("national_id"), doc.getInteger("balance"));
                     }
                 }
 
@@ -95,18 +104,18 @@ public class ImplementacionBD implements GymDAO {
         return persona;
     }
 
-    public ArrayList<Product> obtenerProductos(){
+    public ArrayList<Product> obtenerProductos() {
         MongoCollection<Document> productos = MongoConnection.getConnection().getCollection("Productos");
         ArrayList<Product> lista = new ArrayList<>();
-        
+
         for (Document doc : productos.find()) {
             Product p = new Product(((Number) doc.get("_id")).intValue(),
-                                    doc.getString("name"),
-                                    ((Number) doc.get("price")).floatValue(),
-                                    ((Number) doc.get("stock")).intValue());
+                    doc.getString("name"),
+                    ((Number) doc.get("price")).floatValue(),
+                    ((Number) doc.get("stock")).intValue());
             lista.add(p);
         }
-        
+
         return lista;
     }
 
