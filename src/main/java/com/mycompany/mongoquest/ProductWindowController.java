@@ -29,13 +29,18 @@ import model.Product;
 import model.User;
 import model.WithCart;
 /**
- * FXML Controller class
+ * Controlador de la ventana de visualización de productos.
+ * Permite consultar la información de un producto y añadirlo
+ * al carrito de compra del usuario.
  *
  * @author Usuario
  */
 public class ProductWindowController implements Initializable {
     
-    Product product = ShopWindowController.pr;
+  /**
+ * Producto seleccionado en la tienda.
+ */
+Product product = ShopWindowController.pr;
     
     @FXML
     private ImageView productimg;
@@ -45,8 +50,11 @@ public class ProductWindowController implements Initializable {
     private Label lblProductPrice;
     @FXML
     private Label lblProductAmount;
-    @FXML
-    private Spinner<Integer> amountToBuy;
+/**
+ * Selector de cantidad a comprar.
+ */
+@FXML
+private Spinner<Integer> amountToBuy;
     @FXML
     private Button addToCart;
     @FXML
@@ -63,8 +71,15 @@ public class ProductWindowController implements Initializable {
         amountToBuy.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, ShopWindowController.pr.getStock(), 0));
     }
     
-    @FXML
-    private void addToCart(ActionEvent event) throws IOException {
+    /**
+ * Añade la cantidad seleccionada del producto al carrito
+ * del usuario y actualiza el stock disponible.
+ *
+ * @param event evento generado al pulsar el botón.
+ * @throws IOException si ocurre un error durante el proceso.
+ */
+@FXML
+private void addToCart(ActionEvent event) throws IOException {
         product.setStock(product.getStock() - amountToBuy.getValue());
         
         if (LoginWindowController.usuario instanceof WithCart) {
@@ -75,8 +90,14 @@ public class ProductWindowController implements Initializable {
         ventanaActual.close();
     }
     
-    @FXML
-    private void goBack(ActionEvent event) throws IOException {        
+/**
+ * Cierra la ventana actual y vuelve a la anterior.
+ *
+ * @param event evento generado al pulsar el botón volver.
+ * @throws IOException si ocurre un error durante el proceso.
+ */
+@FXML
+private void goBack(ActionEvent event) throws IOException {        
         Stage ventanaActual = (Stage) ((Node) event.getSource()).getScene().getWindow();
         ventanaActual.close();
     }
