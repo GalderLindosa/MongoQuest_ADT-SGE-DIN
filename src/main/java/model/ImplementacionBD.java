@@ -28,10 +28,12 @@ import static com.mongodb.client.model.Filters.lt;
 import static com.mongodb.client.model.Filters.or;
 import com.mongodb.client.model.Projections;
 import com.mongodb.client.model.Sorts;
+import com.mongodb.client.model.Updates;
 import controller.MongoConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import org.bson.conversions.Bson;
 
@@ -341,10 +343,43 @@ public class ImplementacionBD {
         return lista;
     }
     
-    public void comprar(HashMap<Product, Integer> productos) {
-        //Recorrer  la coleccion de purchases, obtener la ultima compra(id mas alto), con eso se crea la nueva compra con el siguiente id,
-        //despues de crear la compra, añadir su id a la lista de compras del cliente
-        //Resumen, recorrer purchases, crear purchase y añadir en people
+    /**
+     * Obtiene todos los productos almacenados en la colección de productos.
+     *
+     * @param cart el carrito que se va a comprar.
+     * @param gymID el id del gym al que ha llegado la compra.
+     * @param userName el usuario que ha realizado la compra y al que se le va a asignar.
+     * @param totalPrice precio de la compra.
+     */
+    public void comprar(HashMap<Product, Integer> cart, int gymID, String userName, float totalPrice) {
+        MongoCollection<Document> purchases = MongoConnection.getConnection().getCollection("purchases");
+        MongoCollection<Document> person = MongoConnection.getConnection().getCollection("people");
+
+        Document ultimo = purchases.find()
+                .sort(Sorts.descending("_id"))
+                .first();
+
+        List<Document> productList = new ArrayList<>();
+        for (Map.Entry<Product, Integer> p : cart.entrySet()) {
+            productList.add(new Document("product_id", p.getKey().getProductId())
+                                .append("quantity", p.getValue()));
+        }
+
+        int newId = (ultimo != null) ? ((Number) ultimo.get("_id")).intValue() + 1 : 1;
+
+        Document newPurchase = new Document();
+        newPurchase.append("_id", newId);
+        newPurchase.append("gym_id", gymID);
+        newPurchase.append("username", userName);
+        newPurchase.append("total_price", totalPrice);
+        newPurchase.append("date", LocalDate.now().toString());
+        newPurchase.append("products", productList);
+
+        purchases.insertOne(newPurchase);
+
+        person.updateOne(Filters.eq("username", userName),
+                        Updates.push("purchases", newId));
+        
     }
 
     /**
