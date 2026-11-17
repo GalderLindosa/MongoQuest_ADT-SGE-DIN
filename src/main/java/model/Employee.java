@@ -16,24 +16,21 @@ import java.util.List;
 public class Employee extends Person implements WithCart{
     
     private List<Integer> classes;
-    private List<Integer> shoppingHistory;
     private String discountCode;
     private int gymId;
     private HashMap<Product, Integer> cart;
 
-      public Employee(List<Integer> classes, List<Integer> shoppingHistory,
-            String discountCode, int gymId, String userName, String password, String name,
+    public Employee(List<Integer> classes, String discountCode, int gymId, String userName, String password, String name,
             String lastName, String dni, float balance,LocalDate startDate) {
         super(userName, password, name, lastName, dni, balance,startDate);
         this.classes = classes;
-        this.shoppingHistory = shoppingHistory;
         this.discountCode = discountCode;
         this.gymId = gymId;
         this.cart = new HashMap<>();
     }
     
     
-        public Employee(String discountCode, int gymId, String userName, String password, String name, String lastName, String dni, float balance, LocalDate startDate) {
+    public Employee(String discountCode, int gymId, String userName, String password, String name, String lastName, String dni, float balance, LocalDate startDate) {
         super(userName, password, name, lastName, dni, balance,startDate);
         this.discountCode = discountCode;
         this.gymId = gymId;
@@ -42,7 +39,6 @@ public class Employee extends Person implements WithCart{
     public Employee() {
         super();
         this.classes = new ArrayList<>();
-        this.shoppingHistory = new ArrayList<>();
         this.discountCode = "";
         this.gymId = 0;
         this.cart = new HashMap<>();
@@ -50,10 +46,6 @@ public class Employee extends Person implements WithCart{
 
     public List<Integer> getClasses() {
         return classes;
-    }
-
-    public List<Integer> getShoppingHistory() {
-        return shoppingHistory;
     }
 
     public String getDiscountCode() {
@@ -71,10 +63,6 @@ public class Employee extends Person implements WithCart{
 
     public void setClasses(List<Integer> classes) {
         this.classes = classes;
-    }
-
-    public void setShoppingHistory(List<Integer> shoppingHistory) {
-        this.shoppingHistory = shoppingHistory;
     }
 
     public void setDiscountCode(String discountCode) {

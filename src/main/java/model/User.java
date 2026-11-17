@@ -17,15 +17,13 @@ public class User extends Person implements WithCart{
     
     private List<Object> trainings;
     private List<Integer> classes;
-    private List<Integer> shoppingHistory;
     private HashMap<Product, Integer> cart;
 
-    public User(List<Object> trainings, List<Integer> classes, List<Integer> shoppingHistory,
-                String userName, String password, String name, String lastName, String dni, float balance, LocalDate start) {
+    public User(List<Object> trainings, List<Integer> classes, String userName, 
+                String password, String name, String lastName, String dni, float balance, LocalDate start) {
         super(userName, password, name, lastName, dni, balance,start);
         this.trainings = trainings;
         this.classes = classes;
-        this.shoppingHistory = shoppingHistory;
         this.cart = new HashMap<>();
     }
     
@@ -35,7 +33,6 @@ public class User extends Person implements WithCart{
         super();
         this.trainings = new ArrayList<>();
         this.classes = new ArrayList<>();
-        this.shoppingHistory = new ArrayList<>();
         this.cart = new HashMap<>();
     }
 
@@ -45,10 +42,6 @@ public class User extends Person implements WithCart{
 
     public void setClasses(ArrayList<Integer> classes) {
         this.classes = classes;
-    }
-
-    public void setShoppingHistory(ArrayList<Integer> shoppingHistory) {
-        this.shoppingHistory = shoppingHistory;
     }
     
     @Override
@@ -63,10 +56,6 @@ public class User extends Person implements WithCart{
     public List<Integer> getClasses() {
         return classes;
     }
-
-    public List<Integer> getShoppingHistory() {
-        return shoppingHistory;
-    }
     
     @Override
     public HashMap<Product, Integer> getCart() {
@@ -75,6 +64,6 @@ public class User extends Person implements WithCart{
 
     @Override
     public String toString() {
-        return "User{" + "trainings=" + trainings + ", classes=" + classes + ", shoppingHistory=" + shoppingHistory + ", cart=" + cart + '}';
+        return "User{" + "trainings=" + trainings + ", classes=" + classes + ", cart=" + cart + '}';
     }
 }

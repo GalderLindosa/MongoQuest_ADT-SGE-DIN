@@ -17,6 +17,8 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
@@ -45,9 +47,7 @@ public class CartWindowController implements Initializable {
     private Map<Product, Integer> cart;
     Person p = LoginWindowController.usuario;
     ImplementacionBD implementacion = ImplementacionBD.getInstance();
-    
-    float totalPrice;
-    ArrayList<String> gymNames = new ArrayList<>();
+    private float totalPrice;
     
     @FXML
     private ScrollPane scrollPane;
@@ -58,7 +58,7 @@ public class CartWindowController implements Initializable {
     @FXML
     private Button btnBuy;
     @FXML
-    private ChoiceBox<String> choiceBoxWhere;
+    private ChoiceBox<Gym> choiceBoxWhere;
     @FXML
     private Label lblTotalPrice;
     @FXML
@@ -97,10 +97,7 @@ public class CartWindowController implements Initializable {
 
             lblBalance.setText(Float.toString(p.getBalance()));
 
-            for (Gym g : implementacion.obtenerGimnasios()) {
-                gymNames.add(g.getDir());
-            }
-            ObservableList<String> gyms = FXCollections.observableArrayList(gymNames);
+            ObservableList<Gym> gyms = FXCollections.observableArrayList(implementacion.obtenerGimnasios());
             choiceBoxWhere.setItems(gyms);
 
 
@@ -163,9 +160,10 @@ public class CartWindowController implements Initializable {
      */
     private Image cargarImagen(Product p){
             try {
-                    return null ;
+                // Si guardas la ruta/URL como String en el producto:
+                return null ;//new Image(p.getImage(), 120, 120, true, true, true);  <---- Para cuando tengamos imagenes de productos
             } catch (Exception ex) {
-                return null ;
+                return null ;//new Image(getClass().getResourceAsStream("sin-imagen.png"));
             }
         }
 
@@ -182,15 +180,28 @@ public class CartWindowController implements Initializable {
     
     @FXML
     private void buy(ActionEvent event) throws java.io.IOException {
-        if (!lblTotalPrice.getText().equals("0€")) {
-            //Añadir el carrito entero (cart) al historial de compras (base de datos, crear una compra
-            //en la coleccion de compras y añadir el id de la misma a la lista del usuario que hace la compra)
+        if (!cart.isEmpty()) {
+            if (p.getBalance() > totalPrice) {
+                implementacion.comprar(cart, choiceBoxWhere.getValue().getGymId(), p.getUserName(), totalPrice);
 
-            p.setBalance(p.getBalance()-totalPrice);
-            cart.clear();
-            Stage ventanaActual = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            ventanaActual.close();
+                p.setBalance(p.getBalance()-totalPrice);
+                cart.clear();
+                Stage ventanaActual = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                ventanaActual.close();
+            } else {
+                showAlert("Error de compra","No se puede realizar la compra por falta de fondos.");
+            }
+        } else {
+            showAlert("Error de compra","No se puede realizar una compra con el carrito vacio.");
         }
+    }
+    
+    private void showAlert(String titulo, String mensaje) {
+        Alert alert = new Alert(AlertType.WARNING);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);   // quita la cabecera para que quede más limpio
+        alert.setContentText(mensaje);
+        alert.showAndWait();
     }
     
 }
