@@ -12,9 +12,9 @@ public class Gym {
 
     private int gymId;
     private String dir;
-    private int pc;
+    private String pc;
 
-    public Gym(int gymId, String dir, int pc) {
+    public Gym(int gymId, String dir, String pc) {
         this.gymId = gymId;
         this.dir = dir;
         this.pc = pc;
@@ -23,7 +23,7 @@ public class Gym {
     public Gym() {
         this.gymId = 0;
         this.dir = "";
-        this.pc = 0;
+        this.pc = "";
     }
 
     public int getGymId() {
@@ -34,7 +34,7 @@ public class Gym {
         return dir;
     }
 
-    public int getPc() {
+    public String getPc() {
         return pc;
     }
 
@@ -46,7 +46,7 @@ public class Gym {
         this.dir = dir;
     }
 
-    public void setPc(int pc) {
+    public void setPc(String pc) {
         this.pc = pc;
     }
 

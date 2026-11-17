@@ -4,7 +4,6 @@
  */
 package com.mycompany.mongoquest;
 
-import controller.MongoConnection;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -19,7 +18,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -103,10 +101,10 @@ private VBox crearTarjetaProducto(Product p) {
         tarjeta.setAlignment(Pos.CENTER);
         tarjeta.setPadding(new Insets(10));
         tarjeta.setPrefWidth(160);
-        /*tarjeta.setStyle(
+        tarjeta.setStyle(
             "-fx-border-color: #cccccc; -fx-border-radius: 8; " +
             "-fx-background-radius: 8; -fx-background-color: white; " +
-            "-fx-cursor: hand;");*/
+            "-fx-cursor: hand;");
 
         // Toda la tarjeta clickable
         tarjeta.setOnMouseClicked(e -> product(p));
