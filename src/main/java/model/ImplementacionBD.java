@@ -30,6 +30,7 @@ import com.mongodb.client.model.Projections;
 import com.mongodb.client.model.Sorts;
 import controller.MongoConnection;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ResourceBundle;
 import org.bson.conversions.Bson;
@@ -334,6 +335,26 @@ public class ImplementacionBD {
         }
 
         return lista;
+    }
+    
+    public ArrayList<Gym> obtenerGimnasios(){
+        MongoCollection<Document> gyms = MongoConnection.getConnection().getCollection("gyms");
+        ArrayList<Gym> lista = new ArrayList<>();
+        
+        for (Document doc : gyms.find()) {
+            Gym g = new Gym(((Number) doc.get("_id")).intValue(),
+                                    doc.getString("address"),
+                                    doc.getString("postal_code"));
+            lista.add(g);
+        }
+        
+        return lista;
+    }
+    
+    public void comprar(HashMap<Product, Integer> productos) {
+        //Recorrer  la coleccion de purchases, obtener la ultima compra(id mas alto), con eso se crea la nueva compra con el siguiente id,
+        //despues de crear la compra, añadir su id a la lista de compras del cliente
+        //Resumen, recorrer purchases, crear purchase y añadir en people
     }
 
     /**
