@@ -16,6 +16,9 @@ import model.Training;
 import model.User;
 import com.mycompany.mongoquest.LoginWindowController;
 import java.util.List;
+import javafx.event.ActionEvent;
+import org.bson.Document;
+
 /**
  * FXML Controller class
  *
@@ -26,7 +29,7 @@ public class WorkoutWindowController implements Initializable {
     @FXML
     private AnchorPane workoutsAnchor;
     @FXML
-    private ListView<Object> workoutLists;
+    private ListView<String> workoutLists;
     @FXML
     private Label exerName;
     @FXML
@@ -35,30 +38,47 @@ public class WorkoutWindowController implements Initializable {
     private Label exerWeight;
     @FXML
     private Label amountSets;
-    
-    private List <Object> works = new ArrayList();
+
+    private List<Training> works = new ArrayList();
+
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        works = ((User)LoginWindowController.usuario).getTrainings();
-        
-       for(int i=0; i<works.size();i++){
-           Object base = works.get(i);
-           Training entrenamiento = (Training)base;
-           
-           
-           workoutLists.getItems().add(entrenamiento.getTrainingName());
-       }
-        
-    }    
-    
-    
-    
-    
-    
-    
-    
+        exerName.setVisible(false);
+        amountReps.setVisible(false);
+        amountSets.setVisible(false);
+        exerWeight.setVisible(false);
+        works = ((User) LoginWindowController.usuario).getTrainings();
+
+        for (int i = 0; i < works.size(); i++) {
+            workoutLists.getItems().add(works.get(i).getTrainingName());
+        }
+
+    }
+
+    @FXML
+    public void infoWorkouts() {
+
+        String name = workoutLists.getSelectionModel().getSelectedItem();
+        System.out.println(name);
+        for (int i = 0; i < works.size(); i++) {
+            if (works.get(i).getTrainingName().equalsIgnoreCase(name)) {
+                exerName.setText(works.get(i).getTrainingName());
+                exerWeight.setText(Integer.toString(works.get(i).getWeight()));
+                amountReps.setText(Integer.toString(works.get(i).getReps()));
+                amountSets.setText(Integer.toString(works.get(i).getSet()));
+                exerName.setVisible(true);
+                amountReps.setVisible(true);
+                amountSets.setVisible(true);
+                exerWeight.setVisible(true);
+            } else {
+                System.out.println("AAAAAAAAAAAA");
+            }
+
+        }
+    }
+
 }

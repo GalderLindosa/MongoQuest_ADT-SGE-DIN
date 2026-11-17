@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class User extends Person implements WithCart{
     
-    private List<Object> trainings;
+    private List<Training> trainings;
     private List<Integer> classes;
     private HashMap<Product, Integer> cart;
 
@@ -36,7 +36,7 @@ public class User extends Person implements WithCart{
         this.cart = new HashMap<>();
     }
 
-    public void setTrainings(ArrayList<Object> trainings) {
+    public void setTrainings(ArrayList<Training> trainings) {
         this.trainings = trainings;
     }
 
@@ -49,7 +49,7 @@ public class User extends Person implements WithCart{
         this.cart.put(p, cantidad);
     }
 
-    public List<Object> getTrainings() {
+    public List<Training> getTrainings() {
         return trainings;
     }
 

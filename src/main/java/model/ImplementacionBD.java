@@ -94,7 +94,8 @@ public class ImplementacionBD {
         Person persona = null;
         List<Integer> classes;
         List<Object> workouts = new ArrayList<>();
-
+        List<Document> workoutsDoc = new ArrayList<>();
+        List<Training> workouts = new ArrayList<>();
         try {
             Document doc = PROFILES.find(and(eq("username", usuario), eq("password", contrasena))).first();
 
@@ -114,7 +115,19 @@ public class ImplementacionBD {
 
                 if ("member".equals(type)) {
                     classes = doc.getList("classes", Integer.class);
-                    workouts = doc.getList("workouts", Object.class);
+                    workoutsDoc = doc.getList("workouts", Document.class);
+
+                    for (Document s : workoutsDoc) {
+
+                        Training Training = new Training(
+                                s.getString("name"),
+                                s.getInteger("reps"),
+                                s.getInteger("weight"),
+                                s.getInteger("sets")
+                        );
+                        
+                        workouts.add(Training);
+                    }
                     return new User(workouts, classes, doc.getString("username"), doc.getString("password"), doc.getString("first_name"), doc.getString("last_name"), doc.getString("national_id"), doc.getInteger("balance"), fecha);
                 } else if ("manager".equals(type)) {
                     return new Boss(doc.getInteger("gym_id"), doc.getString("username"), doc.getString("password"), doc.getString("first_name"), doc.getString("last_name"), doc.getString("national_id"), doc.getInteger("balance"), fecha);
