@@ -15,12 +15,12 @@ import java.util.List;
  */
 public class User extends Person implements WithCart{
     
-    private List<Training> trainings;
+    private List<Object> trainings;
     private List<Integer> classes;
     private List<Integer> shoppingHistory;
     private HashMap<Product, Integer> cart;
 
-    public User(List<Training> trainings, List<Integer> classes, List<Integer> shoppingHistory,
+    public User(List<Object> trainings, List<Integer> classes, List<Integer> shoppingHistory,
                 String userName, String password, String name, String lastName, String dni, float balance, LocalDate start) {
         super(userName, password, name, lastName, dni, balance,start);
         this.trainings = trainings;
@@ -39,7 +39,7 @@ public class User extends Person implements WithCart{
         this.cart = new HashMap<>();
     }
 
-    public void setTrainings(ArrayList<Training> trainings) {
+    public void setTrainings(ArrayList<Object> trainings) {
         this.trainings = trainings;
     }
 
@@ -56,7 +56,7 @@ public class User extends Person implements WithCart{
         this.cart.put(p, cantidad);
     }
 
-    public List<Training> getTrainings() {
+    public List<Object> getTrainings() {
         return trainings;
     }
 

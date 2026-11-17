@@ -87,11 +87,14 @@ public class ImplementacionBD {
      * @param contrasena contraseña del usuario.
      * @return objeto Person correspondiente o null si no existe.
      */
+
+
     public Person buscar(String usuario, String contrasena) {
         Person persona = null;
         List<Integer> classes;
         List<Integer> purchases;
-        List<Training> workouts;
+        List<Object> workouts = new ArrayList<>();
+
         try {
             Document doc = PROFILES.find(and(eq("username", usuario), eq("password", contrasena))).first();
 
@@ -112,14 +115,14 @@ public class ImplementacionBD {
                 if ("member".equals(type)) {
                     classes = doc.getList("classes", Integer.class);
                     purchases = doc.getList("purchases", Integer.class);
-                    workouts = doc.getList("workouts", Training.class);
+                    workouts = doc.getList("workouts", Object.class);
                     return new User(workouts, classes, purchases, doc.getString("username"), doc.getString("password"), doc.getString("first_name"), doc.getString("last_name"), doc.getString("national_id"), doc.getInteger("balance"), fecha);
                 } else if ("manager".equals(type)) {
                     return new Boss(doc.getInteger("gym_id"), doc.getString("username"), doc.getString("password"), doc.getString("first_name"), doc.getString("last_name"), doc.getString("national_id"), doc.getInteger("balance"), fecha);
                 } else if ("employee".equals(type)) {
                     classes = doc.getList("classes", Integer.class);
                     purchases = doc.getList("purchases", Integer.class);
-                    return new Employee(classes,purchases,doc.getString("discount_code"), doc.getInteger("gym_id"), doc.getString("username"), doc.getString("password"), doc.getString("first_name"), doc.getString("last_name"), doc.getString("national_id"), doc.getInteger("balance"), fecha);
+                    return new Employee(classes, purchases, doc.getString("discount_code"), doc.getInteger("gym_id"), doc.getString("username"), doc.getString("password"), doc.getString("first_name"), doc.getString("last_name"), doc.getString("national_id"), doc.getInteger("balance"), fecha);
                 }
             }
 
