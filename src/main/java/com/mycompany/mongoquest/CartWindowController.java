@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -46,7 +47,7 @@ public class CartWindowController implements Initializable {
     ImplementacionBD implementacion = ImplementacionBD.getInstance();
     
     float totalPrice;
-    ArrayList<Gym> gyms = implementacion.obtenerGimnasios();
+    ArrayList<String> gymNames = new ArrayList<>();
     
     @FXML
     private ScrollPane scrollPane;
@@ -68,14 +69,15 @@ public class CartWindowController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        if (!(p instanceof WithCart)) {
-            return;   // Jefe u otro tipo sin carrito
-        }
+        /*if (!(p instanceof WithCart)) {
+        return;   // Jefe u otro tipo sin carrito
+        }*/
 
         cart = ((WithCart) p).getCart();
 
         if (cart == null || cart.isEmpty()) {
             contenedorProductos.getChildren().add(new Label("El carrito está vacío"));
+            lblTotalPrice.setText("0€");
             return;
         }
 
@@ -90,9 +92,12 @@ public class CartWindowController implements Initializable {
         
         lblBalance.setText(Float.toString(p.getBalance()));
         
-        for (Gym g : gyms) {
-            choiceBoxWhere.setValue(g.getDir());
+        for (Gym g : implementacion.obtenerGimnasios()) {
+            gymNames.add(g.getDir());
         }
+        ObservableList<String> gyms = FXCollections.observableArrayList(gymNames);
+        choiceBoxWhere.setItems(gyms);
+        
         
         if (p instanceof Employee) {
             Label lblDiscount = new Label();
@@ -130,10 +135,10 @@ public class CartWindowController implements Initializable {
             tarjeta.setAlignment(Pos.CENTER);
             tarjeta.setPadding(new Insets(10));
             tarjeta.setPrefWidth(160);
-            /*tarjeta.setStyle(
+            tarjeta.setStyle(
                 "-fx-border-color: #cccccc; -fx-border-radius: 8; " +
                 "-fx-background-radius: 8; -fx-background-color: white; " +
-                "-fx-cursor: hand;");*/
+                "-fx-cursor: hand;");
             
             lista.add(tarjeta);
         }
@@ -150,11 +155,13 @@ public class CartWindowController implements Initializable {
         }
     }
     
+    @FXML
     private void goBack(ActionEvent event) throws java.io.IOException {        
         Stage ventanaActual = (Stage) ((Node) event.getSource()).getScene().getWindow();
         ventanaActual.close();
     }
     
+    @FXML
     private void buy(ActionEvent event) throws java.io.IOException {
         //Añadir el carrito entero (cart) al historial de compras (base de datos, crear una compra
         //en la coleccion de compras y añadir el id de la misma a la lista del usuario que hace la compra)
