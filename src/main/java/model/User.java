@@ -4,6 +4,7 @@
  */
 package model;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,18 +21,15 @@ public class User extends Person implements WithCart{
     private HashMap<Product, Integer> cart;
 
     public User(List<Training> trainings, List<Integer> classes, List<Integer> shoppingHistory,
-                String userName, String password, String name, String lastName, String dni, float balance) {
-        super(userName, password, name, lastName, dni, balance);
+                String userName, String password, String name, String lastName, String dni, float balance, LocalDate start) {
+        super(userName, password, name, lastName, dni, balance,start);
         this.trainings = trainings;
         this.classes = classes;
         this.shoppingHistory = shoppingHistory;
         this.cart = new HashMap<>();
     }
     
-        public User(String userName, String password, String name, String lastName, String dni, float balance) {
-        super(userName, password, name, lastName, dni, balance);
-        
-    }
+
     
     public User() {
         super();
