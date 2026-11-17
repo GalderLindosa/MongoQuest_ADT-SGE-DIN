@@ -52,7 +52,7 @@ public class Gym {
 
     @Override
     public String toString() {
-        return "Gym{" + "gymId=" + gymId + ", dir=" + dir + ", pc=" + pc + '}';
+        return dir;
     }
     
     
