@@ -4,7 +4,9 @@
  */
 package model;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import excepciones.*;
 
 /**
  *
@@ -12,22 +14,24 @@ import java.util.ArrayList;
  */
 public class Person {
     
-    private String userName;
-    private String password;
-    private String name;
-    private String lastName;
-    private String dni;
-    private float balance;
-
-    public Person(String userName, String password, String name, String lastName, String dni, float balance) {
+    protected String userName;
+    protected String password;
+    protected String name;
+    protected String lastName;
+    protected String dni;
+    protected LocalDate startDate;
+    protected float balance;
+    
+    public Person(String userName, String password, String name, String lastName, String dni, float balance,LocalDate startDate) {
         this.userName = userName;
         this.password = password;
         this.name = name;
         this.lastName = lastName;
         this.dni = dni;
+        this.startDate = startDate;
         this.balance = balance;
     }
-    
+
     public Person() {
         this.userName = "";
         this.password = "";
@@ -64,9 +68,22 @@ public class Person {
     public void setUserName(String userName) {
         this.userName = userName;
     }
+/**
+ * Establece la contraseña del usuario.
+ * La contraseña debe tener al menos 8 caracteres,
+ * una letra mayúscula, una letra minúscula,
+ * un número y un carácter especial.
+ *
+ * @param password contraseña a asignar.
+ * @throws PasswordException si la contraseña no cumple
+ *         los requisitos de seguridad establecidos.
+ */
+    public void setPassword(String password) throws PasswordException  {
+      if (!password.matches("^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[_@#$%^&+=!]).{8,}$")) {
+        throw new PasswordException("The password must be at least 8 characters long and include an uppercase letter, a lowercase letter, a number, and a special character.");
+    }
 
-    public void setPassword(String password) {
-        this.password = password;
+    this.password = password;
     }
 
     public void setName(String name) {
@@ -76,9 +93,28 @@ public class Person {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
+/**
+ * Valida y asigna el DNI de la persona.
+ * El formato válido consiste en 8 dígitos
+ * seguidos de una letra (por ejemplo: 12345678A).
+ *
+ * @param dni DNI que se desea asignar.
+ * @throws DniException si el DNI no cumple el formato establecido.
+ */
+   public void setDni(String dni) throws DniException {
+        if (!dni.matches("\\d{8}[A-Za-z]")) {
+            throw new DniException("The DNI must have 8 numbers and one letter.");
+        }
 
-    public void setDni(String dni) {
-        this.dni = dni;
+    this.dni = dni;
+}
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
     }
     
     public void setBalance(float balance) {
@@ -87,8 +123,7 @@ public class Person {
 
     @Override
     public String toString() {
-        return "Person{" + "userName=" + userName + ", password=" + password + ", name=" + name 
-                + ", lastName=" + lastName + ", dni=" + dni + '}';
+        return "Person{" + "userName=" + userName + ", password=" + password + ", name=" + name + ", lastName=" + lastName + ", dni=" + dni + ", startDate=" + startDate + '}';
     }
-    
+   
 }

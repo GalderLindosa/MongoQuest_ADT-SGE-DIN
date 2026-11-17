@@ -28,8 +28,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import model.ImplementacionBD;
 import java.io.File;
-import javafx.scene.control.Alert;
-import javafx.scene.control.CheckBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -41,14 +39,14 @@ import javafx.scene.text.Font;
  */
 public class LoginWindowController implements Initializable {
 
-    /**
-     * Instancia de la base de datos utilizada para las consultas.
-     */
-    private ImplementacionBD bd = ImplementacionBD.getInstance();
-    /**
-     * Escena principal de *a aplicación.
-     */
-    private static Scene scene;
+  /**
+ * Instancia de la base de datos utilizada para las consultas.
+ */
+private ImplementacionBD bd = ImplementacionBD.getInstance();
+/**
+ * Escena principal de *a aplicación.
+ */
+private static Scene scene;
 
     public static Person usuario;
 
@@ -72,12 +70,12 @@ public class LoginWindowController implements Initializable {
     GymControlador controlador = new GymControlador();
     @FXML
     private VBox vBoxLogin;
-    @FXML
-    private CheckBox showPassword;
 
     /**
      * Initializes the controller class.
      */
+    
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         db = MongoConnection.getConnection();
@@ -85,16 +83,16 @@ public class LoginWindowController implements Initializable {
     }
 
     /**
-     * Comprueba las credenciales introduc*das por el usuario. Si son corr*ctas
-     * abre la ventana de perfil y c*erra la ventana actual. En caso*contrario
-     * muestra un mensaje de*error.
-     *
-     * @param event evento g*nerado al pulsar el botón de login
-     *
-     * @throws IOException si ocurre un error al cargar la ventana.
-     */
-    @FXML
-    private void loggedIn(ActionEvent event) throws IOException {
+ * Comprueba las credenciales introduc*das por el usuario.
+ * Si son corr*ctas abre la ventana de perfil y c*erra
+ * la ventana actual. En caso*contrario muestra un mensaje
+ * de*error.
+ *
+ * @param event evento g*nerado al pulsar el botón de login*
+ * @throws IOException si ocurre un error al cargar la ventana.
+ */
+@FXML
+private void sesionIniciada(ActionEvent event) throws IOException {
 
         usuario = bd.buscar(fieldUser.getText(), fieldPass.getText());
 
@@ -103,7 +101,7 @@ public class LoginWindowController implements Initializable {
             userNull.setTextFill(Color.web("#FF0000"));
             userNull.setFont(new Font("Arial", 10));
             if (!errorMessage) {
-                errorMessage = true;
+                errorMessage=true;
                 vBoxLogin.getChildren().add(userNull);
             }
 
@@ -122,14 +120,6 @@ public class LoginWindowController implements Initializable {
 
     }
 
-    @FXML
-    private void passwordShown() {
-        if (showPassword.isSelected()) {
-            var alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Contraseñ:");
-            alert.setContentText("su contraseña es: "+ fieldPass.getText());
-            alert.show();
-        }
-    }
+ }
 
-}
+

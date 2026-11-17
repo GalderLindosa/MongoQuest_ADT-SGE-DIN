@@ -4,25 +4,42 @@
  */
 package com.mycompany.mongoquest;
 
+import controller.GymControlador;
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 import java.util.ResourceBundle;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import model.Person;
+import model.User;
+import excepciones.*;
+import java.time.DateTimeException;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.PasswordField;
 /**
- * FXML Controller class
+ * Controlador de la ventana de gestión de usuarios.
+ * Permite añadir, modificar y eliminar usuarios
+ * registrados en la aplicación.
  *
  * @author Usuario
  */
-public class UserListWindowController implements Initializable {
-
-
-    @FXML
-    private ListView<?> userList;
+public class UserListWindowController implements Initializable  {
+/**
+ * Lista de usu*rios registrados.
+ */
+@FXML
+private ListView<User> userList;
     @FXML
     private Button addUserButton;
     @FXML
@@ -37,6 +54,13 @@ public class UserListWindowController implements Initializable {
     private Label dniLabel;
     @FXML
     private Label dateLabel;
+   /**
+ * Etiqueta utilizada para mostr*r mensajes
+ * informativos y de er*or.
+ */
+    @FXML
+    private Label mensaje;
+    
     @FXML
     private TextField userField;
     @FXML
@@ -49,16 +73,372 @@ public class UserListWindowController implements Initializable {
     private TextField dniField;
     @FXML
     private TextField dateField;
-    @FXML
-    private Button deleteUser;
+  
     @FXML
     private Button modifyUser;
-    /**
-     * Initializes the controller class.
-     */
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-    }    
     
+    @FXML
+    private RadioButton cancelRegistration;
+    
+ /**
+ * Controlador encargado d* la gestión de usuarios.
+ */
+private GymControlador cont;
+/**
+ * Usuario especial utilizado*para la opción de añadir.
+ */
+private User añadirUser;
+    @FXML
+    private Label passLabel1;
+    @FXML
+    private PasswordField passField1;
+    @FXML
+    private Label passLabel11;
+    @FXML
+    private CheckBox verContra1;
+    @FXML
+    private CheckBox verContra2;
+    
+    @FXML
+    private TextField passVisibleField;
+    @FXML
+    private TextField passVisibleField1;
+   /**
+ * Inicializa la ventana cargando todos los usuarios
+ * registrados y añadiendo la opción de crear uno nuevo.
+ *
+ * @param url ubicación utilizada para resolver rutas relativas.
+ * @param rb recursos de internacionalización.
+ */
+@Override
+public void initialize(URL url, ResourceBundle rb) {
+        cont = new GymControlador();
+        
+        añadirUser = new User();
+        añadirUser .setUserName("+Añadir");
+        
+        for (User e : cont.getUsers()) {
+            userList.getItems().add(e);
+        }
+       userList.getItems().add(añadirUser );
+       
+       addUserButton.setVisible(false);
+       modifyUser.setVisible(false);
+    }
+/**
+ * Muestra un mensaje informativo al usuario.
+ *
+ * @param msg mensaje a mostrar.
+ */
+private void mostrarInfo(String msg) {
+        mensaje.setStyle("-fx-text-fill: green;");
+        mensaje.setText(msg);
+    }
+/**
+ * Muestra un mensaje de error al usuario.
+ *
+ * @param msg mensaje de error.
+ */
+private void mostrarError(String msg) {
+        mensaje.setStyle("-fx-text-fill: red;");
+        mensaje.setText(msg);
+    }
+     
+/**
+ * Carga en los campos de texto la información
+ * del usuario seleccionado en la lista.
+ */
+@FXML
+private void seleccionarUsuario(){
+        User user = userList.getSelectionModel().getSelectedItem();
+        
+        if (user.getUserName().equals("+Añadir") || user == null) { 
+            userField.clear();
+            userField.setEditable(true);
+            passField.clear();
+            passField1.clear();
+            nameField.clear();
+            surField.clear();
+            dniField.clear();
+            dateField.clear();
+            dateField.setText(LocalDate.now().toString());
+            addUserButton.setVisible(true);
+            modifyUser.setVisible(false);
+            cancelRegistration.setVisible(false);
+            
+        }else{
+            addUserButton.setVisible(false);
+            modifyUser.setVisible(true);
+            userField.setText(user.getUserName());
+            userField.setEditable(false); // para que no se pueda moficar 
+            passField.setText(user.getPassword());
+            passField1.setText(user.getPassword());
+            nameField.setText(user.getName());
+            surField.setText(user.getLastName());
+            dniField.setText(user.getDni());
+            dateField.setText(user.getStartDate().toString());
+            cancelRegistration.setVisible(true);
+            cancelRegistration.setSelected(false);
+        }
+        dateField.setEditable(false);
+    }
+    
+/**
+ * Comprueba si los datos introducidos son iguales
+ * a los del usuario seleccionado.
+ *
+ * @param user usuario seleccionado.
+ * @return true si los datos coinciden, false en caso contrario.
+ */
+private boolean igual(User user) {
+        return user.getPassword().equals(passField.getText())
+            && user.getPassword().equals(passField1.getText())
+            && user.getName().equals(nameField.getText())
+            && user.getLastName().equals(surField.getText())
+            && user.getDni().equals(dniField.getText());
+    }
+    
+/**
+ * Modifica los datos del usuario seleccionado o
+ * elimina su registro si se ha marcado la opción correspondiente.
+ */
+@FXML
+private void modificarUser() {
+        User seleccionado = userList.getSelectionModel().getSelectedItem();
+        boolean dniCorrecto = true, passwordCorrecto=true;
+
+        if (userField.getText().isBlank()) {
+            mostrarError("You must select a user.");
+        } else {
+            if (cancelRegistration.isSelected()) {
+                Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
+                alerta.setTitle("Confirmation");
+                alerta.setHeaderText("Cancel someone's registration");
+                alerta.setContentText("Are you sure you want to delete the user?");
+
+                Optional<ButtonType> resultado = alerta.showAndWait();
+
+                if (resultado.isPresent() && resultado.get() == ButtonType.OK) {
+                    if (cont.eliminarPerson(seleccionado)) {
+                        userList.getItems().remove(seleccionado);
+                        mostrarInfo("User deleted from the database");
+                        cancelRegistration.setSelected(false);
+                    } else {
+                        mostrarError("Error deleting user");
+                    }
+                }
+            } else {
+                if (igual(seleccionado)) {
+                    mostrarError("You need to modify some information.");
+                } else {
+                    try {
+                        seleccionado.setDni(dniField.getText());
+                    } catch (DniException e) {
+                        mostrarError("Incorrect ID format");
+                        dniCorrecto = false;
+                    }
+                    if (dniCorrecto) {
+                        try {
+                            seleccionado.setPassword(passField.getText());
+                        } catch (PasswordException e) {
+                            mostrarError("The password must be at least 8 characters include an uppercase letter, a lowercase letter, "
+                                    + "\na number, and a special character.");
+                            passwordCorrecto=false;
+                        }
+                        if (!contrasIguales(passField.getText(),passField1.getText())){
+                            passwordCorrecto = false;
+                            mostrarError("The passwords must be the same.");
+                        }
+                        
+                        if (passwordCorrecto){
+                            seleccionado.setName(nameField.getText());
+                            seleccionado.setLastName(surField.getText());
+
+                            if (cont.modificarPerson(seleccionado)) {
+                                mostrarInfo("User updated");
+                            } else {
+                                mostrarError("Error updating user");
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+/**
+ * Comprueba que todos los campos obligatorios
+ * contienen datos.
+ *
+ * @return true si todos los campos están rellenos.
+ */
+private boolean comprobacion(){
+        if (userField.getText().isBlank()
+                || passField.getText().isBlank()
+                || passField1.getText().isBlank()
+                || nameField.getText().isBlank()
+                || surField.getText().isBlank()
+                || dniField.getText().isBlank()
+                || dateField.getText().isBlank()) {
+            mostrarError("All fields are required");
+            return false;
+        }
+        return true;
+    }
+    
+/**
+ * Registra un nuevo usuario en la aplicación.
+ */
+@FXML
+private void anadirUser() {
+        boolean dniCorrecto=true,passwordCorrecto=true;
+        if (comprobacion()) {
+            String nomUser = userField.getText();
+
+            if (userNameRepe(nomUser)) {
+                mostrarError("That username already exists.");
+                
+            }else{
+                User nuevo = new User();
+
+                nuevo.setUserName(userField.getText());
+                try {
+                    nuevo.setPassword(passField.getText());
+                } catch (PasswordException e) {
+                    mostrarError("The password must be at least 8 characters include an uppercase letter, a lowercase letter,"
+                            + "\n a number, and a special character.");
+                    passwordCorrecto = false;
+                }
+               
+                if (!contrasIguales(passField.getText(),passField1.getText())){
+                    passwordCorrecto = false;
+                    mostrarError("The passwords must be the same.");
+                }
+                
+                if (passwordCorrecto){
+                    nuevo.setName(nameField.getText());
+                    nuevo.setLastName(surField.getText());
+
+                    try {
+                        nuevo.setDni(dniField.getText());
+                    } catch (DniException e) {
+                        mostrarError("Incorrect ID format");
+                        dniCorrecto = false;
+                    }
+                    if (dniCorrecto){
+                        try{
+                            DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                            LocalDate fecha = LocalDate.parse(dateField.getText(), formato);
+
+                            nuevo.setStartDate(fecha);
+                        }catch(DateTimeException e){
+                            mostrarError("Invalid date format.");
+                            System.out.print(e);
+                        }
+                        if (cont.insertarPerson(nuevo)) {
+                            userList.getItems().remove(añadirUser);
+                            userList.getItems().add(nuevo);
+                            userList.getSelectionModel().selectFirst(); //soba?
+                            userList.getItems().add(añadirUser);
+
+                            mostrarInfo("New user registered");
+
+                        } else {
+                            mostrarError("Error registering the user");
+                        }
+                    }
+                }
+            }
+       }
+    }
+/**
+ * Comprueba si un nombre de usuario ya existe.
+ *
+ * @param userName nombre de usuario a comprobar.
+ * @return true si ya existe, false en caso contrario.
+ */
+private boolean userNameRepe(String userName) {
+        for (User u : cont.getUsers()) {
+             if (u.getUserName().equalsIgnoreCase(userName)) {
+                 return true;
+             }
+         }
+         return false;
+   }
+   
+/**
+ * Comprueba si las dos contraseñas introducidas son iguales.
+ *
+ * @param cont1 primera contraseña.
+ * @param cont2 segunda contraseña.
+ * @return true si coinciden, false en caso contrario.
+ */
+private boolean contrasIguales(String cont1, String cont2){
+       if (cont1.equals(cont2)){
+           return true;
+       }else{
+           return false;
+       }
+   }
+/**
+ * Muestra u oculta la pri*era contraseña.
+ */
+@FXML
+private void verContrasena() {
+        if (verContra1.isSelected()) {
+            passVisibleField.setText(passField.getText());
+            passVisibleField.setVisible(true);
+            passVisibleField.setManaged(true);
+            passField.setVisible(false);
+            passField.setManaged(false);
+        } else {
+            passField.setText(passVisibleField.getText());
+            passField.setVisible(true);
+            passField.setManaged(true);
+            passVisibleField.setVisible(false);
+            passVisibleField.setManaged(false);
+        }
+    }
+    
+/**
+ * Muestra u oculta la segunda c*ntraseña.
+ */
+@FXML
+private void verContrasena1() {
+        if (verContra2.isSelected()) {
+            passVisibleField1.setText(passField1.getText());
+            passVisibleField1.setVisible(true);
+            passVisibleField1.setManaged(true);
+            passField1.setVisible(false);
+            passField1.setManaged(false);
+
+        } else {
+            passField1.setText(passVisibleField1.getText());
+            passField1.setVisible(true);
+            passField1.setManaged(true);
+            passVisibleField1.setVisible(false);
+            passVisibleField1.setManaged(false);
+        }
+    }
+    
+/**
+ **Oculta ambas contraseñas y restaur*
+ * los campos de tipo PasswordFie*d.
+ */
+private void ocultarContrasenas() {
+        verContra1.setSelected(false);
+        verContra2.setSelected(false);
+
+        passField.setVisible(true);
+        passField.setManaged(true);
+
+        passVisibleField.setVisible(false);
+        passVisibleField.setManaged(false);
+
+        passField1.setVisible(true);
+        passField1.setManaged(true);
+
+        passVisibleField1.setVisible(false);
+        passVisibleField1.setManaged(false);
+    }
 }

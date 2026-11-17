@@ -4,9 +4,9 @@
  */
 package model;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  *
@@ -14,16 +14,16 @@ import java.util.List;
  */
 public class Employee extends Person implements WithCart{
     
-    private List<Integer> classes;
-    private List<Integer> shoppingHistory;
+    private ArrayList<Integer> classes;
+    private ArrayList<Integer> shoppingHistory;
     private String discountCode;
     private int gymId;
     private HashMap<Product, Integer> cart;
 
-    public Employee(List<Integer> classes, List<Integer> shoppingHistory,
+      public Employee(ArrayList<Integer> classes, ArrayList<Integer> shoppingHistory,
             String discountCode, int gymId, String userName, String password, String name,
-            String lastName, String dni, float balance) {
-        super(userName, password, name, lastName, dni, balance);
+            String lastName, String dni, float balance,LocalDate startDate) {
+        super(userName, password, name, lastName, dni, balance,startDate);
         this.classes = classes;
         this.shoppingHistory = shoppingHistory;
         this.discountCode = discountCode;
@@ -31,8 +31,9 @@ public class Employee extends Person implements WithCart{
         this.cart = new HashMap<>();
     }
     
-        public Employee(String discountCode, int gymId, String userName, String password, String name, String lastName, String dni, float balance) {
-        super(userName, password, name, lastName, dni, balance);
+    
+        public Employee(String discountCode, int gymId, String userName, String password, String name, String lastName, String dni, float balance, LocalDate startDate) {
+        super(userName, password, name, lastName, dni, balance,startDate);
         this.discountCode = discountCode;
         this.gymId = gymId;
     }
@@ -46,11 +47,11 @@ public class Employee extends Person implements WithCart{
         this.cart = new HashMap<>();
     }
 
-    public List<Integer> getClasses() {
+    public ArrayList<Integer> getClasses() {
         return classes;
     }
 
-    public List<Integer> getShoppingHistory() {
+    public ArrayList<Integer> getShoppingHistory() {
         return shoppingHistory;
     }
 
@@ -90,6 +91,7 @@ public class Employee extends Person implements WithCart{
 
     @Override
     public String toString() {
-        return "Employee{" + "classes=" + classes + ", shoppingHistory=" + shoppingHistory + ", discountCode=" + discountCode + ", gymId=" + gymId + ", cart=" + cart + '}';
+    //Cambio el toString para que cuando lo muetsr en la lista solo enseñe el nombre 
+        return getUserName();
     }
 }
