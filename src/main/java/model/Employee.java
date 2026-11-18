@@ -7,6 +7,7 @@ package model;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  *
@@ -14,25 +15,22 @@ import java.util.HashMap;
  */
 public class Employee extends Person implements WithCart{
     
-    private ArrayList<Integer> classes;
-    private ArrayList<Integer> shoppingHistory;
+    private List<Integer> classes;
     private String discountCode;
     private int gymId;
     private HashMap<Product, Integer> cart;
 
-      public Employee(ArrayList<Integer> classes, ArrayList<Integer> shoppingHistory,
-            String discountCode, int gymId, String userName, String password, String name,
+    public Employee(List<Integer> classes, String discountCode, int gymId, String userName, String password, String name,
             String lastName, String dni, float balance,LocalDate startDate) {
         super(userName, password, name, lastName, dni, balance,startDate);
         this.classes = classes;
-        this.shoppingHistory = shoppingHistory;
         this.discountCode = discountCode;
         this.gymId = gymId;
         this.cart = new HashMap<>();
     }
     
     
-        public Employee(String discountCode, int gymId, String userName, String password, String name, String lastName, String dni, float balance, LocalDate startDate) {
+    public Employee(String discountCode, int gymId, String userName, String password, String name, String lastName, String dni, float balance, LocalDate startDate) {
         super(userName, password, name, lastName, dni, balance,startDate);
         this.discountCode = discountCode;
         this.gymId = gymId;
@@ -41,18 +39,13 @@ public class Employee extends Person implements WithCart{
     public Employee() {
         super();
         this.classes = new ArrayList<>();
-        this.shoppingHistory = new ArrayList<>();
         this.discountCode = "";
         this.gymId = 0;
         this.cart = new HashMap<>();
     }
 
-    public ArrayList<Integer> getClasses() {
+    public List<Integer> getClasses() {
         return classes;
-    }
-
-    public ArrayList<Integer> getShoppingHistory() {
-        return shoppingHistory;
     }
 
     public String getDiscountCode() {
@@ -68,12 +61,8 @@ public class Employee extends Person implements WithCart{
         return cart;
     }
 
-    public void setClasses(ArrayList<Integer> classes) {
+    public void setClasses(List<Integer> classes) {
         this.classes = classes;
-    }
-
-    public void setShoppingHistory(ArrayList<Integer> shoppingHistory) {
-        this.shoppingHistory = shoppingHistory;
     }
 
     public void setDiscountCode(String discountCode) {
@@ -89,6 +78,7 @@ public class Employee extends Person implements WithCart{
         this.cart.put(p, cantidad);
     }
 
+
  /**
  * Devuelve el nombre de usuario para que sea el texto
  * mostrado al representar el objeto en componentes
@@ -96,8 +86,9 @@ public class Employee extends Person implements WithCart{
  *
  * @return nombre de usuario.
  */
-@Override
-public String toString() {
-    return getUserName();
-}
+    @Override
+    public String toString() {
+        return getUserName();
+    }
+
 }

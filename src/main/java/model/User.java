@@ -7,6 +7,7 @@ package model;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  *
@@ -14,31 +15,26 @@ import java.util.HashMap;
  */
 public class User extends Person implements WithCart{
     
-    private ArrayList<Training> trainings;
-    private ArrayList<Integer> classes;
-    private ArrayList<Integer> shoppingHistory;
+    private List<Training> trainings;
+    private List<Integer> classes;
     private HashMap<Product, Integer> cart;
 
-
-    public User(ArrayList<Training> trainings, ArrayList<Integer> classes, ArrayList<Integer> shoppingHistory,
-                String userName, String password, String name, String lastName, String dni, float balance,LocalDate startDate) {
-        super(userName, password, name, lastName, dni, balance, startDate);
+    public User(List<Training> trainings, List<Integer> classes, String userName, 
+                String password, String name, String lastName, String dni, float balance, LocalDate start) {
+        super(userName, password, name, lastName, dni, balance,start);
         this.trainings = trainings;
         this.classes = classes;
-        this.shoppingHistory = shoppingHistory;
         this.cart = new HashMap<>();
     }
-    public User(String userName, String password, String name, String lastName, String dni, float balance,LocalDate startDate) {
-        super(userName, password, name, lastName, dni, balance, startDate);
-        
-    }
+    
+
     public User() {
         super();
         this.trainings = new ArrayList<>();
         this.classes = new ArrayList<>();
-        this.shoppingHistory = new ArrayList<>();
         this.cart = new HashMap<>();
     }
+
     public void setTrainings(ArrayList<Training> trainings) {
         this.trainings = trainings;
     }
@@ -46,26 +42,18 @@ public class User extends Person implements WithCart{
     public void setClasses(ArrayList<Integer> classes) {
         this.classes = classes;
     }
-
-    public void setShoppingHistory(ArrayList<Integer> shoppingHistory) {
-        this.shoppingHistory = shoppingHistory;
-    }
     
     @Override
     public void setCart(Product p, Integer cantidad) {
         this.cart.put(p, cantidad);
     }
 
-    public ArrayList<Training> getTrainings() {
+    public List<Training> getTrainings() {
         return trainings;
     }
 
-    public ArrayList<Integer> getClasses() {
+    public List<Integer> getClasses() {
         return classes;
-    }
-
-    public ArrayList<Integer> getShoppingHistory() {
-        return shoppingHistory;
     }
     
     @Override
@@ -73,15 +61,8 @@ public class User extends Person implements WithCart{
         return cart;
     }
 
-/**
- * Devuelve el nombre de usuario para su representación
- * en texto. Se utiliza para mostrar únicamente el nombre
- * de usuario en componentes como ListView.
- *
- * @return nombre de usuario.
- */
     @Override
     public String toString() {
-        return getUserName();  
+        return getUserName();
     }
 }

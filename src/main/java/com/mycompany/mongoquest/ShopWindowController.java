@@ -4,7 +4,6 @@
  */
 package com.mycompany.mongoquest;
 
-import controller.MongoConnection;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -19,7 +18,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -54,16 +52,16 @@ public class ShopWindowController implements Initializable  {
     private Button btn3;
     @FXML
     private Button btn4;
- /**
- * Panel desplazable que muestra los productos.
- */
-@FXML
-private ScrollPane scrollPane;
-/**
- * Contenedor donde se añaden dinámicamente los productos.
- */
-@FXML
-private FlowPane contenedorProductos;
+    /**
+    * Panel desplazable que muestra los productos.
+    */
+   @FXML
+   private ScrollPane scrollPane;
+   /**
+    * Contenedor donde se añaden dinámicamente los productos.
+    */
+   @FXML
+   private FlowPane contenedorProductos;
     /**
      * Initializes the controller class.
      */
@@ -77,13 +75,15 @@ private FlowPane contenedorProductos;
         }
     }
 
-/**
- * Crea la tarjeta gráfica asociada a un producto.
- *
- * @param p producto a mostrar.
- * @return tarjeta visual del producto.
- */
-private VBox crearTarjetaProducto(Product p) {
+
+    /**
+     * Crea la tarjeta gráfica asociada a un producto.
+     *
+     * @param p producto a mostrar.
+     * @return tarjeta visual del producto.
+     */
+    private VBox crearTarjetaProducto(Product p) {
+        // Imagen
         ImageView imagen = new ImageView(cargarImagen(p));
         imagen.setFitWidth(120);
         imagen.setFitHeight(120);
@@ -100,19 +100,24 @@ private VBox crearTarjetaProducto(Product p) {
         tarjeta.setAlignment(Pos.CENTER);
         tarjeta.setPadding(new Insets(10));
         tarjeta.setPrefWidth(160);
-        
+        tarjeta.setStyle(
+            "-fx-border-color: #cccccc; -fx-border-radius: 8; " +
+            "-fx-background-radius: 8; -fx-background-color: white; " +
+            "-fx-cursor: hand;");
+
+        // Toda la tarjeta clickable
         tarjeta.setOnMouseClicked(e -> product(p));
         
         
         return tarjeta;
     }
-/**
- * Carga la imagen asociada a un producto.
- *
- * @param p producto cuya imagen se desea cargar.
- * @return imagen del producto.
- */
-private Image cargarImagen(Product p) {
+    /**
+     * Carga la imagen asociada a un producto.
+     *
+     * @param p producto cuya imagen se desea cargar.
+     * @return imagen del producto.
+     */
+    private Image cargarImagen(Product p) {
         try {
                return null ;
         } catch (Exception ex) {
@@ -120,14 +125,14 @@ private Image cargarImagen(Product p) {
         }
     }
     
-/**
- * Abre la ventana del historial de compras.
- *
- * @param event evento generado al pulsar el botón.
- * @throws IOException si ocurre un error al cargar la ventana.
- */
-@FXML
-private void history(ActionEvent event) throws IOException{
+    /**
+     * Abre la ventana del historial de compras.
+     *
+     * @param event evento generado al pulsar el botón.
+     * @throws IOException si ocurre un error al cargar la ventana.
+     */
+    @FXML
+    private void history(ActionEvent event) throws IOException{
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("PurchaseHistory.fxml"));
         Parent root = fxmlLoader.load();
         
@@ -139,13 +144,13 @@ private void history(ActionEvent event) throws IOException{
         ventanaActual.close();
     }
     
-/**
- * Abre la ventana del carrito de compra.
- *
- * @throws IOException si ocurre un error al cargar la ventana.
- */
-@FXML
-private void cart() throws IOException{
+    /**
+     * Abre la ventana del carrito de compra.
+     *
+     * @throws IOException si ocurre un error al cargar la ventana.
+     */
+    @FXML
+    private void cart() throws IOException{
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("CartWindow.fxml"));
         Parent root = fxmlLoader.load();
         
@@ -154,12 +159,12 @@ private void cart() throws IOException{
         stage.show();
     }
     
-/**
- * Abre la ventana de información del producto seleccionado.
- *
- * @param p producto seleccionado.
- */
-private void product(Product p) {
+    /**
+     * Abre la ventana de información del producto seleccionado.
+     *
+     * @param p producto seleccionado.
+     */
+    private void product(Product p) {
         pr = p;
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("ProductWindow.fxml"));
         Parent root;

@@ -9,7 +9,7 @@ package model;
  * @author ire22
  */
 public class Training {
-    
+    private int idT;
     private String trainingName;
     private int set;
     private int reps;
@@ -61,6 +61,19 @@ public class Training {
         return weight;
     }
 
+    public int getIdT() {
+        return idT;
+    }
+
+    public void setIdT(int idT) {
+        this.idT = idT;
+    }
+
+    
+    
+
+    
+    
     @Override
     public String toString() {
         return "Training{" + "trainingName=" + trainingName + ", set=" + set + ", reps=" + reps + ", weight=" + weight + '}';
