@@ -76,6 +76,9 @@
                 <Button fx:id="btnUnsubscribe"
                         text="Unsubscribe"
                         onAction="#unsubscribe"/>
+                <Button fx:id="btnSubscribe"
+                        text="Subscribe"
+                        onAction="#subscribeClass"/>
 
             </HBox>
 
