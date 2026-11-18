@@ -203,21 +203,21 @@ public class ImplementacionBD {
             Employee employee = new Employee();
 
 
-           employee.setUserName(doc.getString("username"));
+            employee.setUserName(doc.getString("username"));
 
-try {
-    String passwordMongo = doc.getString("password");
+            try {
+                String passwordMongo = doc.getString("password");
 
-    System.out.println("Mongo: " + passwordMongo);
+                System.out.println("Mongo: " + passwordMongo);
 
-    employee.setPassword(passwordMongo);
+                employee.setPassword(passwordMongo);
 
-    System.out.println("Objeto: " + employee.getPassword());
+                System.out.println("Objeto: " + employee.getPassword());
 
-} catch (PasswordException e) {
-    System.out.println("Incorrect password: " + e.getMessage());
-    continue;
-}
+            } catch (PasswordException e) {
+                System.out.println("Incorrect password: " + e.getMessage());
+                continue;
+            }
   
             employee.setName(doc.getString("first_name"));
             employee.setLastName(doc.getString("last_name"));
@@ -563,5 +563,44 @@ public void removeMemberFromClass(
         person.updateOne(Filters.eq("username", userName),
                         Updates.push("purchases", newId));
         
+    }
+    
+    public List<ShoppingHistory> findPurchasesByUser(String username) {
+        MongoCollection<Document> purchases = MongoConnection.getConnection().getCollection("purchases");
+
+        List<ShoppingHistory> result = new ArrayList<>();
+
+        for (Document d : purchases.find(Filters.eq("username", username))
+                                   .sort(Sorts.descending("_id"))) {
+
+            HashMap<Integer, Integer> products = new HashMap<>();
+            for (Document p : d.getList("products", Document.class)) {
+                products.put(((Number) p.get("product_id")).intValue(),
+                             ((Number) p.get("quantity")).intValue());
+            }
+
+            result.add(new ShoppingHistory(
+                    ((Number) d.get("_id")).intValue(),
+                    ((Number) d.get("gym_id")).intValue(),
+                    d.getString("username"),
+                    ((Number) d.get("total_price")).floatValue(),
+                    LocalDate.parse(d.getString("date")),
+                    products));
+        }
+        return result;
+    }
+
+    public Map<Integer, Product> loadProducts() {
+        MongoCollection<Document> products = MongoConnection.getConnection().getCollection("products");
+
+        Map<Integer, Product> map = new HashMap<>();
+        for (Document d : products.find()) {
+            int id = ((Number) d.get("_id")).intValue();
+            map.put(id, new Product(id,
+                    d.getString("name"),
+                    ((Number) d.get("price")).floatValue(),
+                    ((Number) d.get("stock")).intValue()));
+        }
+        return map;
     }
 }

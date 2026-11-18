@@ -44,14 +44,6 @@ public class ShopWindowController implements Initializable  {
     private Button btnCarrito;
     @FXML
     private Button btnHistorial;
-    @FXML
-    private Button btn1;
-    @FXML
-    private Button btn2;
-    @FXML
-    private Button btn3;
-    @FXML
-    private Button btn4;
     /**
     * Panel desplazable que muestra los productos.
     */
