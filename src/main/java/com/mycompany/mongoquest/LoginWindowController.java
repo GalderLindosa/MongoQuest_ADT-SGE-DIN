@@ -14,7 +14,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-
+import dao.*;
 import model.*;
 import controller.MongoConnection;
 import com.mongodb.client.MongoDatabase;
@@ -46,6 +46,7 @@ public class LoginWindowController implements Initializable {
     /**
      * Escena principal de *a aplicación.
      */
+
 
     public static Person usuario;
 

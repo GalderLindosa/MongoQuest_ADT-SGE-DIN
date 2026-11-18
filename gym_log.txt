@@ -1,0 +1,2 @@
+[2026-11-18T17:26:55.010088500] LOGIN -> User=manager01, Role=manager
+[2026-11-18T17:28:18.728690900] LOGIN -> User=manager01, Role=manager

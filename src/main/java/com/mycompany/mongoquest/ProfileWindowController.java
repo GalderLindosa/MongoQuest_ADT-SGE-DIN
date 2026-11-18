@@ -80,6 +80,8 @@ public class ProfileWindowController implements Initializable {
     private Button button3;
     @FXML
     private Button button4;
+    @FXML
+    private Button button5;
     
     private String username;
     private String role;
@@ -150,14 +152,18 @@ public void setButtons(Person person) throws IOException {
             setClassButton();
             setShopButton();
             setRoutineButton();
+            button5.setVisible(false);
         } else if (person instanceof Employee) {
             setClassButton();
             setShopButton();
             setUsListButton();
+            button5.setVisible(false);
         } else if (person instanceof Boss) {
             setClassButton();
             setEmListButton();
             setUsListButton();
+            button5.setVisible(true);
+            setLogButton();
 
         }
         button1.setDisable(true);
@@ -337,5 +343,34 @@ public void goBackToLogin(ActionEvent event) throws IOException{
         Stage ventanaActual = (Stage) ((Node) event.getSource()).getScene().getWindow();
         ventanaActual.close();
     }
+public void setLogButton() {
 
+    button5.setText("View Logs");
+
+    button5.setOnAction(new EventHandler<ActionEvent>() {
+
+        private Scene scene;
+        Stage stage = new Stage();
+
+        @Override
+        public void handle(ActionEvent e) {
+
+            try {
+
+                scene = new Scene(
+                        loadFXML("LogWindow"),
+                        800,
+                        500
+                );
+
+                stage.setScene(scene);
+                stage.setTitle("System Logs");
+                stage.show();
+
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+    });
+}
 }
