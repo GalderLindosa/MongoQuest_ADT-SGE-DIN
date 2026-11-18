@@ -21,12 +21,14 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ComboBox;
 import model.Person;
 import model.User;
 import excepciones.*;
 import java.time.DateTimeException;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.PasswordField;
+import model.Boss;
 /**
  * Controlador de la ventana de gestión de usuarios.
  * Permite añadir, modificar y eliminar usuarios
@@ -54,6 +56,8 @@ private ListView<User> userList;
     private Label dniLabel;
     @FXML
     private Label dateLabel;
+    @FXML
+    private ComboBox<Integer> gymCombo;
    /**
  * Etiqueta utilizada para mostr*r mensajes
  * informativos y de er*or.
@@ -63,8 +67,8 @@ private ListView<User> userList;
     
     @FXML
     private TextField userField;
-   @FXML
-private PasswordField passField;
+    @FXML
+    private PasswordField passField;
     @FXML
     private TextField nameField;
     @FXML
@@ -103,7 +107,9 @@ private User añadirUser;
     private TextField passVisibleField;
     @FXML
     private TextField passVisibleField1;
-    
+    private Boss boss;
+
+
     private ImplementacionBD bd = ImplementacionBD.getInstance();
    /**
  * Inicializa la ventana cargando todos los usuarios

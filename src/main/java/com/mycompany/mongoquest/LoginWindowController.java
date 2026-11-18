@@ -127,7 +127,7 @@ public class LoginWindowController implements Initializable {
         if (showPassword.isSelected()) {
             var alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Su contraseña es");
-            alert.setContentText("Su contraseña es:" + fieldPass.getText());
+            alert.setContentText("Su contraseña es: " + fieldPass.getText());
             alert.show();
         }
 

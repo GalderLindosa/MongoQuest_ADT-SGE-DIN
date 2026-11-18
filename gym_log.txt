@@ -26,3 +26,8 @@
 [2026-11-18T20:15:11.998399300] ADD MEMBER -> User=user02, Class=1
 [2026-11-18T20:15:31.174303900] LOGIN -> User=user02, Role=member
 [2026-11-18T20:15:52.065870300] LOGIN -> User=manager01, Role=manager
+[2026-11-18T20:34:49.795671900] LOGIN -> User=manager01, Role=manager
+[2026-11-18T21:34:17.198606400] LOGIN -> User=manager01, Role=manager
+[2026-11-18T22:16:42.435979900] LOGIN -> User=trainer01, Role=employee
+[2026-11-18T22:19:12.239899600] LOGIN -> User=trainer01, Role=employee
+[2026-11-18T22:23:33.889981400] LOGIN -> User=manager01, Role=manager
