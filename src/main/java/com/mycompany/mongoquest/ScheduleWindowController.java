@@ -61,6 +61,8 @@ public class ScheduleWindowController implements Initializable {
 
     @FXML
     private Button btnUnsubscribe;
+    @FXML
+    private Button btnSubscribe;
 
     private ImplementacionBD bd = ImplementacionBD.getInstance();
 
@@ -97,6 +99,7 @@ public class ScheduleWindowController implements Initializable {
             btnEditClass.setVisible(true);
             btnDeleteClass.setVisible(true);
             btnUnsubscribe.setVisible(false);
+            btnSubscribe.setVisible(false);
 
         } else if ("employee".equals(role)){
 
@@ -104,6 +107,7 @@ public class ScheduleWindowController implements Initializable {
             btnEditClass.setVisible(false);
             btnDeleteClass.setVisible(false);
             btnUnsubscribe.setVisible(false);
+            btnSubscribe.setVisible(false);
 
         } else if ("member".equals(role)) {
 
@@ -111,6 +115,7 @@ public class ScheduleWindowController implements Initializable {
             btnEditClass.setVisible(false);
             btnDeleteClass.setVisible(false);
             btnUnsubscribe.setVisible(true);
+            btnSubscribe.setVisible(true);
         }
     }
 @FXML
@@ -281,7 +286,13 @@ private void createClass() {
     }
 
     System.out.println("CLASES CARGADAS: " + clases.size());
-
+    System.out.println("===== CARGAR HORARIO =====");
+    System.out.println("USER: " + username);
+    System.out.println("ROLE: " + role);
+    System.out.println(
+            "CLASES CARGADAS: "
+            + clases.size()
+    );
     for (GymClass c : clases) {
         System.out.println(c.getId() + " - " + c.getClassName());
     }
@@ -446,5 +457,37 @@ private void unsubscribe() {
         System.out.println("Successfully unsubscribed from the class");
     }
 }
+@FXML
+private void subscribeClass() {
 
+    TextInputDialog dialog = new TextInputDialog();
+
+    dialog.setTitle("Subscribe to Class");
+    dialog.setHeaderText("Enter the class ID");
+    dialog.setContentText("Class ID:");
+
+    Optional<String> result = dialog.showAndWait();
+
+    if (result.isPresent()) {
+
+        int classId = Integer.parseInt(result.get());
+
+        if (!bd.classExists(classId)) {
+
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("Class does not exist.");
+            alert.showAndWait();
+            return;
+        }
+
+        bd.addMemberToClass(
+                classId,
+                username
+        );
+
+        cargarHorario();
+
+        System.out.println("User enrolled successfully");
+    }
+}
 }
