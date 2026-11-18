@@ -235,9 +235,9 @@ public class CartWindowController implements Initializable {
         if (textFieldDiscount.getText().equals(empleado.getDiscountCode())) {
             totalPrice = Math.round(totalPrice * 0.80f * 100) / 100.0f;
             lblTotalPrice.setText(totalPrice + "€");
-            showAlert("Descuento aplicado", "Se ha aplicado correctamente el descuento del 20%.");
+            showAlert("Discount applied", "The 20% discount has been applied correctly.");
         } else {
-            showAlert("Código incorrecto", "El código de descuento introducido no es válido.");
+            showAlert("Wrong code", "The discount code entered is not valid.");
         }
     }
     
