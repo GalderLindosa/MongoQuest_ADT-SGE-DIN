@@ -18,9 +18,11 @@ import com.mycompany.mongoquest.LoginWindowController;
 import java.util.List;
 import javafx.event.ActionEvent;
 import org.bson.Document;
-
 /**
- * FXML Controller class
+ * Controlador de la ventana de entrenamientos.
+ * Permite visualizar la lista de ejercicios
+ * asignados al usuario y mostrar los detalles
+ * del entrenamiento seleccionado.
  *
  * @author Usuario
  */
@@ -41,9 +43,14 @@ public class WorkoutWindowController implements Initializable {
 
     private List<Training> works = new ArrayList();
 
-    /**
-     * Initializes the controller class.
-     */
+ /**
+ * Inicializa la ventana cargando los entrenamientos
+ * del usuario que ha iniciado sesión y rellenando
+ * la lista con los nombres de los ejercicios.
+ *
+ * @param url ubicación utilizada para resolver rutas.
+ * @param rb recursos de internacionalización.
+ */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
@@ -58,7 +65,11 @@ public class WorkoutWindowController implements Initializable {
         }
 
     }
-
+/**
+ * Muestra la información detallada del entrenamiento
+ * seleccionado en la lista, incluyendo nombre,
+ * peso utilizado, número de repeticiones y series.
+ */
     @FXML
     public void infoWorkouts() {
 

@@ -27,14 +27,15 @@ import excepciones.*;
 import java.time.DateTimeException;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.PasswordField;
+
 /**
- * Controlador de la ventana de gestión de empleados.
- * Permite registrar, modificar y eliminar empleados
- * de la base de datos.
+ * Controlador de la ventana de gestión de empleados. Permite registrar,
+ * modificar y eliminar empleados de la base de datos.
  *
- * @author Usuario
+ * @author ire22
  */
 public class EmployeeListWindowController implements Initializable {
+
     @FXML
     private ListView<Employee> employeeList;
     @FXML
@@ -53,7 +54,7 @@ public class EmployeeListWindowController implements Initializable {
     private Label dateLabel;
     @FXML
     private Label mensaje;
-    
+
     @FXML
     private TextField userField;
     @FXML
@@ -66,19 +67,18 @@ public class EmployeeListWindowController implements Initializable {
     private TextField dniField;
     @FXML
     private TextField dateField;
-  
+
     @FXML
     private Button modifyUser;
-    
+
     @FXML
     private RadioButton cancelRegistration;
-    
-  
+
     private Employee anadirEmployee;
-    
+
     @FXML
     private Label passLabel1;
-    
+
     @FXML
     private PasswordField passField1;
     @FXML
@@ -87,70 +87,72 @@ public class EmployeeListWindowController implements Initializable {
     private CheckBox verContra1;
     @FXML
     private CheckBox verContra2;
-    
+
     @FXML
     private TextField passVisibleField;
     @FXML
     private TextField passVisibleField1;
-    
+
     private ImplementacionBD bd = ImplementacionBD.getInstance();
-/**
- * Inicializa la ventana cargando los empleados
- * existentes y la opción de añadir uno nuevo.
- *
- * @param url ubicación utilizada para resolver rutas relativas.
- * @param rb recursos de internacionalización.
- */
-@Override
-public void initialize(URL url, ResourceBundle rb) {
-        
-        
+
+    /**
+     * Inicializa la ventana cargando los empleados existentes y la opción de
+     * añadir uno nuevo.
+     *
+     * @param url ubicación utilizada para resolver rutas relativas.
+     * @param rb recursos de internacionalización.
+     */
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+
         anadirEmployee = new Employee();
-        anadirEmployee .setUserName("+Añadir");
-        
+        anadirEmployee.setUserName("+Añadir");
+
         for (Employee e : bd.getEmployee()) {
             employeeList.getItems().add(e);
         }
-       employeeList.getItems().add(anadirEmployee );
-       
-       addUserButton.setVisible(false);
-       modifyUser.setVisible(false);
-       
-       passVisibleField.setVisible(false);
-       passVisibleField1.setVisible(false);
+        employeeList.getItems().add(anadirEmployee);
+
+        addUserButton.setVisible(false);
+        modifyUser.setVisible(false);
+
+        passVisibleField.setVisible(false);
+        passVisibleField1.setVisible(false);
     }
-/**
- * Muestra un mensaje informativo al usuario.
- *
- * @param msg mensaje a mostrar.
- */
-private void mostrarInfo(String msg){
+
+    /**
+     * Muestra un mensaje informativo al usuario.
+     *
+     * @param msg mensaje a mostrar.
+     */
+    private void mostrarInfo(String msg) {
         mensaje.setStyle("-fx-text-fill: green;");
         mensaje.setText(msg);
     }
-    
-/**
- * Muestra un mensaje de error al usuario.
- *
- * @param msg mensaje de error.
- */
-private void mostrarError(String msg){
+
+    /**
+     * Muestra un mensaje de error al usuario.
+     *
+     * @param msg mensaje de error.
+     */
+    private void mostrarError(String msg) {
         mensaje.setStyle("-fx-text-fill: red;");
         mensaje.setText(msg);
     }
-     
-/**
- * Carga en los campos del formulario los datos
- * del empleado seleccionado. Tambien configuracionpara  algunos campos en especifico no se puedan modificar 
- */
-@FXML
-private void seleccionarUsuario(){
+
+    /**
+     * Carga en los campos del formulario los datos del empleado seleccionado.
+     * Tambien configuracionpara algunos campos en especifico no se puedan
+     * modificar
+     */
+    @FXML
+    private void seleccionarUsuario() {
         ocultarContrasenas();
         Employee user = employeeList.getSelectionModel().getSelectedItem();
         if (user == null) {
             return;
         }
-        if (user.getUserName().equals("+Añadir")) { 
+        if (user.getUserName().equals("+Añadir")) {
             userField.clear();
             userField.setEditable(true);
             passField.clear();
@@ -163,12 +165,12 @@ private void seleccionarUsuario(){
             addUserButton.setVisible(true);
             modifyUser.setVisible(false);
             cancelRegistration.setVisible(false);
-            
-        }else{
+
+        } else {
             addUserButton.setVisible(false);
             modifyUser.setVisible(true);
             userField.setText(user.getUserName());
-            userField.setEditable(false); 
+            userField.setEditable(false);
             passField.setText(user.getPassword());
             passField1.setText(user.getPassword());
             nameField.setText(user.getName());
@@ -180,57 +182,57 @@ private void seleccionarUsuario(){
         }
         dateField.setEditable(false);
     }
-    
-/**
- * Comprueba si los datos introducidos coinciden
- * con los del empleado seleccionado.
- *
- * @param user empleado seleccionado.
- * @return true si no se han realizado modificaciones.
- */
-private boolean igual(Employee user) {
-    System.out.println(user.getPassword().equals(passField.getText()));
-System.out.println(user.getPassword().equals(passField1.getText()));
-System.out.println(user.getName().equals(nameField.getText()));
-System.out.println(user.getLastName().equals(surField.getText()));
-System.out.println(user.getDni().equals(dniField.getText()));
-System.out.println("BD: " + user.getPassword());
-System.out.println("Campo: " + passField.getText());
+
+    /**
+     * Comprueba si los datos introducidos coinciden con los del empleado
+     * seleccionado.
+     *
+     * @param user empleado seleccionado.
+     * @return true si no se han realizado modificaciones.
+     */
+    private boolean igual(Employee user) {
+        System.out.println(user.getPassword().equals(passField.getText()));
+        System.out.println(user.getPassword().equals(passField1.getText()));
+        System.out.println(user.getName().equals(nameField.getText()));
+        System.out.println(user.getLastName().equals(surField.getText()));
+        System.out.println(user.getDni().equals(dniField.getText()));
+        System.out.println("BD: " + user.getPassword());
+        System.out.println("Campo: " + passField.getText());
         return user.getPassword().equals(passField.getText())
-            && user.getPassword().equals(passField1.getText())
-            && user.getName().equals(nameField.getText())
-            && user.getLastName().equals(surField.getText())
-            && user.getDni().equals(dniField.getText());
-    }
-    
-  /**
- * Modifica los datos de un empleado o elimina
- * su registro si se ha solicitado.
- */
-@FXML
-private void modificarEmployee(){
-    
-    System.out.println("Visible1: " + passVisibleField.getText());
-    System.out.println("Pass1 antes: " + passField.getText());
-
-    if (verContra1.isSelected()) {
-        passField.setText(passVisibleField.getText());
+                && user.getPassword().equals(passField1.getText())
+                && user.getName().equals(nameField.getText())
+                && user.getLastName().equals(surField.getText())
+                && user.getDni().equals(dniField.getText());
     }
 
-    if (verContra2.isSelected()) {
-        passField1.setText(passVisibleField1.getText());
-    }
+    /**
+     * Modifica los datos de un empleado o elimina su registro si se ha
+     * solicitado.
+     */
+    @FXML
+    private void modificarEmployee() {
 
-    System.out.println("Pass1 despues: " + passField.getText());
+        System.out.println("Visible1: " + passVisibleField.getText());
+        System.out.println("Pass1 antes: " + passField.getText());
 
-    Employee seleccionado = employeeList.getSelectionModel().getSelectedItem();
-       System.out.println("Nombre BD: " + seleccionado.getName());
-System.out.println("Nombre Campo: " + nameField.getText());
-    boolean dniCorrecto = true, passwordCorrecto=true;
+        if (verContra1.isSelected()) {
+            passField.setText(passVisibleField.getText());
+        }
 
-        if (userField.getText().isBlank() || seleccionado == null ) {
+        if (verContra2.isSelected()) {
+            passField1.setText(passVisibleField1.getText());
+        }
+
+        System.out.println("Pass1 despues: " + passField.getText());
+
+        Employee seleccionado = employeeList.getSelectionModel().getSelectedItem();
+        System.out.println("Nombre BD: " + seleccionado.getName());
+        System.out.println("Nombre Campo: " + nameField.getText());
+        boolean dniCorrecto = true, passwordCorrecto = true;
+
+        if (userField.getText().isBlank() || seleccionado == null) {
             mostrarError("You must select a user.");
-           
+
         } else {
             if (cancelRegistration.isSelected()) {
                 System.out.println("Entrando a eliminar");
@@ -242,9 +244,9 @@ System.out.println("Nombre Campo: " + nameField.getText());
                 Optional<ButtonType> resultado = alerta.showAndWait();
 
                 if (resultado.isPresent() && resultado.get() == ButtonType.OK) {
-                   System.out.println("Usuario seleccionado: "
-                + seleccionado.getUserName());
-                   
+                    System.out.println("Usuario seleccionado: "
+                            + seleccionado.getUserName());
+
                     boolean eliminado = bd.eliminarPerson(seleccionado);
 
                     System.out.println("Resultado eliminación: " + eliminado);
@@ -253,7 +255,7 @@ System.out.println("Nombre Campo: " + nameField.getText());
                         employeeList.getSelectionModel().clearSelection();
                         mostrarInfo("User deleted from the database");
                         cancelRegistration.setSelected(false);
-                        
+
                     } else {
                         mostrarError("Error deleting user");
                     }
@@ -274,14 +276,14 @@ System.out.println("Nombre Campo: " + nameField.getText());
                         } catch (PasswordException e) {
                             mostrarError("The password must be at least 8 characters include an uppercase letter, a lowercase letter, "
                                     + "\na number, and a special character.");
-                            passwordCorrecto=false;
+                            passwordCorrecto = false;
                         }
-                        if (!contrasIguales(passField.getText(),passField1.getText())){
+                        if (!contrasIguales(passField.getText(), passField1.getText())) {
                             passwordCorrecto = false;
                             mostrarError("The passwords must be the same.");
                         }
-                        
-                        if (passwordCorrecto){
+
+                        if (passwordCorrecto) {
                             seleccionado.setName(nameField.getText());
                             seleccionado.setLastName(surField.getText());
 
@@ -296,14 +298,13 @@ System.out.println("Nombre Campo: " + nameField.getText());
             }
         }
     }
-    
-/**
- * Verifica que todos los campos obligatorios
- * estén cumplimentados.
- *
- * @return true si todos los campos contienen información.
- */
-private boolean comprobacion() {
+
+    /**
+     * Verifica que todos los campos obligatorios estén cumplimentados.
+     *
+     * @return true si todos los campos contienen información.
+     */
+    private boolean comprobacion() {
         if (userField.getText().isBlank()
                 || passField.getText().isBlank()
                 || passField1.getText().isBlank()
@@ -316,20 +317,20 @@ private boolean comprobacion() {
         }
         return true;
     }
-    
-/**
- * Registra un nuevo empleado en la aplicación.
- */
-@FXML
-private void anadirPerson() {
-        boolean dniCorrecto=true,passwordCorrecto=true;
+
+    /**
+     * Registra un nuevo empleado en la aplicación.
+     */
+    @FXML
+    private void anadirPerson() {
+        boolean dniCorrecto = true, passwordCorrecto = true;
         if (comprobacion()) {
             String nomUser = userField.getText();
 
             if (userNameRepe(nomUser)) {
                 mostrarError("That username already exists.");
-                
-            }else{
+
+            } else {
                 Employee nuevo = new Employee();
 
                 nuevo.setUserName(userField.getText());
@@ -340,84 +341,84 @@ private void anadirPerson() {
                             + "\n a number, and a special character.");
                     passwordCorrecto = false;
                 }
-               
-                if (!contrasIguales(passField.getText(),passField1.getText())){
+
+                if (!contrasIguales(passField.getText(), passField1.getText())) {
                     passwordCorrecto = false;
                     mostrarError("The passwords must be the same.");
                 }
-                
-                if (passwordCorrecto){
-                nuevo.setName(nameField.getText());
-                nuevo.setLastName(surField.getText());
 
-                try {
-                    nuevo.setDni(dniField.getText());
-                } catch (DniException e) {
-                    mostrarError("Incorrect ID format");
-                    dniCorrecto = false;
-                }
-                if (dniCorrecto){
-                    try{
-                        DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-                        LocalDate fecha = LocalDate.parse(dateField.getText(), formato);
+                if (passwordCorrecto) {
+                    nuevo.setName(nameField.getText());
+                    nuevo.setLastName(surField.getText());
 
-                        nuevo.setStartDate(fecha);
-                    }catch(DateTimeException e){
-                        mostrarError("Error en la fecha");
-                        System.out.print(e);
+                    try {
+                        nuevo.setDni(dniField.getText());
+                    } catch (DniException e) {
+                        mostrarError("Incorrect ID format");
+                        dniCorrecto = false;
                     }
-                    if (bd.insertarPerson(nuevo)) {
-                        employeeList.getItems().remove(anadirEmployee);
-                        employeeList.getItems().add(nuevo);
-                        employeeList.getSelectionModel().selectFirst();
-                        employeeList.getItems().add(anadirEmployee);
+                    if (dniCorrecto) {
+                        try {
+                            DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                            LocalDate fecha = LocalDate.parse(dateField.getText(), formato);
 
-                        mostrarInfo("New user registered");
+                            nuevo.setStartDate(fecha);
+                        } catch (DateTimeException e) {
+                            mostrarError("Error en la fecha");
+                            System.out.print(e);
+                        }
+                        if (bd.insertarPerson(nuevo)) {
+                            employeeList.getItems().remove(anadirEmployee);
+                            employeeList.getItems().add(nuevo);
+                            employeeList.getSelectionModel().selectFirst();
+                            employeeList.getItems().add(anadirEmployee);
 
-                    } else {
-                        mostrarError("Error registering the user");
+                            mostrarInfo("New user registered");
+
+                        } else {
+                            mostrarError("Error registering the user");
+                        }
                     }
-                }
                 }
             }
-       }
+        }
     }
 
-/**
- * Comprueba si el nombre de usuario ya existe.
- *
- * @param userName nombre de usuario a comprobar.
- * @return true si ya existe.
- */
-private boolean userNameRepe(String userName) {
+    /**
+     * Comprueba si el nombre de usuario ya existe.
+     *
+     * @param userName nombre de usuario a comprobar.
+     * @return true si ya existe.
+     */
+    private boolean userNameRepe(String userName) {
         for (Employee u : bd.getEmployee()) {
-             if (u.getUserName().equalsIgnoreCase(userName)) {
-                 return true;
-             }
-         }
-         return false;
-   }
-   
-/**
- * Comprueba si ambas contraseñas son iguales.
- *
- * @param cont1 primera contraseña.
- * @param cont2 segunda contraseña.
- * @return true si coinciden.
- */
-private boolean contrasIguales(String cont1, String cont2){
-       if (cont1.equals(cont2)){
-           return true;
-       }else{
-           return false;
-       }
-   }
-   
-/**
- * Muestra u oculta la primera contraseña.
- */
-@FXML
-private void verContrasena() {
+            if (u.getUserName().equalsIgnoreCase(userName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Comprueba si ambas contraseñas son iguales.
+     *
+     * @param cont1 primera contraseña.
+     * @param cont2 segunda contraseña.
+     * @return true si coinciden.
+     */
+    private boolean contrasIguales(String cont1, String cont2) {
+        if (cont1.equals(cont2)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Muestra u oculta la primera contraseña.
+     */
+    @FXML
+    private void verContrasena() {
         if (verContra1.isSelected()) {
             passVisibleField.setText(passField.getText());
             passVisibleField.setVisible(true);
@@ -432,12 +433,12 @@ private void verContrasena() {
             passVisibleField.setManaged(false);
         }
     }
-    
-/**
- * Muestra u oculta la segunda contraseña.
- */
-@FXML
-private void verContrasena1() {
+
+    /**
+     * Muestra u oculta la segunda contraseña.
+     */
+    @FXML
+    private void verContrasena1() {
         if (verContra2.isSelected()) {
             passVisibleField1.setText(passField1.getText());
             passVisibleField1.setVisible(true);
@@ -453,11 +454,12 @@ private void verContrasena1() {
             passVisibleField1.setManaged(false);
         }
     }
-/**
- * Oculta ambas contraseñas y restablece
- * los campos de contraseña originales.
- */
-private void ocultarContrasenas(){
+
+    /**
+     * Oculta ambas contraseñas y restablece los campos de contraseña
+     * originales.
+     */
+    private void ocultarContrasenas() {
         verContra1.setSelected(false);
         verContra2.setSelected(false);
 

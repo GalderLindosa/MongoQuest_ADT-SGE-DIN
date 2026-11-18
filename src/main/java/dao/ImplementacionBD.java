@@ -9,56 +9,42 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;*/
 import com.mongodb.MongoException;
-import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
-import java.util.Date;
 import static com.mongodb.client.model.Filters.and;
-import org.bson.Document;
 import static com.mongodb.client.model.Filters.eq;
-import com.mongodb.client.result.DeleteResult;
-import excepciones.DniException;
-import excepciones.PasswordException;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import static com.mongodb.client.model.Filters.lt;
-import static com.mongodb.client.model.Filters.or;
-import com.mongodb.client.model.Projections;
 import com.mongodb.client.model.Sorts;
 import com.mongodb.client.model.Updates;
+import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import controller.MongoConnection;
+import excepciones.DniException;
+import excepciones.PasswordException;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import log.Logger;
 import model.Boss;
-import model.Boss;
-import model.Employee;
 import model.Employee;
 import model.Gym;
-import model.Gym;
-import model.GymClass;
 import model.GymClass;
 import model.Person;
-import model.Person;
 import model.Product;
-import model.Product;
-import model.Schedule;
 import model.Schedule;
 import model.ShoppingHistory;
 import model.Training;
-import model.Training;
 import model.User;
-import model.User;
-import org.bson.conversions.Bson;
+import org.bson.Document;
 
 /**
  * Implementación de acceso a datos de la aplicación. Gestiona las operaciones
@@ -398,6 +384,11 @@ public class ImplementacionBD {
         return lista;
     }
 
+    /**
+     * Obtiene todos los gimnasios registrados en la base de datos.
+     *
+     * @return lista de gimnasios disponibles.
+     */
     public ArrayList<Gym> obtenerGimnasios() {
         MongoCollection<Document> gyms = MongoConnection.getConnection().getCollection("gyms");
         ArrayList<Gym> lista = new ArrayList<>();
@@ -412,71 +403,83 @@ public class ImplementacionBD {
         return lista;
     }
 
+    /**
+     * Recupera todas las clases almacenadas en la colección de clases junto con
+     * sus horarios, entrenador y miembros inscritos.
+     *
+     * @return lista de clases del gimnasio.
+     */
     public ArrayList<GymClass> getGymClasses() {
 
-    ArrayList<GymClass> clases = new ArrayList<>();
+        ArrayList<GymClass> clases = new ArrayList<>();
 
-    MongoCollection<Document> collection =
-            database.getCollection("classes");
+        MongoCollection<Document> collection
+                = database.getCollection("classes");
 
-    for (Document doc : collection.find()) {
+        for (Document doc : collection.find()) {
 
-        System.out.println("DOCUMENTO:");
-        System.out.println(doc.toJson());
+            System.out.println("DOCUMENTO:");
+            System.out.println(doc.toJson());
 
-        int id = ((Number) doc.get("_id")).intValue();
-        String className = doc.getString("class_name");
-        String employeeUsername = doc.getString("employee_username");
-        int gymId = ((Number) doc.get("gym_id")).intValue();
+            int id = ((Number) doc.get("_id")).intValue();
+            String className = doc.getString("class_name");
+            String employeeUsername = doc.getString("employee_username");
+            int gymId = ((Number) doc.get("gym_id")).intValue();
 
-        ArrayList<String> members = new ArrayList<>();
+            ArrayList<String> members = new ArrayList<>();
 
-        List<String> membersList =
-                doc.getList("members", String.class);
+            List<String> membersList
+                    = doc.getList("members", String.class);
 
-        if (membersList != null) {
-            members.addAll(membersList);
-        }
-
-        ArrayList<Schedule> schedules = new ArrayList<>();
-
-        List<Document> scheduleDocs =
-                doc.getList("schedule", Document.class);
-
-        System.out.println("Schedule: " + scheduleDocs);
-
-        if (scheduleDocs != null) {
-
-            for (Document s : scheduleDocs) {
-
-                String day = s.getString("day");
-                String hour = s.getString("time");
-
-                System.out.println(day + " " + hour);
-
-                schedules.add(
-                        new Schedule(day, hour)
-                );
+            if (membersList != null) {
+                members.addAll(membersList);
             }
+
+            ArrayList<Schedule> schedules = new ArrayList<>();
+
+            List<Document> scheduleDocs
+                    = doc.getList("schedule", Document.class);
+
+            System.out.println("Schedule: " + scheduleDocs);
+
+            if (scheduleDocs != null) {
+
+                for (Document s : scheduleDocs) {
+
+                    String day = s.getString("day");
+                    String hour = s.getString("time");
+
+                    System.out.println(day + " " + hour);
+
+                    schedules.add(
+                            new Schedule(day, hour)
+                    );
+                }
+            }
+
+            GymClass gymClass = new GymClass(
+                    id,
+                    className,
+                    schedules,
+                    employeeUsername,
+                    members,
+                    gymId
+            );
+
+            clases.add(gymClass);
         }
 
-        GymClass gymClass = new GymClass(
-                id,
-                className,
-                schedules,
-                employeeUsername,
-                members,
-                gymId
-        );
+        System.out.println("TOTAL CLASES: " + clases.size());
 
-        clases.add(gymClass);
+        return clases;
     }
 
-    System.out.println("TOTAL CLASES: " + clases.size());
-
-    return clases;
-}
-       
+    /**
+     * Obtiene los identificadores de las clases asignadas a un entrenador.
+     *
+     * @param username nombre de usuario del entrenador.
+     * @return lista de identificadores de clases.
+     */
     public ArrayList<Integer> getClassIdsEmployee(String username) {
 
         ArrayList<Integer> classIds = new ArrayList<>();
@@ -501,64 +504,80 @@ public class ImplementacionBD {
         return classIds;
     }
 
-   public ArrayList<GymClass> getClassesForUser(
-        String username,
-        String role) {
+    /**
+     * Obtiene las clases asociadas a un usuario según su rol dentro de la
+     * aplicación.
+     *
+     * Los miembros visualizan las clases en las que están inscritos y los
+     * empleados las clases que imparten.
+     *
+     * @param username nombre de usuario.
+     * @param role rol del usuario.
+     * @return lista de clases asociadas.
+     */
+    public ArrayList<GymClass> getClassesForUser(
+            String username,
+            String role) {
 
-    ArrayList<GymClass> resultado = new ArrayList<>();
+        ArrayList<GymClass> resultado = new ArrayList<>();
 
-    ArrayList<GymClass> todasLasClases =
-            getGymClasses();
+        ArrayList<GymClass> todasLasClases
+                = getGymClasses();
 
-    System.out.println("USER = " + username);
-    System.out.println("ROLE = " + role);
+        System.out.println("USER = " + username);
+        System.out.println("ROLE = " + role);
 
-    if ("member".equals(role)) {
+        if ("member".equals(role)) {
 
-        for (GymClass gymClass : todasLasClases) {
-
-            System.out.println(
-                    gymClass.getClassName()
-                    + " -> "
-                    + gymClass.getMembers()
-            );
-
-            if (gymClass.getMembers().contains(username)) {
+            for (GymClass gymClass : todasLasClases) {
 
                 System.out.println(
-                        "ENCONTRADA -> "
-                        + gymClass.getClassName()
+                        gymClass.getClassName()
+                        + " -> "
+                        + gymClass.getMembers()
                 );
 
-                resultado.add(gymClass);
+                if (gymClass.getMembers().contains(username)) {
+
+                    System.out.println(
+                            "ENCONTRADA -> "
+                            + gymClass.getClassName()
+                    );
+
+                    resultado.add(gymClass);
+                }
+            }
+
+        } else if ("employee".equals(role)) {
+
+            for (GymClass gymClass : todasLasClases) {
+
+                if (gymClass.getEmployeeUsername()
+                        .equals(username)) {
+
+                    System.out.println(
+                            "CLASE EMPLEADO -> "
+                            + gymClass.getClassName()
+                    );
+
+                    resultado.add(gymClass);
+                }
             }
         }
 
-    } else if ("employee".equals(role)) {
+        System.out.println(
+                "RESULTADO FINAL = "
+                + resultado.size()
+        );
 
-        for (GymClass gymClass : todasLasClases) {
-
-            if (gymClass.getEmployeeUsername()
-                    .equals(username)) {
-
-                System.out.println(
-                        "CLASE EMPLEADO -> "
-                        + gymClass.getClassName()
-                );
-
-                resultado.add(gymClass);
-            }
-        }
+        return resultado;
     }
 
-    System.out.println(
-            "RESULTADO FINAL = "
-            + resultado.size()
-    );
-
-    return resultado;
-}
-
+    /**
+     * Crea una nueva clase en la base de datos.
+     *
+     * @param gymClass clase que se desea crear.
+     */
     public void createClass(GymClass gymClass) {
 
         MongoCollection<Document> collection
@@ -587,6 +606,11 @@ public class ImplementacionBD {
         Logger.log("CREATE CLASS", "ID=" + gymClass.getId() + ", Name=" + gymClass.getClassName() + ", Trainer=" + gymClass.getEmployeeUsername());
     }
 
+    /**
+     * Elimina una clase existente a partir de su identificador.
+     *
+     * @param classId identificador de la clase.
+     */
     public void deleteClass(int classId) {
 
         MongoCollection<Document> collection
@@ -601,22 +625,29 @@ public class ImplementacionBD {
         );
     }
 
+    /**
+     * Cambia el entrenador asignado a una clase actualizando tanto la colección
+     * de clases como la información de los empleados.
+     *
+     * @param classId identificador de la clase.
+     * @param newTrainer nombre del nuevo entrenador.
+     */
     public void updateClassTrainer(
-        int classId,
-        String newTrainer) {
+            int classId,
+            String newTrainer) {
 
-        MongoCollection<Document> classes =
-                database.getCollection("classes");
+        MongoCollection<Document> classes
+                = database.getCollection("classes");
 
-        MongoCollection<Document> people =
-                database.getCollection("people");
+        MongoCollection<Document> people
+                = database.getCollection("people");
 
         Document clase = classes.find(
                 Filters.eq("_id", classId)
         ).first();
 
-        String oldTrainer =
-                clase.getString("employee_username");
+        String oldTrainer
+                = clase.getString("employee_username");
 
         people.updateOne(
                 Filters.eq("username", oldTrainer),
@@ -633,16 +664,23 @@ public class ImplementacionBD {
                 Updates.set("employee_username", newTrainer)
         );
     }
-  
+
+    /**
+     * Inscribe a un usuario en una clase y actualiza su información en la base
+     * de datos.
+     *
+     * @param classId identificador de la clase.
+     * @param username nombre del usuario.
+     */
     public void addMemberToClass(
-        int classId,
-        String username) {
+            int classId,
+            String username) {
 
-        MongoCollection<Document> classes =
-                database.getCollection("classes");
+        MongoCollection<Document> classes
+                = database.getCollection("classes");
 
-        MongoCollection<Document> people =
-                database.getCollection("people");
+        MongoCollection<Document> people
+                = database.getCollection("people");
 
         classes.updateOne(
                 Filters.eq("_id", classId),
@@ -661,15 +699,21 @@ public class ImplementacionBD {
         );
     }
 
+    /**
+     * Elimina la inscripción de un usuario en una clase determinada.
+     *
+     * @param classId identificador de la clase.
+     * @param username nombre del usuario.
+     */
     public void removeMemberFromClass(
-        int classId,
-        String username) {
+            int classId,
+            String username) {
 
-        MongoCollection<Document> classes =
-                database.getCollection("classes");
+        MongoCollection<Document> classes
+                = database.getCollection("classes");
 
-        MongoCollection<Document> people =
-                database.getCollection("people");
+        MongoCollection<Document> people
+                = database.getCollection("people");
 
         classes.updateOne(
                 Filters.eq("_id", classId),
@@ -730,6 +774,12 @@ public class ImplementacionBD {
 
     }
 
+    /**
+     * Recupera el historial de compras realizado por un usuario determinado.
+     *
+     * @param username nombre de usuario.
+     * @return lista de compras realizadas.
+     */
     public List<ShoppingHistory> findPurchasesByUser(String username) {
         MongoCollection<Document> purchases = MongoConnection.getConnection().getCollection("purchases");
 
@@ -755,6 +805,12 @@ public class ImplementacionBD {
         return result;
     }
 
+    /**
+     * Carga todos los productos almacenados en la base de datos y los organiza
+     * por su identificador.
+     *
+     * @return mapa de productos indexados por ID.
+     */
     public Map<Integer, Product> loadProducts() {
         MongoCollection<Document> products = MongoConnection.getConnection().getCollection("products");
 
@@ -769,6 +825,12 @@ public class ImplementacionBD {
         return map;
     }
 
+    /**
+     * Comprueba si existe un empleado con el nombre de usuario indicado.
+     *
+     * @param username nombre de usuario.
+     * @return true si existe, false en caso contrario.
+     */
     public boolean employeeExists(String username) {
 
         MongoCollection<Document> collection
@@ -782,8 +844,14 @@ public class ImplementacionBD {
         ).first();
 
         return empleado != null;
-    } 
+    }
 
+    /**
+     * Comprueba si existe una clase con el identificador especificado.
+     *
+     * @param classId identificador de la clase.
+     * @return true si existe, false en caso contrario.
+     */
     public boolean classExists(int classId) {
 
         MongoCollection<Document> collection
@@ -796,6 +864,12 @@ public class ImplementacionBD {
         return doc != null;
     }
 
+    /**
+     * Comprueba si existe un gimnasio con el identificador indicado.
+     *
+     * @param gymId identificador del gimnasio.
+     * @return true si existe, false en caso contrario.
+     */
     public boolean gymExists(int gymId) {
 
         MongoCollection<Document> collection
@@ -808,6 +882,12 @@ public class ImplementacionBD {
         return doc != null;
     }
 
+    /**
+     * Comprueba si ya existe una clase con el nombre indicado.
+     *
+     * @param className nombre de la clase.
+     * @return true si existe, false en caso contrario.
+     */
     public boolean classNameExists(String className) {
 
         MongoCollection<Document> collection
@@ -820,6 +900,11 @@ public class ImplementacionBD {
         return doc != null;
     }
 
+    /**
+     * Lee el contenido completo del fichero de registro de la aplicación.
+     *
+     * @return texto con todas las entradas del log.
+     */
     public String leerLog() {
 
         StringBuilder contenido = new StringBuilder();
@@ -840,7 +925,16 @@ public class ImplementacionBD {
 
         return contenido.toString();
     }
-    
+
+    /**
+     * Reduce el stock disponible de un producto únicamente si existe cantidad
+     * suficiente.
+     *
+     * @param productId identificador del producto.
+     * @param cantidad cantidad a descontar.
+     * @return true si el stock se actualiza correctamente, false en caso
+     * contrario.
+     */
     public boolean decreaseProductStock(int productId, int cantidad) {
 
         MongoCollection<Document> productos = MongoConnection.getConnection().getCollection("products");
