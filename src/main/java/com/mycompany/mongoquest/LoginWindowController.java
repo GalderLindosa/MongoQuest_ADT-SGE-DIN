@@ -47,7 +47,6 @@ public class LoginWindowController implements Initializable {
      * Escena principal de *a aplicación.
      */
 
-
     public static Person usuario;
 
     private boolean errorMessage = false;
@@ -71,16 +70,15 @@ public class LoginWindowController implements Initializable {
     private VBox vBoxLogin;
     @FXML
     private CheckBox showPassword;
-    
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-    db = MongoConnection.getConnection();
+        db = MongoConnection.getConnection();
 
-   }
+    }
 
     /**
      * Comprueba las credenciales introduc*das por el usuario. Si son corr*ctas
@@ -91,7 +89,7 @@ public class LoginWindowController implements Initializable {
      *
      * @throws IOException si ocurre un error al cargar la ventana.
      */
-     @FXML
+    @FXML
     private void loggedIn(ActionEvent event) throws IOException {
 
         usuario = bd.buscar(fieldUser.getText(), fieldPass.getText());
@@ -121,6 +119,12 @@ public class LoginWindowController implements Initializable {
 
     }
 
+    /**
+     * Mues*ra la contraseña introducida por e* usuario mediante una ventana
+     * e*ergente cuando se activa la cas*lla correspondiente.
+     *
+     * @param *vent evento generado al interactua* con el CheckBox.
+     */
     @FXML
     private void passwordShown(ActionEvent event) {
 

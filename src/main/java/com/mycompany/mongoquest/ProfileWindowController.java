@@ -33,9 +33,8 @@ import javafx.stage.Stage;
 import javafx.scene.Scene;
 
 /**
- * Controlador de la ventana de perfil.
- * Muestra la información del usuario autenticado y
- * configura las opciones disponibles según su rol.
+ * Controlador de la ventana de perfil. Muestra la información del usuario
+ * autenticado y configura las opciones disponibles según su rol.
  *
  * @author Usuario
  */
@@ -82,19 +81,19 @@ public class ProfileWindowController implements Initializable {
     private Button button4;
     @FXML
     private Button button5;
-    
+
     private String username;
     private String role;
 
-   /**
- * Inicializa la ventana cargando los datos del usuario
- * y configurando los botones según su tipo.
- *
- * @param url ubicación utilizada para resolver rutas relativas.
- * @param rb recursos de internacionalización.
- */
-@Override
-public void initialize(URL url, ResourceBundle rb) {
+    /**
+     * Inicializa la ventana cargando los datos del usuario y configurando los
+     * botones según su tipo.
+     *
+     * @param url ubicación utilizada para resolver rutas relativas.
+     * @param rb recursos de internacionalización.
+     */
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
         try {
             // TODO
             userName.setText(LoginWindowController.usuario.getName());
@@ -111,12 +110,11 @@ public void initialize(URL url, ResourceBundle rb) {
         }
     }
 
-/**
- * Muestra u oculta la contraseña del usuario
- * según el estado del CheckBox.
- */
-@FXML
-public void mostrarContraseña() {
+    /**
+     * Muestra u oculta la contraseña del usuario según el estado del CheckBox.
+     */
+    @FXML
+    public void mostrarContraseña() {
         if (showPassword.isSelected()) {
             userPass.setText(LoginWindowController.usuario.getPassword());
         } else {
@@ -124,12 +122,12 @@ public void mostrarContraseña() {
         }
     }
 
-/**
- * Carga información adicional del usuario en la interfaz.
- *
- * @param person usuario del que se desea mostrar información.
- */
-public void cargaInfoUser(Person person){
+    /**
+     * Carga información adicional del usuario en la interfaz.
+     *
+     * @param person usuario del que se desea mostrar información.
+     */
+    public void cargaInfoUser(Person person) {
 
         if (person instanceof User | person instanceof Employee) {
             Label balancelbl = new Label();
@@ -140,13 +138,13 @@ public void cargaInfoUser(Person person){
         }
     }
 
-/**
- * Configura los botones visibles según el tipo de usuario.
- *
- * @param person usuario autenticado.
- * @throws IOException si ocurre un error al cargar una ventana.
- */
-public void setButtons(Person person) throws IOException {
+    /**
+     * Configura los botones visibles según el tipo de usuario.
+     *
+     * @param person usuario autenticado.
+     * @throws IOException si ocurre un error al cargar una ventana.
+     */
+    public void setButtons(Person person) throws IOException {
 
         if (person instanceof User) {
             setClassButton();
@@ -170,59 +168,60 @@ public void setButtons(Person person) throws IOException {
 
     }
 
-/**
- * Configura el botón de acceso a las clases.
- *
- * @throws IOException si ocurre un error al cargar la ventana.
- */
-public void setClassButton() throws IOException {
+    /**
+     * Configura el botón de acceso a las clases.
+     *
+     * @throws IOException si ocurre un error al cargar la ventana.
+     */
+    public void setClassButton() throws IOException {
 
-    button2.setText("Classes");
+        button2.setText("Classes");
 
-    button2.setOnAction(new EventHandler<ActionEvent>() {
+        button2.setOnAction(new EventHandler<ActionEvent>() {
 
-        @Override
-        public void handle(ActionEvent e) {
+            @Override
+            public void handle(ActionEvent e) {
 
-            try {
-                FXMLLoader loader = new FXMLLoader(
-                        App.class.getResource("ScheduleWindow.fxml")
-                );
+                try {
+                    FXMLLoader loader = new FXMLLoader(
+                            App.class.getResource("ScheduleWindow.fxml")
+                    );
 
-                Scene scene = new Scene(loader.load(), 819, 400);
+                    Scene scene = new Scene(loader.load(), 819, 400);
 
-                ScheduleWindowController controller =
-                        loader.getController();
+                    ScheduleWindowController controller
+                            = loader.getController();
 
-                String username = LoginWindowController.usuario.getUserName();
-                String role = "";
+                    String username = LoginWindowController.usuario.getUserName();
+                    String role = "";
 
-                if (LoginWindowController.usuario instanceof User) {
-                    role = "member";
-                } else if (LoginWindowController.usuario instanceof Employee) {
-                    role = "employee";
-                } else if (LoginWindowController.usuario instanceof Boss) {
-                    role = "manager";
+                    if (LoginWindowController.usuario instanceof User) {
+                        role = "member";
+                    } else if (LoginWindowController.usuario instanceof Employee) {
+                        role = "employee";
+                    } else if (LoginWindowController.usuario instanceof Boss) {
+                        role = "manager";
+                    }
+
+                    controller.setUser(username, role);
+                    Stage stage = new Stage();
+                    stage.setScene(scene);
+                    stage.setTitle("Classes");
+                    stage.show();
+
+                } catch (IOException ex) {
+                    ex.printStackTrace();
                 }
-
-                controller.setUser(username, role);
-                Stage stage = new Stage();
-                stage.setScene(scene);
-                stage.setTitle("Classes");
-                stage.show();
-
-            } catch (IOException ex) {
-                ex.printStackTrace();
             }
-        }
-    });
-}
-/**
- * Configura el botón de acceso a la tienda.
- *
- * @throws IOException si ocurre un error al cargar la ventana.
- */
-public void setShopButton() throws IOException{
+        });
+    }
+
+    /**
+     * Configura el botón de acceso a la tienda.
+     *
+     * @throws IOException si ocurre un error al cargar la ventana.
+     */
+    public void setShopButton() throws IOException {
         button4.setText("Shop");
         button4.setOnAction(new EventHandler<ActionEvent>() {
             private Scene scene;
@@ -243,6 +242,11 @@ public void setShopButton() throws IOException{
         });
     }
 
+    /**
+     * Configura el botón de acceso a la ventana de entrenamientos del usuario.
+     *
+     * @throws IOException si ocurre un error al cargar la ventana.
+     */
     public void setRoutineButton() throws IOException {
 
         button3.setText("Routine");
@@ -267,6 +271,12 @@ public void setShopButton() throws IOException{
         });
     }
 
+    /**
+     * Configura el botón de acceso a la gestión y consulta de usuarios
+     * registrados.
+     *
+     * @throws IOException si ocurre un error al cargar la ventana.
+     */
     public void setUsListButton() throws IOException {
 
         button3.setText("Users list");
@@ -289,6 +299,12 @@ public void setShopButton() throws IOException{
         });
     }
 
+    /**
+     * Configura el botón de acceso a la lista de empleados registrados en el
+     * gimnasio.
+     *
+     * @throws IOException si ocurre un error al cargar la ventana.
+     */
     public void setEmListButton() throws IOException {
 
         button4.setText("Employee List");
@@ -311,27 +327,26 @@ public void setShopButton() throws IOException{
         });
     }
 
-
-/**
- * Carga un archivo FXML y devuelve su nodo raíz.
- *
- * @param fxml nombre del archivo FXML sin extensión.
- * @return nodo raíz cargado.
- * @throws IOException si ocurre un error durante la carga.
- */
-private static Parent loadFXML(String fxml) throws IOException {
+    /**
+     * Carga un archivo FXML y devuelve su nodo raíz.
+     *
+     * @param fxml nombre del archivo FXML sin extensión.
+     * @return nodo raíz cargado.
+     * @throws IOException si ocurre un error durante la carga.
+     */
+    private static Parent loadFXML(String fxml) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
         return fxmlLoader.load();
     }
 
- /**
- * Cierra la sesión actual y vuelve a la ventana de inicio de sesión.
- *
- * @param event evento generado al pulsar el botón de cerrar sesión.
- * @throws IOException si ocurre un error al cargar la ventana.
- */
-@FXML
-public void goBackToLogin(ActionEvent event) throws IOException{
+    /**
+     * Cierra la sesión actual y vuelve a la ventana de inicio de sesión.
+     *
+     * @param event evento generado al pulsar el botón de cerrar sesión.
+     * @throws IOException si ocurre un error al cargar la ventana.
+     */
+    @FXML
+    public void goBackToLogin(ActionEvent event) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("LoginWindow.fxml"));
         Parent root = fxmlLoader.load();
 
@@ -343,34 +358,39 @@ public void goBackToLogin(ActionEvent event) throws IOException{
         Stage ventanaActual = (Stage) ((Node) event.getSource()).getScene().getWindow();
         ventanaActual.close();
     }
-public void setLogButton() {
 
-    button5.setText("View Logs");
+    /**
+     * Configura el botón que permite visualizar el registro de eventos y
+     * acciones del sistema.
+     */
+    public void setLogButton() {
 
-    button5.setOnAction(new EventHandler<ActionEvent>() {
+        button5.setText("View Logs");
 
-        private Scene scene;
-        Stage stage = new Stage();
+        button5.setOnAction(new EventHandler<ActionEvent>() {
 
-        @Override
-        public void handle(ActionEvent e) {
+            private Scene scene;
+            Stage stage = new Stage();
 
-            try {
+            @Override
+            public void handle(ActionEvent e) {
 
-                scene = new Scene(
-                        loadFXML("LogWindow"),
-                        800,
-                        500
-                );
+                try {
 
-                stage.setScene(scene);
-                stage.setTitle("System Logs");
-                stage.show();
+                    scene = new Scene(
+                            loadFXML("LogWindow"),
+                            800,
+                            500
+                    );
 
-            } catch (IOException ex) {
-                ex.printStackTrace();
+                    stage.setScene(scene);
+                    stage.setTitle("System Logs");
+                    stage.show();
+
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
             }
-        }
-    });
-}
+        });
+    }
 }

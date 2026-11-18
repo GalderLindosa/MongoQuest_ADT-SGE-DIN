@@ -42,18 +42,24 @@ import model.Product;
 import model.WithCart;
 
 /**
- * FXML Controller class
+ * Controlador de la ventana del carrito de compra. Permite visualizar los
+ * productos añadidos por el usuario, calcular el importe total, aplicar
+ * descuentos y realizar compras seleccionando un gimnasio de recogida.
  *
  * @author Unai.Ibarguren
  */
 public class CartWindowController implements Initializable {
-    
+
+    /**
+     * Carrito del usuario con los productos seleccionados y sus cantidades
+     * correspondientes.
+     */
     private Map<Product, Integer> cart;
     Person p = LoginWindowController.usuario;
     ImplementacionBD implementacion = ImplementacionBD.getInstance();
     private float totalPrice;
     private TextField textFieldDiscount;
-    
+
     @FXML
     private AnchorPane anchorPane;
     @FXML
@@ -72,8 +78,8 @@ public class CartWindowController implements Initializable {
     private Label lblBalance;
 
     /**
-     * Inicializa la ventana del carrito cargando los productos
-     * almacenados en el carrito del usuario actual.
+     * Inicializa la ventana del carrito cargando los productos almacenados en
+     * el carrito del usuario actual.
      *
      * @param url ubicación utilizada para resolver rutas relativas.
      * @param rb recursos utilizados para la internacionalización.
@@ -82,7 +88,7 @@ public class CartWindowController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
 
         if (!(p instanceof WithCart)) {
-            return;   
+            return;
         }
 
         cart = ((WithCart) p).getCart();
@@ -105,7 +111,7 @@ public class CartWindowController implements Initializable {
         totalPrice = (float) cart.entrySet().stream()
                 .mapToDouble(e -> e.getKey().getPrice() * e.getValue())
                 .sum();
-        lblTotalPrice.setText(totalPrice+"€");
+        lblTotalPrice.setText(totalPrice + "€");
 
         if (p instanceof Employee) {
 
@@ -131,9 +137,10 @@ public class CartWindowController implements Initializable {
             );
         }
     }
+
     /**
-     * Crea las tarjetas visuales de los productos contenidos
-     * en el carrito de compra.
+     * Crea las tarjetas visuales de los productos contenidos en el carrito de
+     * compra.
      *
      * @param cart mapa con los productos y sus cantidades.
      * @return lista de tarjetas de productos.
@@ -161,41 +168,50 @@ public class CartWindowController implements Initializable {
 
             tarjeta.setPadding(new Insets(10));
             tarjeta.setStyle(
-                    "-fx-border-color: #cccccc; -fx-border-radius: 8; " +
-                    "-fx-background-radius: 8; -fx-background-color: white;");
+                    "-fx-border-color: #cccccc; -fx-border-radius: 8; "
+                    + "-fx-background-radius: 8; -fx-background-color: white;");
 
             lista.add(tarjeta);
         }
 
         return lista;
     }
+
     /**
      * Carga la imagen asociada a un producto.
      *
      * @param p producto del que se desea obtener la imagen.
      * @return imagen del producto.
      */
-    private Image cargarImagen(Product p){
-            try {
-                // Si guardas la ruta/URL como String en el producto:
-                return null ;//new Image(p.getImage(), 120, 120, true, true, true);  <---- Para cuando tengamos imagenes de productos
-            } catch (Exception ex) {
-                return null ;//new Image(getClass().getResourceAsStream("sin-imagen.png"));
-            }
+    private Image cargarImagen(Product p) {
+        try {
+            // Si guardas la ruta/URL como String en el producto:
+            return null;//new Image(p.getImage(), 120, 120, true, true, true);  <---- Para cuando tengamos imagenes de productos
+        } catch (Exception ex) {
+            return null;//new Image(getClass().getResourceAsStream("sin-imagen.png"));
         }
+    }
 
-      /**
+    /**
      * Cierra la ventana actual y vuelve a la pantalla anterior.
      *
      * @param event evento generado al pulsar el botón volver.
      * @throws java.io.IOException si ocurre un error durante el proceso.
      */
     @FXML
-    private void goBack(ActionEvent event) throws java.io.IOException {        
+    private void goBack(ActionEvent event) throws java.io.IOException {
         Stage ventanaActual = (Stage) ((Node) event.getSource()).getScene().getWindow();
         ventanaActual.close();
     }
-    
+
+    /**
+     * Realiza la compra de los productos contenidos en el carrito comprobando
+     * el saldo disponible y el gimnasio seleccionado para la recogida.
+     *
+     * @param event evento generado al pulsar el botón comprar.
+     * @throws java.io.IOException si ocurre algún error durante el proceso de
+     * compra.
+     */
     @FXML
     private void buy(ActionEvent event) throws java.io.IOException {
         if (!cart.isEmpty()) {
@@ -220,7 +236,13 @@ public class CartWindowController implements Initializable {
             showAlert("Purchase error", "You cannot make a purchase with an empty cart.");
         }
     }
-    
+
+    /**
+     * Muestra una ventana de aviso con el mensaje indicado.
+     *
+     * @param titulo título de la alerta.
+     * @param mensaje mensaje mostrado al usuario.
+     */
     private void showAlert(String titulo, String mensaje) {
         Alert alert = new Alert(AlertType.WARNING);
         alert.setTitle(titulo);
@@ -228,7 +250,11 @@ public class CartWindowController implements Initializable {
         alert.setContentText(mensaje);
         alert.showAndWait();
     }
-    
+
+    /**
+     * Comprueba el código de descuento introducido por el empleado y aplica una
+     * reducción del 20% sobre el precio total de la compra cuando es válido.
+     */
     private void applyDiscount() {
         Employee empleado = (Employee) p;
 
@@ -240,5 +266,5 @@ public class CartWindowController implements Initializable {
             showAlert("Wrong code", "The discount code entered is not valid.");
         }
     }
-    
+
 }

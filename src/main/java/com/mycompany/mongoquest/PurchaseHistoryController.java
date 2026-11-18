@@ -29,6 +29,7 @@ import dao.ImplementacionBD;
 import model.Person;
 import model.Product;
 import model.ShoppingHistory;
+
 /**
  * FXML Controller class
  *
@@ -36,7 +37,13 @@ import model.ShoppingHistory;
  */
 public class PurchaseHistoryController implements Initializable {
 
+    /**
+     * Usuario actualmente autenticado.
+     */
     Person pr = LoginWindowController.usuario;
+    /**
+     * Instancia encargada del acceso a los datos almacenados en MongoDB.
+     */
     ImplementacionBD implementacion = ImplementacionBD.getInstance();
 
     @FXML
@@ -62,6 +69,17 @@ public class PurchaseHistoryController implements Initializable {
         }
     }
 
+    /**
+     ** Genera una colección de tarjetas*visuales con la información de *ada
+     * compra realizada.
+     *
+     * Cada t*rjeta muestra el identificador de *a compra, fecha, importe total
+     * * los productos adquiridos junto*a sus cantidades.
+     *
+     * @param com*ras lista de compras realizadas.
+     * @param products catálogo de produ*tos disponible.
+     * @return lista d* paneles VBox con la información de cada compra.
+     */
     private List<VBox> crearTarjetasCompra(List<ShoppingHistory> compras, Map<Integer, Product> products) {
         ArrayList<VBox> lista = new ArrayList<>();
 
@@ -91,16 +109,25 @@ public class PurchaseHistoryController implements Initializable {
             tarjeta.setPadding(new Insets(10));
             tarjeta.setPrefWidth(270);
             tarjeta.setStyle(
-                    "-fx-border-color: #cccccc; -fx-border-radius: 8; " +
-                    "-fx-background-radius: 8; -fx-background-color: white;");
+                    "-fx-border-color: #cccccc; -fx-border-radius: 8; "
+                    + "-fx-background-radius: 8; -fx-background-color: white;");
 
             lista.add(tarjeta);
         }
         return lista;
     }
 
+    /**
+     * *
+     * Cierra la ventana actual y d vuelve al usuario a la pantalla anterior.
+     *
+     * @param event event generado al pulsar el botón.
+     * @
+     * hrows java .io.IOException si ocurr un error durante la gestión de la
+     * ventana
+     */
     @FXML
-    private void goBack(ActionEvent event) throws java.io.IOException {        
+    private void goBack(ActionEvent event) throws java.io.IOException {
         Stage ventanaActual = (Stage) ((Node) event.getSource()).getScene().getWindow();
         ventanaActual.close();
     }
