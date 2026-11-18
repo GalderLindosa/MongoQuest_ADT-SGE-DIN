@@ -93,7 +93,7 @@ public class CartWindowController implements Initializable {
         choiceBoxWhere.setItems(gyms);
 
         if (cart == null || cart.isEmpty()) {
-            contenedorProductos.getChildren().add(new Label("El carrito está vacío"));
+            contenedorProductos.getChildren().add(new Label("The cart is empty"));
             lblTotalPrice.setText("0€");
             return;
         }
@@ -109,7 +109,7 @@ public class CartWindowController implements Initializable {
 
         if (p instanceof Employee) {
 
-            Label lblDiscount = new Label("Código de descuento:");
+            Label lblDiscount = new Label("Discount code:");
             lblDiscount.setLayoutX(300);
             lblDiscount.setLayoutY(281);
 
@@ -156,8 +156,8 @@ public class CartWindowController implements Initializable {
 
             VBox tarjeta = new VBox(5, new HBox(lblNombre, espacio, lblTotal));
 
-            tarjeta.getChildren().add(new Label("Cantidad: " + cantidad));
-            tarjeta.getChildren().add(new Label(String.format("Precio unitario: %.2f €", prod.getPrice())));
+            tarjeta.getChildren().add(new Label("Amount: " + cantidad));
+            tarjeta.getChildren().add(new Label(String.format("Price per unit: %.2f €", prod.getPrice())));
 
             tarjeta.setPadding(new Insets(10));
             tarjeta.setStyle(

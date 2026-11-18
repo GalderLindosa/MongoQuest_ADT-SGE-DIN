@@ -89,18 +89,18 @@ public class ProductWindowController implements Initializable {
         int cantidad = amountToBuy.getValue();
 
         if (cantidad <= 0) {
-            showAlert("Error", "Debes seleccionar una cantidad.");
+            showAlert("Error", "You must select an amount.");
             return;
         }
 
         if (!(LoginWindowController.usuario instanceof WithCart)) {
-            showAlert("Error", "Este usuario no dispone de carrito.");
+            showAlert("Error", "This user does not have a cart.");
             return;
         }
 
         // Primero comprobamos y actualizamos el stock en MongoDB.
         if (!implementacion.decreaseProductStock(product.getProductId(), cantidad)) {
-            showAlert("Error", "No hay suficiente stock disponible.");
+            showAlert("Error", "Insuficient stock");
             return;
         }
 

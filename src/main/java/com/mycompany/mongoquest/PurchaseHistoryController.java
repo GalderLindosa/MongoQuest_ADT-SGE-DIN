@@ -51,7 +51,7 @@ public class PurchaseHistoryController implements Initializable {
         List<ShoppingHistory> compras = implementacion.findPurchasesByUser(pr.getUserName());
 
         if (compras.isEmpty()) {
-            contenedorCompras.getChildren().add(new Label("Todavía no has hecho ninguna compra"));
+            contenedorCompras.getChildren().add(new Label("There is no purchases yet"));
             return;
         }
 
@@ -66,7 +66,7 @@ public class PurchaseHistoryController implements Initializable {
         ArrayList<VBox> lista = new ArrayList<>();
 
         for (ShoppingHistory compra : compras) {
-            Label lblTitulo = new Label("Compra #" + compra.getShoppingHistoryId()
+            Label lblTitulo = new Label("Purchase #" + compra.getShoppingHistoryId()
                     + " · " + compra.getDate());
             lblTitulo.setStyle("-fx-font-weight: bold;");
 
