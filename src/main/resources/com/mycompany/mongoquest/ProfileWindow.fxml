@@ -30,5 +30,9 @@
          <font>
             <Font size="19.0" />
          </font></Label>
+         <Button fx:id="button5"
+        layoutX="500"
+        layoutY="350"
+        text="View Logs"/>
    </children>
 </Pane>

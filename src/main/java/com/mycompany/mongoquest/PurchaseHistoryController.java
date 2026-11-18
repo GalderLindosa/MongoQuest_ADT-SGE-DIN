@@ -25,7 +25,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import model.ImplementacionBD;
+import dao.ImplementacionBD;
 import model.Person;
 import model.Product;
 import model.ShoppingHistory;
