@@ -33,7 +33,7 @@ import org.bson.Document;
  * acceder al carrito, consultar el historial de compras
  * y seleccionar productos para añadirlos al carrito.
  *
- * @author Usuario
+ * @author unaiIbarguren
  */
 public class ShopWindowController implements Initializable  {
 

@@ -21,6 +21,16 @@ import model.HorarioTabla;
 import dao.ImplementacionBD;
 import model.Schedule;
 
+/**
+ * Controlador de la ventana de horarios. Permite visualizar, crear, modificar y
+ * eliminar clases del gimnasio, así como apuntarse o darse de baja según el rol
+ * del usuario.
+ *
+ * Los horarios se muestran en formato semanal organizados por días y franjas
+ * horarias.
+ *
+ * @author ire22
+ */
 public class ScheduleWindowController implements Initializable {
 
     @FXML
@@ -71,7 +81,7 @@ public class ScheduleWindowController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-      
+
         hourColumn.setCellValueFactory(new PropertyValueFactory<>("hour"));
         mondayColumn.setCellValueFactory(new PropertyValueFactory<>("monday"));
         tuesdayColumn.setCellValueFactory(new PropertyValueFactory<>("tuesday"));
@@ -82,16 +92,30 @@ public class ScheduleWindowController implements Initializable {
         sundayColumn.setCellValueFactory(new PropertyValueFactory<>("sunday"));
     }
 
+    /**
+     * Establece el usuario y su rol para adaptar las funcionalidades
+     * disponibles y cargar el horario correspondiente.
+     *
+     * @param username nombre de usuario autenticado.
+     * @param role rol del usuario autenticado.
+     */
     public void setUser(String username, String role) {
-    System.out.println("Username: " + username);
-    System.out.println("Role: " + role);
+        System.out.println("Username: " + username);
+        System.out.println("Role: " + role);
         this.username = username;
         this.role = role;
 
-        configurarPermisos(); 
+        configurarPermisos();
         cargarHorario();
     }
 
+    /**
+     * Configura la visibilidad de los botones según el rol del usuario
+     * conectado.
+     *
+     * Manager: administración completa de clases. Employee: visualización de
+     * horarios. Member: suscripción y cancelación de clases.
+     */
     private void configurarPermisos() {
 
         if ("manager".equals(role)) {
@@ -101,7 +125,7 @@ public class ScheduleWindowController implements Initializable {
             btnUnsubscribe.setVisible(false);
             btnSubscribe.setVisible(false);
 
-        } else if ("employee".equals(role)){
+        } else if ("employee".equals(role)) {
 
             btnCreateClass.setVisible(false);
             btnEditClass.setVisible(false);
@@ -117,280 +141,75 @@ public class ScheduleWindowController implements Initializable {
             btnUnsubscribe.setVisible(true);
             btnSubscribe.setVisible(true);
         }
-    }
-@FXML
-private void createClass() {
 
-    try {
-
-        TextInputDialog idDialog = new TextInputDialog();
-        idDialog.setTitle("Create Class");
-        idDialog.setHeaderText("Enter class ID");
-
-        Optional<String> idResult = idDialog.showAndWait();
-
-        if (!idResult.isPresent()) {
-            return;
-        }
-
-        int id = Integer.parseInt(idResult.get());
-        if (bd.classExists(id)) {
-
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText(null);
-            alert.setContentText("A class with that ID already exists.");
-
-            alert.showAndWait();
-            return;
-        }
-        TextInputDialog nameDialog = new TextInputDialog();
-        nameDialog.setTitle("Create Class");
-        nameDialog.setHeaderText("Enter class name");
-
-        Optional<String> nameResult = nameDialog.showAndWait();
-
-        if (!nameResult.isPresent()) {
-            return;
-        }
-
-        String className = nameResult.get();
-        if (bd.classNameExists(className)) {
-
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText(null);
-            alert.setContentText("A class with that name already exists.");
-
-            alert.showAndWait();
-            return;
-        }
-        TextInputDialog trainerDialog = new TextInputDialog();
-        trainerDialog.setTitle("Create Class");
-        trainerDialog.setHeaderText("Enter trainer username");
-
-        Optional<String> trainerResult = trainerDialog.showAndWait();
-
-        if (!trainerResult.isPresent()) {
-            return;
-        }
-
-        String trainer = trainerResult.get();
-        if (!bd.employeeExists(trainer)) {
-
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText(null);
-            alert.setContentText("The employee does not exist.");
-
-            alert.showAndWait();
-            return;
-        }
-        TextInputDialog gymDialog = new TextInputDialog();
-        gymDialog.setTitle("Create Class");
-        gymDialog.setHeaderText("Enter gym ID");
-
-        Optional<String> gymResult = gymDialog.showAndWait();
-
-        if (!gymResult.isPresent()) {
-            return;
-        }
-
-        int gymId = Integer.parseInt(gymResult.get());
-        if (!bd.gymExists(gymId)) {
-
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText(null);
-            alert.setContentText("The gym does not exist.");
-
-            alert.showAndWait();
-            return;
-        }
-        TextInputDialog dayDialog = new TextInputDialog();
-        dayDialog.setTitle("Create Class");
-        dayDialog.setHeaderText("Enter day");
-
-        Optional<String> dayResult = dayDialog.showAndWait();
-
-        if (!dayResult.isPresent()) {
-            return;
-        }
-
-        String day = dayResult.get();
-        if (!day.equals("Monday")
-        && !day.equals("Tuesday")
-        && !day.equals("Wednesday")
-        && !day.equals("Thursday")
-        && !day.equals("Friday")
-        && !day.equals("Saturday")
-        && !day.equals("Sunday")) {
-
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText(null);
-            alert.setContentText("Invalid day.");
-
-            alert.showAndWait();
-            return;
-        }
-
-        TextInputDialog hourDialog = new TextInputDialog();
-        hourDialog.setTitle("Create Class");
-        hourDialog.setHeaderText("Enter hour");
-
-        Optional<String> hourResult = hourDialog.showAndWait();
-
-        if (!hourResult.isPresent()) {
-            return;
-        }
-
-        String hour = hourResult.get();
-        if (!hour.matches("\\d{2}:\\d{2}")) {
-
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText(null);
-            alert.setContentText("Time must be in HH:MM format.");
-
-            alert.showAndWait();
-            return;
-        }
-        ArrayList<Schedule> schedules = new ArrayList<>();
-        schedules.add(new Schedule(day, hour));
-
-        GymClass gymClass = new GymClass(
-                id,
-                className,
-                schedules,
-                trainer,
-                new ArrayList<>(),
-                gymId
-        );
-
-        bd.createClass(gymClass);
-
-        cargarHorario();
-
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-}
- private void cargarHorario() {
-        ArrayList<GymClass> clases;
-
-    if ("member".equals(role) || "employee".equals(role)) {
-        clases = bd.getClassesForUser(username, role);
-    } else {
-        clases = bd.getGymClasses();
     }
 
-    System.out.println("CLASES CARGADAS: " + clases.size());
-    System.out.println("===== CARGAR HORARIO =====");
-    System.out.println("USER: " + username);
-    System.out.println("ROLE: " + role);
-    System.out.println(
-            "CLASES CARGADAS: "
-            + clases.size()
-    );
-    for (GymClass c : clases) {
-        System.out.println(c.getId() + " - " + c.getClassName());
-    }
-    
+    /**
+     * Crea una nueva clase solicitando al administrador los datos necesarios
+     * mediante cuadros de diálogo.
+     *
+     * Se valida la existencia del entrenador, gimnasio, identificador de clase
+     * y formato del horario antes de realizar la inserción en la base de datos.
+     */
+    @FXML
+    private void createClass() {
 
-    ScheduleTable.getItems().clear();
+        try {
 
-    HashMap<String, HorarioTabla> filas = new HashMap<>();
+            TextInputDialog idDialog = new TextInputDialog();
+            idDialog.setTitle("Create Class");
+            idDialog.setHeaderText("Enter class ID");
 
-    for (GymClass gymClass : clases) {
+            Optional<String> idResult = idDialog.showAndWait();
 
-        for (Schedule s : gymClass.getSchedule()) {
-
-            HorarioTabla fila = filas.get(s.getHour());
-
-            if (fila == null) {
-                fila = new HorarioTabla();
-                fila.setHour(s.getHour());
-                filas.put(s.getHour(), fila);
+            if (!idResult.isPresent()) {
+                return;
             }
 
-            String textoClase =
-                    gymClass.getId() + " - "
-                    + gymClass.getClassName();
+            int id = Integer.parseInt(idResult.get());
+            if (bd.classExists(id)) {
 
-            switch (s.getDay()) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText(null);
+                alert.setContentText("A class with that ID already exists.");
 
-                case "Monday":
-                    fila.setMonday(textoClase);
-                    break;
-
-                case "Tuesday":
-                    fila.setTuesday(textoClase);
-                    break;
-
-                case "Wednesday":
-                    fila.setWednesday(textoClase);
-                    break;
-
-                case "Thursday":
-                    fila.setThursday(textoClase);
-                    break;
-
-                case "Friday":
-                    fila.setFriday(textoClase);
-                    break;
-
-                case "Saturday":
-                    fila.setSaturday(textoClase);
-                    break;
-
-                case "Sunday":
-                    fila.setSunday(textoClase);
-                    break;
+                alert.showAndWait();
+                return;
             }
-        }
-    }
+            TextInputDialog nameDialog = new TextInputDialog();
+            nameDialog.setTitle("Create Class");
+            nameDialog.setHeaderText("Enter class name");
 
-    ScheduleTable.getItems().addAll(filas.values());
-}
-@FXML
-private void editClass() {
+            Optional<String> nameResult = nameDialog.showAndWait();
 
-    TextInputDialog idDialog = new TextInputDialog();
+            if (!nameResult.isPresent()) {
+                return;
+            }
 
-    idDialog.setTitle("Edit Class");
-    idDialog.setHeaderText("Enter the class ID");
-    idDialog.setContentText("Class ID:");
+            String className = nameResult.get();
+            if (bd.classNameExists(className)) {
 
-    Optional<String> idResult = idDialog.showAndWait();
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText(null);
+                alert.setContentText("A class with that name already exists.");
 
-    if (idResult.isPresent()) {
+                alert.showAndWait();
+                return;
+            }
+            TextInputDialog trainerDialog = new TextInputDialog();
+            trainerDialog.setTitle("Create Class");
+            trainerDialog.setHeaderText("Enter trainer username");
 
-        int classId = Integer.parseInt(idResult.get());
-        
-       if (!bd.classExists(classId)) {
+            Optional<String> trainerResult = trainerDialog.showAndWait();
 
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText(null);
-            alert.setContentText("Class ID does not exist.");
+            if (!trainerResult.isPresent()) {
+                return;
+            }
 
-            alert.showAndWait();
-            return;
-        }
-        TextInputDialog trainerDialog = new TextInputDialog();
-
-        trainerDialog.setTitle("Edit Trainer");
-        trainerDialog.setHeaderText("Enter the new trainer username");
-        trainerDialog.setContentText("Username:");
-
-        Optional<String> trainerResult = trainerDialog.showAndWait();
-
-        if (trainerResult.isPresent()) {
-
-            String trainerUsername = trainerResult.get();
-
-            if (!bd.employeeExists(trainerUsername)) {
+            String trainer = trainerResult.get();
+            if (!bd.employeeExists(trainer)) {
 
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error");
@@ -400,94 +219,338 @@ private void editClass() {
                 alert.showAndWait();
                 return;
             }
+            TextInputDialog gymDialog = new TextInputDialog();
+            gymDialog.setTitle("Create Class");
+            gymDialog.setHeaderText("Enter gym ID");
+
+            Optional<String> gymResult = gymDialog.showAndWait();
+
+            if (!gymResult.isPresent()) {
+                return;
+            }
+
+            int gymId = Integer.parseInt(gymResult.get());
+            if (!bd.gymExists(gymId)) {
+
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText(null);
+                alert.setContentText("The gym does not exist.");
+
+                alert.showAndWait();
+                return;
+            }
+            TextInputDialog dayDialog = new TextInputDialog();
+            dayDialog.setTitle("Create Class");
+            dayDialog.setHeaderText("Enter day");
+
+            Optional<String> dayResult = dayDialog.showAndWait();
+
+            if (!dayResult.isPresent()) {
+                return;
+            }
+
+            String day = dayResult.get();
+            if (!day.equals("Monday")
+                    && !day.equals("Tuesday")
+                    && !day.equals("Wednesday")
+                    && !day.equals("Thursday")
+                    && !day.equals("Friday")
+                    && !day.equals("Saturday")
+                    && !day.equals("Sunday")) {
+
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText(null);
+                alert.setContentText("Invalid day.");
+
+                alert.showAndWait();
+                return;
+            }
+
+            TextInputDialog hourDialog = new TextInputDialog();
+            hourDialog.setTitle("Create Class");
+            hourDialog.setHeaderText("Enter hour");
+
+            Optional<String> hourResult = hourDialog.showAndWait();
+
+            if (!hourResult.isPresent()) {
+                return;
+            }
+
+            String hour = hourResult.get();
+            if (!hour.matches("\\d{2}:\\d{2}")) {
+
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText(null);
+                alert.setContentText("Time must be in HH:MM format.");
+
+                alert.showAndWait();
+                return;
+            }
+            ArrayList<Schedule> schedules = new ArrayList<>();
+            schedules.add(new Schedule(day, hour));
+
+            GymClass gymClass = new GymClass(
+                    id,
+                    className,
+                    schedules,
+                    trainer,
+                    new ArrayList<>(),
+                    gymId
+            );
+
+            bd.createClass(gymClass);
 
             cargarHorario();
 
-            System.out.println("Class updated successfully");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
-}
 
-@FXML
-private void deleteClass() {
+    /**
+     * Carga las clases correspondientes al usuario y genera la tabla semanal de
+     * horarios agrupando las clases por hora y día de la semana.
+     *
+     * Los miembros visualizan únicamente sus clases, los empleados las
+     * impartidas por ellos y los administradores todas las existentes.
+     */
+    private void cargarHorario() {
+        ArrayList<GymClass> clases;
 
-    TextInputDialog dialog = new TextInputDialog();
-
-    dialog.setTitle("Delete Class");
-    dialog.setHeaderText("Enter the class ID");
-    dialog.setContentText("Class ID:");
-
-    Optional<String> result = dialog.showAndWait();
-
-    if (result.isPresent()) {
-
-        int id = Integer.parseInt(result.get());
-
-        bd.deleteClass(id);
-
-        cargarHorario();
-
-        System.out.println("Class deleted successfully");
-    }
-}
-
-@FXML
-private void unsubscribe() {
-
-    // JavaFX dialog used to ask the user for a value
-
-    TextInputDialog dialog = new TextInputDialog();
-
-    dialog.setTitle("Unsubscribe from Class");
-    dialog.setHeaderText("Enter the class ID");
-    dialog.setContentText("Class ID:");
-
-    Optional<String> result = dialog.showAndWait();
-
-    if (result.isPresent()) {
-
-        int classId = Integer.parseInt(result.get());
-
-        bd.removeMemberFromClass(
-                classId,
-                username
-        );
-        cargarHorario();
-
-        System.out.println("Successfully unsubscribed from the class");
-    }
-}
-@FXML
-private void subscribeClass() {
-
-    TextInputDialog dialog = new TextInputDialog();
-
-    dialog.setTitle("Subscribe to Class");
-    dialog.setHeaderText("Enter the class ID");
-    dialog.setContentText("Class ID:");
-
-    Optional<String> result = dialog.showAndWait();
-
-    if (result.isPresent()) {
-
-        int classId = Integer.parseInt(result.get());
-
-        if (!bd.classExists(classId)) {
-
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("Class does not exist.");
-            alert.showAndWait();
-            return;
+        if ("member".equals(role) || "employee".equals(role)) {
+            clases = bd.getClassesForUser(username, role);
+        } else {
+            clases = bd.getGymClasses();
         }
 
-        bd.addMemberToClass(
-                classId,
-                username
+        System.out.println("CLASES CARGADAS: " + clases.size());
+        System.out.println("===== CARGAR HORARIO =====");
+        System.out.println("USER: " + username);
+        System.out.println("ROLE: " + role);
+        System.out.println(
+                "CLASES CARGADAS: "
+                + clases.size()
         );
+        for (GymClass c : clases) {
+            System.out.println(c.getId() + " - " + c.getClassName());
+        }
 
-        cargarHorario();
+        ScheduleTable.getItems().clear();
 
-        System.out.println("User enrolled successfully");
+        HashMap<String, HorarioTabla> filas = new HashMap<>();
+
+        for (GymClass gymClass : clases) {
+
+            for (Schedule s : gymClass.getSchedule()) {
+
+                HorarioTabla fila = filas.get(s.getHour());
+
+                if (fila == null) {
+                    fila = new HorarioTabla();
+                    fila.setHour(s.getHour());
+                    filas.put(s.getHour(), fila);
+                }
+
+                String textoClase
+                        = gymClass.getId() + " - "
+                        + gymClass.getClassName();
+
+                switch (s.getDay()) {
+
+                    case "Monday":
+                        fila.setMonday(textoClase);
+                        break;
+
+                    case "Tuesday":
+                        fila.setTuesday(textoClase);
+                        break;
+
+                    case "Wednesday":
+                        fila.setWednesday(textoClase);
+                        break;
+
+                    case "Thursday":
+                        fila.setThursday(textoClase);
+                        break;
+
+                    case "Friday":
+                        fila.setFriday(textoClase);
+                        break;
+
+                    case "Saturday":
+                        fila.setSaturday(textoClase);
+                        break;
+
+                    case "Sunday":
+                        fila.setSunday(textoClase);
+                        break;
+                }
+            }
+        }
+
+        ScheduleTable.getItems().addAll(filas.values());
     }
-}
+
+    /**
+     * Permite modificar el entrenador asignado a una clase existente
+     * verificando previamente que la clase y el empleado existen en la base de
+     * datos.
+     */
+    @FXML
+    private void editClass() {
+
+        TextInputDialog idDialog = new TextInputDialog();
+
+        idDialog.setTitle("Edit Class");
+        idDialog.setHeaderText("Enter the class ID");
+        idDialog.setContentText("Class ID:");
+
+        Optional<String> idResult = idDialog.showAndWait();
+
+        if (idResult.isPresent()) {
+
+            int classId = Integer.parseInt(idResult.get());
+
+            if (!bd.classExists(classId)) {
+
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText(null);
+                alert.setContentText("Class ID does not exist.");
+
+                alert.showAndWait();
+                return;
+            }
+            TextInputDialog trainerDialog = new TextInputDialog();
+
+            trainerDialog.setTitle("Edit Trainer");
+            trainerDialog.setHeaderText("Enter the new trainer username");
+            trainerDialog.setContentText("Username:");
+
+            Optional<String> trainerResult = trainerDialog.showAndWait();
+
+            if (trainerResult.isPresent()) {
+
+                String trainerUsername = trainerResult.get();
+
+                if (!bd.employeeExists(trainerUsername)) {
+
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error");
+                    alert.setHeaderText(null);
+                    alert.setContentText("The employee does not exist.");
+
+                    alert.showAndWait();
+                    return;
+                }
+
+                cargarHorario();
+
+                System.out.println("Class updated successfully");
+            }
+        }
+    }
+
+    /**
+     * Elimina una clase existente a partir de su identificador y actualiza la
+     * tabla de horarios.
+     */
+    @FXML
+    private void deleteClass() {
+
+        TextInputDialog dialog = new TextInputDialog();
+
+        dialog.setTitle("Delete Class");
+        dialog.setHeaderText("Enter the class ID");
+        dialog.setContentText("Class ID:");
+
+        Optional<String> result = dialog.showAndWait();
+
+        if (result.isPresent()) {
+
+            int id = Integer.parseInt(result.get());
+
+            bd.deleteClass(id);
+
+            cargarHorario();
+
+            System.out.println("Class deleted successfully");
+        }
+    }
+
+    /**
+     * Da de baja al usuario actual de una clase seleccionada mediante su
+     * identificador.
+     *
+     * Tras la operación se actualiza el horario mostrado en pantalla.
+     */
+    @FXML
+    private void unsubscribe() {
+
+        // JavaFX dialog used to ask the user for a value
+        TextInputDialog dialog = new TextInputDialog();
+
+        dialog.setTitle("Unsubscribe from Class");
+        dialog.setHeaderText("Enter the class ID");
+        dialog.setContentText("Class ID:");
+
+        Optional<String> result = dialog.showAndWait();
+
+        if (result.isPresent()) {
+
+            int classId = Integer.parseInt(result.get());
+
+            bd.removeMemberFromClass(
+                    classId,
+                    username
+            );
+            cargarHorario();
+
+            System.out.println("Successfully unsubscribed from the class");
+        }
+    }
+
+    /**
+     * Inscribe al usuario actual en una clase existente mediante su
+     * identificador.
+     *
+     * La inscripción actualiza tanto la clase como el historial del usuario y
+     * recarga la tabla de horarios.
+     */
+    @FXML
+    private void subscribeClass() {
+
+        TextInputDialog dialog = new TextInputDialog();
+
+        dialog.setTitle("Subscribe to Class");
+        dialog.setHeaderText("Enter the class ID");
+        dialog.setContentText("Class ID:");
+
+        Optional<String> result = dialog.showAndWait();
+
+        if (result.isPresent()) {
+
+            int classId = Integer.parseInt(result.get());
+
+            if (!bd.classExists(classId)) {
+
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setContentText("Class does not exist.");
+                alert.showAndWait();
+                return;
+            }
+
+            bd.addMemberToClass(
+                    classId,
+                    username
+            );
+
+            cargarHorario();
+
+            System.out.println("User enrolled successfully");
+        }
+    }
 }

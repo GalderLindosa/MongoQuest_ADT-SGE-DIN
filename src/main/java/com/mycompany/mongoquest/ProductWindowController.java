@@ -32,22 +32,22 @@ import model.Person;
 import model.Product;
 import model.User;
 import model.WithCart;
+
 /**
- * Controlador de la ventana de visualización de productos.
- * Permite consultar la información de un producto y añadirlo
- * al carrito de compra del usuario.
+ * Controlador de la ventana de visualización de productos. Permite consultar la
+ * información de un producto y añadirlo al carrito de compra del usuario.
  *
  * @author Usuario
  */
 public class ProductWindowController implements Initializable {
-    
-   /**
-   * Producto seleccionado en la tienda.
-   */
+
+    /**
+     * Producto seleccionado en la tienda.
+     */
     Product product = ShopWindowController.pr;
-    
+
     ImplementacionBD implementacion = ImplementacionBD.getInstance();
-    
+
     @FXML
     private ImageView productimg;
     @FXML
@@ -65,8 +65,13 @@ public class ProductWindowController implements Initializable {
     private Button addToCart;
     @FXML
     private Button btnBack;
+
     /**
-     * Initializes the controller class.
+     * Inicializa la ventana cargando la información del producto seleccionado y
+     * configurando el selector de cantidad según el stock disponible.
+     *
+     * @param url ubicación utilizada para resolver rutas.
+     * @param rb recursos de internacionalización.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -75,14 +80,14 @@ public class ProductWindowController implements Initializable {
         lblProductAmount.setText("Stock: " + Integer.toString(product.getStock()));
         amountToBuy.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, product.getStock(), 0));
     }
-    
+
     /**
-    * Añade la cantidad seleccionada del producto al carrito
-    * del usuario y actualiza el stock disponible.
-    *
-    * @param event evento generado al pulsar el botón.
-    * @throws IOException si ocurre un error durante el proceso.
-    */
+     * Añade la cantidad seleccionada del producto al carrito del usuario y
+     * actualiza el stock disponible.
+     *
+     * @param event evento generado al pulsar el botón.
+     * @throws IOException si ocurre un error durante el proceso.
+     */
     @FXML
     private void addToCart(ActionEvent event) throws IOException {
 
@@ -130,30 +135,30 @@ public class ProductWindowController implements Initializable {
         ventanaActual.close();
     }
 
-   /**
-    * Cierra la ventana actual y vuelve a la anterior.
-    *
-    * @param event evento generado al pulsar el botón volver.
-    * @throws IOException si ocurre un error durante el proceso.
-    */
-   @FXML
-   private void goBack(ActionEvent event) throws IOException {        
+    /**
+     * Cierra la ventana actual y vuelve a la anterior.
+     *
+     * @param event evento generado al pulsar el botón volver.
+     * @throws IOException si ocurre un error durante el proceso.
+     */
+    @FXML
+    private void goBack(ActionEvent event) throws IOException {
         Stage ventanaActual = (Stage) ((Node) event.getSource()).getScene().getWindow();
         ventanaActual.close();
     }
-   
-   /**
-     * Crea una alerta.
+
+    /**
+     * Muestra una ventana de aviso al usuario con el mensaje indicado.
      *
-     * @param titulo titulo de la alerta.
-     * @param mensaje mensaje de la alerta.
+     * @param titulo título de la alerta.
+     * @param mensaje contenido mostrado al usuario.
      */
-   private void showAlert(String titulo, String mensaje) {
+    private void showAlert(String titulo, String mensaje) {
         Alert alert = new Alert(AlertType.WARNING);
         alert.setTitle(titulo);
         alert.setHeaderText(null);
         alert.setContentText(mensaje);
         alert.showAndWait();
     }
-    
+
 }
