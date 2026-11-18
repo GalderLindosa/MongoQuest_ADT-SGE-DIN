@@ -29,6 +29,7 @@ import static com.mongodb.client.model.Filters.or;
 import com.mongodb.client.model.Projections;
 import com.mongodb.client.model.Sorts;
 import com.mongodb.client.model.Updates;
+import com.mongodb.client.result.UpdateResult;
 import controller.MongoConnection;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -383,7 +384,7 @@ public class ImplementacionBD {
      * @return lista de productos.
      */
     public ArrayList<Product> obtenerProductos() {
-        MongoCollection<Document> productos = MongoConnection.getConnection().getCollection("Productos");
+        MongoCollection<Document> productos = MongoConnection.getConnection().getCollection("products");
         ArrayList<Product> lista = new ArrayList<>();
 
         for (Document doc : productos.find()) {
@@ -781,7 +782,7 @@ public class ImplementacionBD {
         ).first();
 
         return empleado != null;
-    }
+    } 
 
     public boolean classExists(int classId) {
 
@@ -838,5 +839,20 @@ public class ImplementacionBD {
         }
 
         return contenido.toString();
+    }
+    
+    public boolean decreaseProductStock(int productId, int cantidad) {
+
+        MongoCollection<Document> productos = MongoConnection.getConnection().getCollection("products");
+
+        UpdateResult resultado = productos.updateOne(
+                Filters.and(
+                        Filters.eq("_id", productId),
+                        Filters.gte("stock", cantidad)
+                ),
+                Updates.inc("stock", -cantidad)
+        );
+
+        return resultado.getModifiedCount() == 1; //Si se ha modificado esto da true
     }
 }

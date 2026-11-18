@@ -100,7 +100,7 @@ public class PurchaseHistoryController implements Initializable {
     }
 
     @FXML
-    private void goBack(ActionEvent event) {
+    private void goBack(ActionEvent event) throws java.io.IOException {        
         Stage ventanaActual = (Stage) ((Node) event.getSource()).getScene().getWindow();
         ventanaActual.close();
     }

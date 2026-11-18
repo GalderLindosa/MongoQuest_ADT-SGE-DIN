@@ -33,6 +33,10 @@ import javafx.stage.Stage;
 import model.Employee;
 import model.Gym;
 import dao.ImplementacionBD;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import model.Person;
 import model.Product;
 import model.WithCart;
@@ -48,7 +52,10 @@ public class CartWindowController implements Initializable {
     Person p = LoginWindowController.usuario;
     ImplementacionBD implementacion = ImplementacionBD.getInstance();
     private float totalPrice;
+    private TextField textFieldDiscount;
     
+    @FXML
+    private AnchorPane anchorPane;
     @FXML
     private ScrollPane scrollPane;
     @FXML
@@ -74,42 +81,56 @@ public class CartWindowController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
-            if (!(p instanceof WithCart)) {
-                return;   
-            }
-
-            cart = ((WithCart) p).getCart();
-
-            if (cart == null || cart.isEmpty()) {
-                contenedorProductos.getChildren().add(new Label("El carrito está vacío"));
-                lblTotalPrice.setText("0€");
-                return;
-            }
-
-            for (VBox tarjeta : crearTarjetaProducto(cart)) {
-                contenedorProductos.getChildren().add(tarjeta);
-            }
-
-            totalPrice = (float) cart.entrySet().stream()
-                    .mapToDouble(e -> e.getKey().getPrice() * e.getValue())
-                    .sum();
-            lblTotalPrice.setText(totalPrice+"€");
-
-            lblBalance.setText(Float.toString(p.getBalance()));
-
-            ObservableList<Gym> gyms = FXCollections.observableArrayList(implementacion.obtenerGimnasios());
-            choiceBoxWhere.setItems(gyms);
-
-
-            if (p instanceof Employee) {
-                Label lblDiscount = new Label();
-                lblDiscount.setLayoutX(340);
-                lblDiscount.setLayoutY(281);
-                TextField textFieldDiscount = new PasswordField();
-                textFieldDiscount.setLayoutX(430);
-                textFieldDiscount.setLayoutY(277);
-            }
+        if (!(p instanceof WithCart)) {
+            return;   
         }
+
+        cart = ((WithCart) p).getCart();
+
+        lblBalance.setText(Float.toString(p.getBalance()));
+
+        ObservableList<Gym> gyms = FXCollections.observableArrayList(implementacion.obtenerGimnasios());
+        choiceBoxWhere.setItems(gyms);
+
+        if (cart == null || cart.isEmpty()) {
+            contenedorProductos.getChildren().add(new Label("El carrito está vacío"));
+            lblTotalPrice.setText("0€");
+            return;
+        }
+
+        for (VBox tarjeta : crearTarjetaProducto(cart)) {
+            contenedorProductos.getChildren().add(tarjeta);
+        }
+
+        totalPrice = (float) cart.entrySet().stream()
+                .mapToDouble(e -> e.getKey().getPrice() * e.getValue())
+                .sum();
+        lblTotalPrice.setText(totalPrice+"€");
+
+        if (p instanceof Employee) {
+
+            Label lblDiscount = new Label("Código de descuento:");
+            lblDiscount.setLayoutX(300);
+            lblDiscount.setLayoutY(281);
+
+            textFieldDiscount = new TextField();
+            textFieldDiscount.setLayoutX(430);
+            textFieldDiscount.setLayoutY(277);
+            textFieldDiscount.setPrefWidth(120);
+
+            Button btnDiscount = new Button("Aplicar");
+            btnDiscount.setLayoutX(560);
+            btnDiscount.setLayoutY(277);
+
+            btnDiscount.setOnAction(e -> applyDiscount());
+
+            anchorPane.getChildren().addAll(
+                    lblDiscount,
+                    textFieldDiscount,
+                    btnDiscount
+            );
+        }
+    }
     /**
      * Crea las tarjetas visuales de los productos contenidos
      * en el carrito de compra.
@@ -119,39 +140,35 @@ public class CartWindowController implements Initializable {
      */
     private List<VBox> crearTarjetaProducto(Map<Product, Integer> cart) {
 
-            ArrayList<VBox> lista = new ArrayList<>();
+        ArrayList<VBox> lista = new ArrayList<>();
 
-            for (Map.Entry<Product, Integer> e : cart.entrySet()) {
+        for (Map.Entry<Product, Integer> e : cart.entrySet()) {
+            Product prod = e.getKey();
+            int cantidad = e.getValue();
 
-                ImageView imagen = new ImageView(cargarImagen(e.getKey()));
-                imagen.setFitWidth(120);
-                imagen.setFitHeight(120);
-                imagen.setPreserveRatio(true);
+            Label lblNombre = new Label(prod.getName());
+            lblNombre.setStyle("-fx-font-weight: bold;");
 
+            Label lblTotal = new Label(String.format("%.2f €", prod.getPrice() * cantidad));
 
-                Label lblNombre = new Label(e.getKey().getName());
-                lblNombre.setStyle("-fx-font-weight: bold;");
-                lblNombre.setWrapText(true);
-                lblNombre.setMaxWidth(140);
+            Region espacio = new Region();
+            HBox.setHgrow(espacio, Priority.ALWAYS);
 
-                Label lblCantidad = new Label(Integer.toString(e.getValue()));
+            VBox tarjeta = new VBox(5, new HBox(lblNombre, espacio, lblTotal));
 
-                Label lblPrecio = new Label(e.getValue() * e.getKey().getPrice() + " €");
+            tarjeta.getChildren().add(new Label("Cantidad: " + cantidad));
+            tarjeta.getChildren().add(new Label(String.format("Precio unitario: %.2f €", prod.getPrice())));
 
-                VBox tarjeta = new VBox(8, imagen, lblNombre, lblCantidad, lblPrecio);
-                tarjeta.setAlignment(Pos.CENTER);
-                tarjeta.setPadding(new Insets(10));
-                tarjeta.setPrefWidth(160);
-                tarjeta.setStyle(
+            tarjeta.setPadding(new Insets(10));
+            tarjeta.setStyle(
                     "-fx-border-color: #cccccc; -fx-border-radius: 8; " +
-                    "-fx-background-radius: 8; -fx-background-color: white; " +
-                    "-fx-cursor: hand;");
+                    "-fx-background-radius: 8; -fx-background-color: white;");
 
-                lista.add(tarjeta);
-            }
-
-            return lista;
+            lista.add(tarjeta);
         }
+
+        return lista;
+    }
     /**
      * Carga la imagen asociada a un producto.
      *
@@ -182,18 +199,25 @@ public class CartWindowController implements Initializable {
     @FXML
     private void buy(ActionEvent event) throws java.io.IOException {
         if (!cart.isEmpty()) {
-            if (p.getBalance() > totalPrice) {
-                implementacion.comprar(cart, choiceBoxWhere.getValue().getGymId(), p.getUserName(), totalPrice);
-
-                p.setBalance(p.getBalance()-totalPrice);
+            if (choiceBoxWhere.getValue() == null) {
+                showAlert("Error de compra", "Debes seleccionar un gimnasio donde recoger el pedido.");
+            } else if (p.getBalance() > totalPrice) {
+                implementacion.comprar(
+                        cart,
+                        choiceBoxWhere.getValue().getGymId(),
+                        p.getUserName(),
+                        totalPrice
+                );
+                p.setBalance(p.getBalance() - totalPrice);
                 cart.clear();
+
                 Stage ventanaActual = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 ventanaActual.close();
             } else {
-                showAlert("Error de compra","No se puede realizar la compra por falta de fondos.");
+                showAlert("Error de compra", "No se puede realizar la compra por falta de fondos.");
             }
         } else {
-            showAlert("Error de compra","No se puede realizar una compra con el carrito vacio.");
+            showAlert("Error de compra", "No se puede realizar una compra con el carrito vacio.");
         }
     }
     
@@ -203,6 +227,18 @@ public class CartWindowController implements Initializable {
         alert.setHeaderText(null);   // quita la cabecera para que quede más limpio
         alert.setContentText(mensaje);
         alert.showAndWait();
+    }
+    
+    private void applyDiscount() {
+        Employee empleado = (Employee) p;
+
+        if (textFieldDiscount.getText().equals(empleado.getDiscountCode())) {
+            totalPrice = Math.round(totalPrice * 0.80f * 100) / 100.0f;
+            lblTotalPrice.setText(totalPrice + "€");
+            showAlert("Descuento aplicado", "Se ha aplicado correctamente el descuento del 20%.");
+        } else {
+            showAlert("Código incorrecto", "El código de descuento introducido no es válido.");
+        }
     }
     
 }
