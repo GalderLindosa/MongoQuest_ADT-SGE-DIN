@@ -29,6 +29,16 @@
       <RadioButton fx:id="cancelRegistration" layoutX="374.0" layoutY="368.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="215.0" text="To cancel someone's registration" />
       <Label fx:id="mensaje" layoutX="12.0" layoutY="5.0" prefHeight="46.0" prefWidth="583.0" />
       <PasswordField fx:id="passField" layoutX="448.0" layoutY="100.0" onAction="#seleccionarUsuario" />
+      <TextField fx:id="passVisibleField"
+           layoutX="448.0"
+           layoutY="100.0"
+           visible="false"
+           managed="false" />
+      <TextField fx:id="passVisibleField1"
+           layoutX="448.0"
+           layoutY="145.0"
+           visible="false"
+           managed="false" />
       <CheckBox fx:id="verContra1" layoutX="626.0" layoutY="103.0" mnemonicParsing="false" onAction="#verContrasena" prefWidth="47.0" text="👁">
          <font>
             <Font size="14.0" />

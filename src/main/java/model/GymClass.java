@@ -48,4 +48,6 @@ public class GymClass {
     public int getGymId() {
         return gymId;
     }
+
+    
 }

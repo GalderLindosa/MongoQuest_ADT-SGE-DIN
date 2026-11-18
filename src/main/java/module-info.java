@@ -10,7 +10,8 @@ module MongoQuest {
     requires org.mongodb.driver.sync.client;
     requires org.mongodb.driver.core;
     requires org.mongodb.bson;
-
+    
+    opens model to javafx.base;
     opens com.mycompany.mongoquest to javafx.fxml;
     exports com.mycompany.mongoquest;
 }

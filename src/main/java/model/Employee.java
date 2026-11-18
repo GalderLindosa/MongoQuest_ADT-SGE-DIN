@@ -89,9 +89,15 @@ public class Employee extends Person implements WithCart{
         this.cart.put(p, cantidad);
     }
 
-    @Override
-    public String toString() {
-    //Cambio el toString para que cuando lo muetsr en la lista solo enseñe el nombre 
-        return getUserName();
-    }
+ /**
+ * Devuelve el nombre de usuario para que sea el texto
+ * mostrado al representar el objeto en componentes
+ * como ListView.
+ *
+ * @return nombre de usuario.
+ */
+@Override
+public String toString() {
+    return getUserName();
+}
 }

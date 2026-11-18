@@ -187,6 +187,13 @@ private void seleccionarUsuario(){
  * @return true si no se han realizado modificaciones.
  */
 private boolean igual(Employee user) {
+    System.out.println(user.getPassword().equals(passField.getText()));
+System.out.println(user.getPassword().equals(passField1.getText()));
+System.out.println(user.getName().equals(nameField.getText()));
+System.out.println(user.getLastName().equals(surField.getText()));
+System.out.println(user.getDni().equals(dniField.getText()));
+System.out.println("BD: " + user.getPassword());
+System.out.println("Campo: " + passField.getText());
         return user.getPassword().equals(passField.getText())
             && user.getPassword().equals(passField1.getText())
             && user.getName().equals(nameField.getText())
@@ -200,11 +207,28 @@ private boolean igual(Employee user) {
  */
 @FXML
 private void modificarEmployee(){
-        Employee seleccionado = employeeList.getSelectionModel().getSelectedItem();
-        boolean dniCorrecto = true, passwordCorrecto=true;
+    
+    System.out.println("Visible1: " + passVisibleField.getText());
+    System.out.println("Pass1 antes: " + passField.getText());
+
+    if (verContra1.isSelected()) {
+        passField.setText(passVisibleField.getText());
+    }
+
+    if (verContra2.isSelected()) {
+        passField1.setText(passVisibleField1.getText());
+    }
+
+    System.out.println("Pass1 despues: " + passField.getText());
+
+    Employee seleccionado = employeeList.getSelectionModel().getSelectedItem();
+       System.out.println("Nombre BD: " + seleccionado.getName());
+System.out.println("Nombre Campo: " + nameField.getText());
+    boolean dniCorrecto = true, passwordCorrecto=true;
 
         if (userField.getText().isBlank() || seleccionado == null ) {
             mostrarError("You must select a user.");
+           
         } else {
             if (cancelRegistration.isSelected()) {
                 System.out.println("Entrando a eliminar");

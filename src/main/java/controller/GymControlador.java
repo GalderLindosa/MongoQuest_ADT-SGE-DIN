@@ -14,7 +14,6 @@ import model.*;
 public class GymControlador {
     private ImplementacionBD dao;
   
-    // -------------------- CONSTRUCTOR --------------------
     public GymControlador() {
         this.dao = ImplementacionBD.getInstance();
       
@@ -37,6 +36,9 @@ public class GymControlador {
     }
     public boolean eliminarPerson(Person p) {
         return dao.eliminarPerson(p);
+    }
+    public ArrayList<GymClass> getGymClasses(){
+        return dao.getGymClasses();
     }
      
 }
