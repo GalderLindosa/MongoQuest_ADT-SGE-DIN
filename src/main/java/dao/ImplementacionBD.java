@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package model;
+package dao;
 
 /*import java.sql.Connection;
 import java.sql.DriverManager;
@@ -35,6 +35,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import model.Boss;
+import model.Employee;
+import model.Gym;
+import model.GymClass;
+import model.Person;
+import model.Product;
+import model.Schedule;
+import model.Training;
+import model.User;
 import org.bson.conversions.Bson;
 
 /**
@@ -65,7 +74,7 @@ public class ImplementacionBD {
     private ImplementacionBD() {
         mongoClient = MongoClients.create("mongodb://localhost:27017");
         database = mongoClient.getDatabase("G2_Life");
-        PROFILES = database.getCollection("People");
+        PROFILES = database.getCollection("people");
 
     }
 
@@ -218,7 +227,6 @@ try {
     System.out.println("Incorrect password: " + e.getMessage());
     continue;
 }
-  
             employee.setName(doc.getString("first_name"));
             employee.setLastName(doc.getString("last_name"));
 
@@ -440,11 +448,16 @@ public ArrayList<GymClass> getClassesForUser(String username, String role) {
 
         for (GymClass gymClass : todasLasClases) {
 
-            if (gymClass.getMembers().contains(username)) {
+    System.out.println("Clase: " + gymClass.getClassName());
+    System.out.println("Members: " + gymClass.getMembers());
 
-                resultado.add(gymClass);
-            }
-        }
+    if (gymClass.getMembers().contains(username)) {
+
+        System.out.println("ENCONTRADA PARA " + username);
+
+        resultado.add(gymClass);
+    }
+}
     }
 
     else if (role.equals("employee")) {
@@ -462,16 +475,28 @@ public ArrayList<GymClass> getClassesForUser(String username, String role) {
 }
 
 public void createClass(GymClass gymClass) {
-    
+
     MongoCollection<Document> collection =
             database.getCollection("classes");
 
+    ArrayList<Document> schedules = new ArrayList<>();
+
+    for (Schedule s : gymClass.getSchedule()) {
+
+        schedules.add(
+                new Document("day", s.getDay())
+                .append("time", s.getHour())
+        );
+    }
     Document doc = new Document();
 
     doc.append("_id", gymClass.getId());
     doc.append("class_name", gymClass.getClassName());
-    doc.append("employee_username", gymClass.getEmployeeUsername());
+    doc.append("employee_username",
+            gymClass.getEmployeeUsername());
     doc.append("gym_id", gymClass.getGymId());
+    doc.append("members", gymClass.getMembers());
+    doc.append("schedule", schedules);
 
     collection.insertOne(doc);
 }
@@ -564,4 +589,53 @@ public void removeMemberFromClass(
                         Updates.push("purchases", newId));
         
     }
+    
+    
+   public boolean employeeExists(String username) {
+
+    MongoCollection<Document> collection =
+            database.getCollection("people");
+
+    Document empleado = collection.find(
+            Filters.and(
+                    Filters.eq("username", username),
+                    Filters.eq("role", "employee")
+            )
+    ).first();
+
+    return empleado != null;
+} 
+   public boolean classExists(int classId) {
+
+    MongoCollection<Document> collection =
+            database.getCollection("classes");
+
+    Document doc = collection.find(
+            Filters.eq("_id", classId)
+    ).first();
+
+    return doc != null;
+}
+   public boolean gymExists(int gymId) {
+
+    MongoCollection<Document> collection =
+            database.getCollection("gyms");
+
+    Document doc = collection.find(
+            Filters.eq("_id", gymId)
+    ).first();
+
+    return doc != null;
+}
+   public boolean classNameExists(String className) {
+
+    MongoCollection<Document> collection =
+            database.getCollection("classes");
+
+    Document doc = collection.find(
+            Filters.eq("class_name", className)
+    ).first();
+
+    return doc != null;
+}
 }
