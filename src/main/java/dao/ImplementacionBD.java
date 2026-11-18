@@ -121,14 +121,14 @@ public class ImplementacionBD {
             Document doc = PROFILES.find(and(eq("username", usuario), eq("password", contrasena))).first();
 
             if (doc == null || !contrasena.equals(doc.getString("password"))) {
-               Logger.log("FAILED LOGIN","User=" + usuario);
+                Logger.log("FAILED LOGIN", "User=" + usuario);
                 return null;
             } else {
                 String type = doc.getString("role");
                 Logger.log(
-                    "LOGIN",
-                    "User=" + usuario
-                    + ", Role=" + type
+                        "LOGIN",
+                        "User=" + usuario
+                        + ", Role=" + type
                 );
                 Date fechaMongo = doc.getDate("start_date");
                 LocalDate fecha = null;
@@ -151,7 +151,7 @@ public class ImplementacionBD {
                                 s.getInteger("weight"),
                                 s.getInteger("sets")
                         );
-                        
+
                         workouts.add(Training);
                     }
                     return new User(workouts, classes, doc.getString("username"), doc.getString("password"), doc.getString("first_name"), doc.getString("last_name"), doc.getString("national_id"), doc.getInteger("balance"), fecha);
@@ -159,7 +159,7 @@ public class ImplementacionBD {
                     return new Boss(doc.getInteger("gym_id"), doc.getString("username"), doc.getString("password"), doc.getString("first_name"), doc.getString("last_name"), doc.getString("national_id"), doc.getInteger("balance"), fecha);
                 } else if ("employee".equals(type)) {
                     classes = doc.getList("classes", Integer.class);
-                   
+
                     return new Employee(classes, doc.getString("discount_code"), doc.getInteger("gym_id"), doc.getString("username"), doc.getString("password"), doc.getString("first_name"), doc.getString("last_name"), doc.getString("national_id"), doc.getInteger("balance"), fecha);
                 }
             }
@@ -230,7 +230,6 @@ public class ImplementacionBD {
             System.out.println(doc);
             Employee employee = new Employee();
 
-
             employee.setUserName(doc.getString("username"));
 
             try {
@@ -246,8 +245,7 @@ public class ImplementacionBD {
                 System.out.println("Incorrect password: " + e.getMessage());
                 continue;
             }
-            
-            
+
             employee.setName(doc.getString("first_name"));
             employee.setLastName(doc.getString("last_name"));
 
@@ -289,21 +287,29 @@ public class ImplementacionBD {
 
             if (p instanceof Employee) {
                 doc.append("role", "employee");
+                doc.append("classes", new ArrayList<Integer>());
+                doc.append("balance", 0);
+
+                Employee e = (Employee) p;
+                doc.append("gym_id", e.getGymId());
             } else if (p instanceof User) {
                 doc.append("role", "member");
+                doc.append("classes", new ArrayList<Integer>());
+                doc.append("workouts", new ArrayList<Document>());
+                doc.append("balance", 0);
             }
 
             collection.insertOne(doc);
             Logger.log("INSERT PERSON",
                     "User=" + p.getUserName()
-                            + ", Role=" + (p instanceof Employee ? "employee" : "member")
+                    + ", Role=" + (p instanceof Employee ? "employee" : "member")
             );
             return true;
 
         } catch (Exception e) {
-         Logger.log(
-        "ERROR",
-        "Metodo=insertarPerson, Error=" + e.getMessage()
+            Logger.log(
+                    "ERROR",
+                    "Metodo=insertarPerson, Error=" + e.getMessage()
             );
             e.printStackTrace();
             return false;
@@ -328,12 +334,12 @@ public class ImplementacionBD {
                     Filters.eq("username", p.getUserName()), //busca el que tenga ese userName 
                     new Document("$set", cambios) //y con el $set actualiza los campo que le digo pero que deje lo demas igual 
             );
-            Logger.log("UPDATE PERSON","User=" + p.getUserName());
+            Logger.log("UPDATE PERSON", "User=" + p.getUserName());
             return true;
         } catch (Exception e) {
             Logger.log(
-        "ERROR",
-        "Metodo=modificarPerson, Error=" + e.getMessage()
+                    "ERROR",
+                    "Metodo=modificarPerson, Error=" + e.getMessage()
             );
             e.printStackTrace();
             return false;
@@ -358,13 +364,13 @@ public class ImplementacionBD {
 
             System.out.println("Documentos eliminados: "
                     + resultado.getDeletedCount());
-            Logger.log("DELETE PERSON","User=" + p.getUserName());
+            Logger.log("DELETE PERSON", "User=" + p.getUserName());
             return resultado.getDeletedCount() > 0;
 
         } catch (Exception e) {
             Logger.log(
-        "ERROR",
-        "Metodo=eliminarPerson, Error=" + e.getMessage()
+                    "ERROR",
+                    "Metodo=eliminarPerson, Error=" + e.getMessage()
             );
             e.printStackTrace();
             return false;
@@ -390,38 +396,42 @@ public class ImplementacionBD {
 
         return lista;
     }
-    
-    public ArrayList<Gym> obtenerGimnasios(){
+
+    public ArrayList<Gym> obtenerGimnasios() {
         MongoCollection<Document> gyms = MongoConnection.getConnection().getCollection("gyms");
         ArrayList<Gym> lista = new ArrayList<>();
-        
+
         for (Document doc : gyms.find()) {
             Gym g = new Gym(((Number) doc.get("_id")).intValue(),
-                                    doc.getString("address"),
-                                    doc.getString("postal_code"));
+                    doc.getString("address"),
+                    doc.getString("postal_code"));
             lista.add(g);
         }
-        
+
         return lista;
     }
 
-public ArrayList<GymClass> getGymClasses() { //en general no mira el user 
+    public ArrayList<GymClass> getGymClasses() {
 
     ArrayList<GymClass> clases = new ArrayList<>();
 
-    MongoCollection<Document> collection = database.getCollection("classes");
+    MongoCollection<Document> collection =
+            database.getCollection("classes");
 
     for (Document doc : collection.find()) {
 
-        int id = doc.getInteger("_id");
+        System.out.println("DOCUMENTO:");
+        System.out.println(doc.toJson());
+
+        int id = ((Number) doc.get("_id")).intValue();
         String className = doc.getString("class_name");
         String employeeUsername = doc.getString("employee_username");
-        int gymId = doc.getInteger("gym_id");
+        int gymId = ((Number) doc.get("gym_id")).intValue();
 
         ArrayList<String> members = new ArrayList<>();
 
         List<String> membersList =
-                (List<String>) doc.get("members");
+                doc.getList("members", String.class);
 
         if (membersList != null) {
             members.addAll(membersList);
@@ -430,12 +440,23 @@ public ArrayList<GymClass> getGymClasses() { //en general no mira el user
         ArrayList<Schedule> schedules = new ArrayList<>();
 
         List<Document> scheduleDocs =
-                (List<Document>) doc.get("schedule");
+                doc.getList("schedule", Document.class);
 
-        for (Document s : scheduleDocs) {
-           String day = s.getString("day");
-           String hour = s.getString("time");
-           schedules.add(new Schedule(day, hour));
+        System.out.println("Schedule: " + scheduleDocs);
+
+        if (scheduleDocs != null) {
+
+            for (Document s : scheduleDocs) {
+
+                String day = s.getString("day");
+                String hour = s.getString("time");
+
+                System.out.println(day + " " + hour);
+
+                schedules.add(
+                        new Schedule(day, hour)
+                );
+            }
         }
 
         GymClass gymClass = new GymClass(
@@ -450,171 +471,229 @@ public ArrayList<GymClass> getGymClasses() { //en general no mira el user
         clases.add(gymClass);
     }
 
+    System.out.println("TOTAL CLASES: " + clases.size());
+
     return clases;
 }
-public ArrayList<Integer> getClassIdsEmployee(String username) {
+       
+    public ArrayList<Integer> getClassIdsEmployee(String username) {
 
-    ArrayList<Integer> classIds = new ArrayList<>();
+        ArrayList<Integer> classIds = new ArrayList<>();
 
-    MongoCollection<Document> collection =
-            database.getCollection("employees");
+        MongoCollection<Document> collection
+                = database.getCollection("employees");
 
-    Document employee =
-            collection.find(Filters.eq("username", username)).first();
+        Document employee
+                = collection.find(Filters.eq("username", username)).first();
 
-    if (employee != null) {
+        if (employee != null) {
 
-        List<Document> classes =
-                (List<Document>) employee.get("classes");
+            List<Document> classes
+                    = (List<Document>) employee.get("classes");
 
-        for (Document c : classes) {
+            for (Document c : classes) {
 
-            classIds.add(c.getInteger("class_id"));
+                classIds.add(c.getInteger("class_id"));
+            }
         }
+
+        return classIds;
     }
 
-    return classIds;
-}
-
-public ArrayList<GymClass> getClassesForUser(String username, String role) {
+   public ArrayList<GymClass> getClassesForUser(
+        String username,
+        String role) {
 
     ArrayList<GymClass> resultado = new ArrayList<>();
 
-    ArrayList<GymClass> todasLasClases = getGymClasses();
+    ArrayList<GymClass> todasLasClases =
+            getGymClasses();
 
-    if (role.equals("member")) {
+    System.out.println("USER = " + username);
+    System.out.println("ROLE = " + role);
 
-        for (GymClass gymClass : todasLasClases) {
-
-    System.out.println("Clase: " + gymClass.getClassName());
-    System.out.println("Members: " + gymClass.getMembers());
-
-    if (gymClass.getMembers().contains(username)) {
-
-        System.out.println("ENCONTRADA PARA " + username);
-
-        resultado.add(gymClass);
-    }
-}
-    }
-
-    else if (role.equals("employee")) {
+    if ("member".equals(role)) {
 
         for (GymClass gymClass : todasLasClases) {
 
-            if (gymClass.getEmployeeUsername().equals(username)) {
+            System.out.println(
+                    gymClass.getClassName()
+                    + " -> "
+                    + gymClass.getMembers()
+            );
+
+            if (gymClass.getMembers().contains(username)) {
+
+                System.out.println(
+                        "ENCONTRADA -> "
+                        + gymClass.getClassName()
+                );
+
+                resultado.add(gymClass);
+            }
+        }
+
+    } else if ("employee".equals(role)) {
+
+        for (GymClass gymClass : todasLasClases) {
+
+            if (gymClass.getEmployeeUsername()
+                    .equals(username)) {
+
+                System.out.println(
+                        "CLASE EMPLEADO -> "
+                        + gymClass.getClassName()
+                );
 
                 resultado.add(gymClass);
             }
         }
     }
 
+    System.out.println(
+            "RESULTADO FINAL = "
+            + resultado.size()
+    );
+
     return resultado;
 }
 
-public void createClass(GymClass gymClass) {
+    public void createClass(GymClass gymClass) {
 
-    MongoCollection<Document> collection =
-            database.getCollection("classes");
+        MongoCollection<Document> collection
+                = database.getCollection("classes");
 
-    ArrayList<Document> schedules = new ArrayList<>();
+        ArrayList<Document> schedules = new ArrayList<>();
 
-    for (Schedule s : gymClass.getSchedule()) {
+        for (Schedule s : gymClass.getSchedule()) {
 
-        schedules.add(
-                new Document("day", s.getDay())
-                .append("time", s.getHour())
+            schedules.add(
+                    new Document("day", s.getDay())
+                            .append("time", s.getHour())
+            );
+        }
+        Document doc = new Document();
+
+        doc.append("_id", gymClass.getId());
+        doc.append("class_name", gymClass.getClassName());
+        doc.append("employee_username",
+                gymClass.getEmployeeUsername());
+        doc.append("gym_id", gymClass.getGymId());
+        doc.append("members", gymClass.getMembers());
+        doc.append("schedule", schedules);
+
+        collection.insertOne(doc);
+        Logger.log("CREATE CLASS", "ID=" + gymClass.getId() + ", Name=" + gymClass.getClassName() + ", Trainer=" + gymClass.getEmployeeUsername());
+    }
+
+    public void deleteClass(int classId) {
+
+        MongoCollection<Document> collection
+                = database.getCollection("classes");
+
+        collection.deleteOne(
+                Filters.eq("_id", classId)
+        );
+        Logger.log(
+                "DELETE CLASS",
+                "ID=" + classId
         );
     }
-    Document doc = new Document();
 
-    doc.append("_id", gymClass.getId());
-    doc.append("class_name", gymClass.getClassName());
-    doc.append("employee_username",
-            gymClass.getEmployeeUsername());
-    doc.append("gym_id", gymClass.getGymId());
-    doc.append("members", gymClass.getMembers());
-    doc.append("schedule", schedules);
+    public void updateClassTrainer(
+        int classId,
+        String newTrainer) {
 
-    collection.insertOne(doc);
-    Logger.log("CREATE CLASS","ID=" + gymClass.getId()+ ", Name=" + gymClass.getClassName()+ ", Trainer=" + gymClass.getEmployeeUsername());
-}
+        MongoCollection<Document> classes =
+                database.getCollection("classes");
 
-public void deleteClass(int classId) {
+        MongoCollection<Document> people =
+                database.getCollection("people");
 
-    MongoCollection<Document> collection =
-            database.getCollection("classes");
+        Document clase = classes.find(
+                Filters.eq("_id", classId)
+        ).first();
 
-    collection.deleteOne(
-            Filters.eq("_id", classId)
-    );
-    Logger.log(
-    "DELETE CLASS",
-    "ID=" + classId
-);
-}
+        String oldTrainer =
+                clase.getString("employee_username");
 
-public void updateClassTrainer(int classId,
-                               String employeeUsername) {
+        people.updateOne(
+                Filters.eq("username", oldTrainer),
+                Updates.pull("classes", classId)
+        );
 
-    MongoCollection<Document> collection =
-            database.getCollection("classes");
+        people.updateOne(
+                Filters.eq("username", newTrainer),
+                Updates.push("classes", classId)
+        );
 
-    collection.updateOne(
-            Filters.eq("_id", classId),
-            Updates.set(
-                    "employee_username",
-                    employeeUsername
-            )
-    );
-    Logger.log(
-    "UPDATE TRAINER",
-    "Class=" + classId
-    + ", Trainer=" + employeeUsername
-);
-}
-public void addMemberToClass(
+        classes.updateOne(
+                Filters.eq("_id", classId),
+                Updates.set("employee_username", newTrainer)
+        );
+    }
+  
+    public void addMemberToClass(
         int classId,
         String username) {
 
-    MongoCollection<Document> collection =
-            database.getCollection("classes");
+        MongoCollection<Document> classes =
+                database.getCollection("classes");
 
-    collection.updateOne(
-            Filters.eq("_id", classId),
-            Updates.push("members", username)
-    );
-    Logger.log(
-    "ADD MEMBER",
-    "User=" + username
-    + ", Class=" + classId
-);
-}
+        MongoCollection<Document> people =
+                database.getCollection("people");
 
-public void removeMemberFromClass(
+        classes.updateOne(
+                Filters.eq("_id", classId),
+                Updates.addToSet("members", username)
+        );
+
+        people.updateOne(
+                Filters.eq("username", username),
+                Updates.addToSet("classes", classId)
+        );
+
+        Logger.log(
+                "ADD MEMBER",
+                "User=" + username
+                + ", Class=" + classId
+        );
+    }
+
+    public void removeMemberFromClass(
         int classId,
         String username) {
 
-    MongoCollection<Document> collection =
-            database.getCollection("classes");
+        MongoCollection<Document> classes =
+                database.getCollection("classes");
 
-    collection.updateOne(
-            Filters.eq("_id", classId),
-            Updates.pull("members", username)
-    );
-    Logger.log(
-    "REMOVE MEMBER",
-    "User=" + username
-    + ", Class=" + classId
-);
-}
-    
+        MongoCollection<Document> people =
+                database.getCollection("people");
+
+        classes.updateOne(
+                Filters.eq("_id", classId),
+                Updates.pull("members", username)
+        );
+
+        people.updateOne(
+                Filters.eq("username", username),
+                Updates.pull("classes", classId)
+        );
+
+        Logger.log(
+                "REMOVE MEMBER",
+                "User=" + username
+                + ", Class=" + classId
+        );
+    }
+
     /**
      * Obtiene todos los productos almacenados en la colección de productos.
      *
      * @param cart el carrito que se va a comprar.
      * @param gymID el id del gym al que ha llegado la compra.
-     * @param userName el usuario que ha realizado la compra y al que se le va a asignar.
+     * @param userName el usuario que ha realizado la compra y al que se le va a
+     * asignar.
      * @param totalPrice precio de la compra.
      */
     public void comprar(Map<Product, Integer> cart, int gymID, String userName, float totalPrice) {
@@ -628,7 +707,7 @@ public void removeMemberFromClass(
         List<Document> productList = new ArrayList<>();
         for (Map.Entry<Product, Integer> p : cart.entrySet()) {
             productList.add(new Document("product_id", p.getKey().getProductId())
-                                .append("quantity", p.getValue()));
+                    .append("quantity", p.getValue()));
         }
 
         int newId = (ultimo != null) ? ((Number) ultimo.get("_id")).intValue() + 1 : 1;
@@ -644,24 +723,24 @@ public void removeMemberFromClass(
         purchases.insertOne(newPurchase);
 
         person.updateOne(Filters.eq("username", userName),
-                        Updates.push("purchases", newId));
-        Logger.log("PURCHASE","User=" + userName+ ", Gym=" + gymID+ ", Total=" + totalPrice
-);
-        
+                Updates.push("purchases", newId));
+        Logger.log("PURCHASE", "User=" + userName + ", Gym=" + gymID + ", Total=" + totalPrice
+        );
+
     }
-    
+
     public List<ShoppingHistory> findPurchasesByUser(String username) {
         MongoCollection<Document> purchases = MongoConnection.getConnection().getCollection("purchases");
 
         List<ShoppingHistory> result = new ArrayList<>();
 
         for (Document d : purchases.find(Filters.eq("username", username))
-                                   .sort(Sorts.descending("_id"))) {
+                .sort(Sorts.descending("_id"))) {
 
             HashMap<Integer, Integer> products = new HashMap<>();
             for (Document p : d.getList("products", Document.class)) {
                 products.put(((Number) p.get("product_id")).intValue(),
-                             ((Number) p.get("quantity")).intValue());
+                        ((Number) p.get("quantity")).intValue());
             }
 
             result.add(new ShoppingHistory(
@@ -688,11 +767,11 @@ public void removeMemberFromClass(
         }
         return map;
     }
-    
-   public boolean employeeExists(String username) {
 
-        MongoCollection<Document> collection =
-                database.getCollection("people");
+    public boolean employeeExists(String username) {
+
+        MongoCollection<Document> collection
+                = database.getCollection("people");
 
         Document empleado = collection.find(
                 Filters.and(
@@ -702,11 +781,12 @@ public void removeMemberFromClass(
         ).first();
 
         return empleado != null;
-    } 
-       public boolean classExists(int classId) {
+    }
 
-        MongoCollection<Document> collection =
-                database.getCollection("classes");
+    public boolean classExists(int classId) {
+
+        MongoCollection<Document> collection
+                = database.getCollection("classes");
 
         Document doc = collection.find(
                 Filters.eq("_id", classId)
@@ -714,10 +794,11 @@ public void removeMemberFromClass(
 
         return doc != null;
     }
-       public boolean gymExists(int gymId) {
 
-        MongoCollection<Document> collection =
-                database.getCollection("gyms");
+    public boolean gymExists(int gymId) {
+
+        MongoCollection<Document> collection
+                = database.getCollection("gyms");
 
         Document doc = collection.find(
                 Filters.eq("_id", gymId)
@@ -725,10 +806,11 @@ public void removeMemberFromClass(
 
         return doc != null;
     }
-       public boolean classNameExists(String className) {
 
-        MongoCollection<Document> collection =
-                database.getCollection("classes");
+    public boolean classNameExists(String className) {
+
+        MongoCollection<Document> collection
+                = database.getCollection("classes");
 
         Document doc = collection.find(
                 Filters.eq("class_name", className)
@@ -737,12 +819,12 @@ public void removeMemberFromClass(
         return doc != null;
     }
 
-       public String leerLog() {
+    public String leerLog() {
 
         StringBuilder contenido = new StringBuilder();
 
-        try (BufferedReader br =
-                new BufferedReader(
+        try (BufferedReader br
+                = new BufferedReader(
                         new FileReader("gym_log.txt"))) {
 
             String linea;
