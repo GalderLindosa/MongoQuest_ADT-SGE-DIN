@@ -74,7 +74,7 @@ public class ImplementacionBD {
     private ImplementacionBD() {
         mongoClient = MongoClients.create("mongodb://localhost:27017");
         database = mongoClient.getDatabase("G2_Life");
-        PROFILES = database.getCollection("People");
+        PROFILES = database.getCollection("people");
 
     }
 
@@ -471,16 +471,28 @@ public ArrayList<GymClass> getClassesForUser(String username, String role) {
 }
 
 public void createClass(GymClass gymClass) {
-    
+
     MongoCollection<Document> collection =
             database.getCollection("classes");
 
+    ArrayList<Document> schedules = new ArrayList<>();
+
+    for (Schedule s : gymClass.getSchedule()) {
+
+        schedules.add(
+                new Document("day", s.getDay())
+                .append("time", s.getHour())
+        );
+    }
     Document doc = new Document();
 
     doc.append("_id", gymClass.getId());
     doc.append("class_name", gymClass.getClassName());
-    doc.append("employee_username", gymClass.getEmployeeUsername());
+    doc.append("employee_username",
+            gymClass.getEmployeeUsername());
     doc.append("gym_id", gymClass.getGymId());
+    doc.append("members", gymClass.getMembers());
+    doc.append("schedule", schedules);
 
     collection.insertOne(doc);
 }
@@ -573,4 +585,53 @@ public void removeMemberFromClass(
                         Updates.push("purchases", newId));
         
     }
+    
+    
+   public boolean employeeExists(String username) {
+
+    MongoCollection<Document> collection =
+            database.getCollection("people");
+
+    Document empleado = collection.find(
+            Filters.and(
+                    Filters.eq("username", username),
+                    Filters.eq("role", "employee")
+            )
+    ).first();
+
+    return empleado != null;
+} 
+   public boolean classExists(int classId) {
+
+    MongoCollection<Document> collection =
+            database.getCollection("classes");
+
+    Document doc = collection.find(
+            Filters.eq("_id", classId)
+    ).first();
+
+    return doc != null;
+}
+   public boolean gymExists(int gymId) {
+
+    MongoCollection<Document> collection =
+            database.getCollection("gyms");
+
+    Document doc = collection.find(
+            Filters.eq("_id", gymId)
+    ).first();
+
+    return doc != null;
+}
+   public boolean classNameExists(String className) {
+
+    MongoCollection<Document> collection =
+            database.getCollection("classes");
+
+    Document doc = collection.find(
+            Filters.eq("class_name", className)
+    ).first();
+
+    return doc != null;
+}
 }

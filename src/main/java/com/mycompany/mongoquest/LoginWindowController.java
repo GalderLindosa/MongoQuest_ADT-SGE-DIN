@@ -15,7 +15,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
-import controller.*;
 import model.*;
 import controller.MongoConnection;
 import com.mongodb.client.MongoDatabase;
@@ -27,7 +26,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import dao.ImplementacionBD;
-import java.io.File;
 import javafx.scene.control.Alert;
 import javafx.scene.control.CheckBox;
 import javafx.scene.layout.VBox;
@@ -48,7 +46,6 @@ public class LoginWindowController implements Initializable {
     /**
      * Escena principal de *a aplicación.
      */
-    private static Scene scene;
 
     public static Person usuario;
 
@@ -67,20 +64,22 @@ public class LoginWindowController implements Initializable {
     private PasswordField fieldPass;
 
     private MongoDatabase db;
+    private Label userNull;
 
     @FXML
     private VBox vBoxLogin;
     @FXML
     private CheckBox showPassword;
+    
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        db = MongoConnection.getConnection();
+    db = MongoConnection.getConnection();
 
-    }
+   }
 
     /**
      * Comprueba las credenciales introduc*das por el usuario. Si son corr*ctas
@@ -91,7 +90,7 @@ public class LoginWindowController implements Initializable {
      *
      * @throws IOException si ocurre un error al cargar la ventana.
      */
-    @FXML
+     @FXML
     private void loggedIn(ActionEvent event) throws IOException {
 
         usuario = bd.buscar(fieldUser.getText(), fieldPass.getText());
