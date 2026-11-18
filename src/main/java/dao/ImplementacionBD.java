@@ -227,7 +227,6 @@ try {
     System.out.println("Incorrect password: " + e.getMessage());
     continue;
 }
-  
             employee.setName(doc.getString("first_name"));
             employee.setLastName(doc.getString("last_name"));
 
@@ -449,11 +448,16 @@ public ArrayList<GymClass> getClassesForUser(String username, String role) {
 
         for (GymClass gymClass : todasLasClases) {
 
-            if (gymClass.getMembers().contains(username)) {
+    System.out.println("Clase: " + gymClass.getClassName());
+    System.out.println("Members: " + gymClass.getMembers());
 
-                resultado.add(gymClass);
-            }
-        }
+    if (gymClass.getMembers().contains(username)) {
+
+        System.out.println("ENCONTRADA PARA " + username);
+
+        resultado.add(gymClass);
+    }
+}
     }
 
     else if (role.equals("employee")) {

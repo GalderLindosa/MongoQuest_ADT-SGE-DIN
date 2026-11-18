@@ -69,7 +69,7 @@ public class ScheduleWindowController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
+      
         hourColumn.setCellValueFactory(new PropertyValueFactory<>("hour"));
         mondayColumn.setCellValueFactory(new PropertyValueFactory<>("monday"));
         tuesdayColumn.setCellValueFactory(new PropertyValueFactory<>("tuesday"));
@@ -92,8 +92,7 @@ public class ScheduleWindowController implements Initializable {
 
     private void configurarPermisos() {
 
-        if ("boss".equals(role)) {
-
+        if ("manager".equals(role)) {
             btnCreateClass.setVisible(true);
             btnEditClass.setVisible(true);
             btnDeleteClass.setVisible(true);
@@ -273,8 +272,20 @@ private void createClass() {
     }
 }
  private void cargarHorario() {
+        ArrayList<GymClass> clases;
 
-    ArrayList<GymClass> clases = bd.getGymClasses();
+    if ("member".equals(role) || "employee".equals(role)) {
+        clases = bd.getClassesForUser(username, role);
+    } else {
+        clases = bd.getGymClasses();
+    }
+
+    System.out.println("CLASES CARGADAS: " + clases.size());
+
+    for (GymClass c : clases) {
+        System.out.println(c.getId() + " - " + c.getClassName());
+    }
+    
 
     ScheduleTable.getItems().clear();
 
@@ -430,7 +441,6 @@ private void unsubscribe() {
                 classId,
                 username
         );
-
         cargarHorario();
 
         System.out.println("Successfully unsubscribed from the class");
