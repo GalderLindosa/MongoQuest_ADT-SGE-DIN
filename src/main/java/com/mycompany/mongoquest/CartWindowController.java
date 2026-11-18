@@ -200,7 +200,7 @@ public class CartWindowController implements Initializable {
     private void buy(ActionEvent event) throws java.io.IOException {
         if (!cart.isEmpty()) {
             if (choiceBoxWhere.getValue() == null) {
-                showAlert("Error de compra", "Debes seleccionar un gimnasio donde recoger el pedido.");
+                showAlert("Purchase error", "You must select a gym where you will pick up your order.");
             } else if (p.getBalance() > totalPrice) {
                 implementacion.comprar(
                         cart,
@@ -214,10 +214,10 @@ public class CartWindowController implements Initializable {
                 Stage ventanaActual = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 ventanaActual.close();
             } else {
-                showAlert("Error de compra", "No se puede realizar la compra por falta de fondos.");
+                showAlert("Purchase error", "The purchase cannot be completed due to a lack of funds.");
             }
         } else {
-            showAlert("Error de compra", "No se puede realizar una compra con el carrito vacio.");
+            showAlert("Purchase error", "You cannot make a purchase with an empty cart.");
         }
     }
     
