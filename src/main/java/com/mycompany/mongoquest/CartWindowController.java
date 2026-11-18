@@ -118,7 +118,7 @@ public class CartWindowController implements Initializable {
             textFieldDiscount.setLayoutY(277);
             textFieldDiscount.setPrefWidth(120);
 
-            Button btnDiscount = new Button("Aplicar");
+            Button btnDiscount = new Button("Apply");
             btnDiscount.setLayoutX(560);
             btnDiscount.setLayoutY(277);
 
