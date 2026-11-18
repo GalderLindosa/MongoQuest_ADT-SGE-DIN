@@ -4,7 +4,7 @@
  */
 package com.mycompany.mongoquest;
 
-import controller.GymControlador;
+import dao.ImplementacionBD;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -83,7 +83,7 @@ private PasswordField passField;
  /**
  * Controlador encargado d* la gestión de usuarios.
  */
-private GymControlador cont;
+
 /**
  * Usuario especial utilizado*para la opción de añadir.
  */
@@ -103,6 +103,8 @@ private User añadirUser;
     private TextField passVisibleField;
     @FXML
     private TextField passVisibleField1;
+    
+    private ImplementacionBD bd = ImplementacionBD.getInstance();
    /**
  * Inicializa la ventana cargando todos los usuarios
  * registrados y añadiendo la opción de crear uno nuevo.
@@ -112,13 +114,11 @@ private User añadirUser;
  */
 @Override
 public void initialize(URL url, ResourceBundle rb) {
-    
-        cont = new GymControlador();
         
         añadirUser = new User();
         añadirUser .setUserName("+Añadir");
         
-        for (User e : cont.getUsers()) {
+        for (User e : bd.getUsers()) {
             userList.getItems().add(e);
         }
        userList.getItems().add(añadirUser );
@@ -249,7 +249,7 @@ private void modificarUser() {
                 Optional<ButtonType> resultado = alerta.showAndWait();
 
                 if (resultado.isPresent() && resultado.get() == ButtonType.OK) {
-                    if (cont.eliminarPerson(seleccionado)) {
+                    if (bd.eliminarPerson(seleccionado)) {
                         userList.getItems().remove(seleccionado);
                         mostrarInfo("User deleted from the database");
                         cancelRegistration.setSelected(false);
@@ -284,7 +284,7 @@ private void modificarUser() {
                             seleccionado.setName(nameField.getText());
                             seleccionado.setLastName(surField.getText());
 
-                            if (cont.modificarPerson(seleccionado)) {
+                            if (bd.modificarPerson(seleccionado)) {
                                 mostrarInfo("User updated");
                             } else {
                                 mostrarError("Error updating user");
@@ -365,7 +365,7 @@ private void anadirUser() {
                             mostrarError("Invalid date format.");
                             System.out.print(e);
                         }
-                        if (cont.insertarPerson(nuevo)) {
+                        if (bd.insertarPerson(nuevo)) {
                             userList.getItems().remove(añadirUser);
                             userList.getItems().add(nuevo);
                             userList.getSelectionModel().selectFirst(); //soba?
@@ -388,7 +388,7 @@ private void anadirUser() {
  * @return true si ya existe, false en caso contrario.
  */
 private boolean userNameRepe(String userName) {
-        for (User u : cont.getUsers()) {
+        for (User u : bd.getUsers()) {
              if (u.getUserName().equalsIgnoreCase(userName)) {
                  return true;
              }

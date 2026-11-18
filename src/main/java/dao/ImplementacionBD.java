@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package model;
+package dao;
 
 /*import java.sql.Connection;
 import java.sql.DriverManager;
@@ -35,6 +35,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import model.Boss;
+import model.Employee;
+import model.Gym;
+import model.GymClass;
+import model.Person;
+import model.Product;
+import model.Schedule;
+import model.Training;
+import model.User;
 import org.bson.conversions.Bson;
 
 /**

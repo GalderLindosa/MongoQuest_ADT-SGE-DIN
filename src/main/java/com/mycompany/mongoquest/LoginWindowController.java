@@ -26,7 +26,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import model.ImplementacionBD;
+import dao.ImplementacionBD;
 import java.io.File;
 import javafx.scene.control.Alert;
 import javafx.scene.control.CheckBox;
@@ -68,8 +68,6 @@ public class LoginWindowController implements Initializable {
 
     private MongoDatabase db;
 
-    ImplementacionBD instanceBD = ImplementacionBD.getInstance();
-    GymControlador controlador = new GymControlador();
     @FXML
     private VBox vBoxLogin;
     @FXML

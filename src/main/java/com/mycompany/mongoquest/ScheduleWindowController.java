@@ -17,7 +17,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import model.GymClass;
 
 import model.HorarioTabla;
-import model.ImplementacionBD;
+import dao.ImplementacionBD;
 import model.Schedule;
 
 public class ScheduleWindowController implements Initializable {

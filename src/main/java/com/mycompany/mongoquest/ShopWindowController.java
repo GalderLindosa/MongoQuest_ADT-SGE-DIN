@@ -24,7 +24,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import model.ImplementacionBD;
+import dao.ImplementacionBD;
 import model.Product;
 import org.bson.Document;
 /**
