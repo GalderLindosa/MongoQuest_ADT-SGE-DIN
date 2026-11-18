@@ -63,8 +63,8 @@ private ListView<User> userList;
     
     @FXML
     private TextField userField;
-    @FXML
-    private TextField passField;
+   @FXML
+private PasswordField passField;
     @FXML
     private TextField nameField;
     @FXML
@@ -112,6 +112,7 @@ private User añadirUser;
  */
 @Override
 public void initialize(URL url, ResourceBundle rb) {
+    
         cont = new GymControlador();
         
         añadirUser = new User();
@@ -124,6 +125,12 @@ public void initialize(URL url, ResourceBundle rb) {
        
        addUserButton.setVisible(false);
        modifyUser.setVisible(false);
+       
+        passVisibleField.setVisible(false);
+        passVisibleField.setManaged(false);
+
+        passVisibleField1.setVisible(false);
+        passVisibleField1.setManaged(false);
     }
 /**
  * Muestra un mensaje informativo al usuario.
@@ -149,40 +156,54 @@ private void mostrarError(String msg) {
  * del usuario seleccionado en la lista.
  */
 @FXML
-private void seleccionarUsuario(){
-        User user = userList.getSelectionModel().getSelectedItem();
-        
-        if (user.getUserName().equals("+Añadir") || user == null) { 
-            userField.clear();
-            userField.setEditable(true);
-            passField.clear();
-            passField1.clear();
-            nameField.clear();
-            surField.clear();
-            dniField.clear();
-            dateField.clear();
-            dateField.setText(LocalDate.now().toString());
-            addUserButton.setVisible(true);
-            modifyUser.setVisible(false);
-            cancelRegistration.setVisible(false);
-            
-        }else{
-            addUserButton.setVisible(false);
-            modifyUser.setVisible(true);
-            userField.setText(user.getUserName());
-            userField.setEditable(false); // para que no se pueda moficar 
-            passField.setText(user.getPassword());
-            passField1.setText(user.getPassword());
-            nameField.setText(user.getName());
-            surField.setText(user.getLastName());
-            dniField.setText(user.getDni());
-            dateField.setText(user.getStartDate().toString());
-            cancelRegistration.setVisible(true);
-            cancelRegistration.setSelected(false);
-        }
-        dateField.setEditable(false);
+private void seleccionarUsuario() {
+
+    ocultarContrasenas();
+
+    User user = userList.getSelectionModel().getSelectedItem();
+
+    if (user == null) {
+        return;
     }
-    
+
+    if (user.getUserName().equals("+Añadir")) {
+        userField.clear();
+        userField.setEditable(true);
+        passField.clear();
+        passField1.clear();
+        nameField.clear();
+        surField.clear();
+        dniField.clear();
+        dateField.clear();
+
+        dateField.setText(LocalDate.now().toString());
+
+        addUserButton.setVisible(true);
+        modifyUser.setVisible(false);
+        cancelRegistration.setVisible(false);
+
+    } else {
+
+        addUserButton.setVisible(false);
+        modifyUser.setVisible(true);
+
+        userField.setText(user.getUserName());
+        userField.setEditable(false);
+
+        passField.setText(user.getPassword());
+        passField1.setText(user.getPassword());
+
+        nameField.setText(user.getName());
+        surField.setText(user.getLastName());
+        dniField.setText(user.getDni());
+        dateField.setText(user.getStartDate().toString());
+
+        cancelRegistration.setVisible(true);
+        cancelRegistration.setSelected(false);
+    }
+
+    dateField.setEditable(false);
+}
 /**
  * Comprueba si los datos introducidos son iguales
  * a los del usuario seleccionado.
@@ -204,7 +225,16 @@ private boolean igual(User user) {
  */
 @FXML
 private void modificarUser() {
-        User seleccionado = userList.getSelectionModel().getSelectedItem();
+
+    if (verContra1.isSelected()) {
+        passField.setText(passVisibleField.getText());
+    }
+
+    if (verContra2.isSelected()) {
+        passField1.setText(passVisibleField1.getText());
+    }
+
+    User seleccionado = userList.getSelectionModel().getSelectedItem();
         boolean dniCorrecto = true, passwordCorrecto=true;
 
         if (userField.getText().isBlank()) {
@@ -385,6 +415,7 @@ private boolean contrasIguales(String cont1, String cont2){
  */
 @FXML
 private void verContrasena() {
+    System.out.println("Click en mostrar contraseña");
         if (verContra1.isSelected()) {
             passVisibleField.setText(passField.getText());
             passVisibleField.setVisible(true);
@@ -405,6 +436,7 @@ private void verContrasena() {
  */
 @FXML
 private void verContrasena1() {
+    System.out.println("Click en mostrar contraseña");
         if (verContra2.isSelected()) {
             passVisibleField1.setText(passField1.getText());
             passVisibleField1.setVisible(true);

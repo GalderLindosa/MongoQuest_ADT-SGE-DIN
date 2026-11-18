@@ -13,23 +13,23 @@ import java.util.ArrayList;
 public class Schedule {
     
     private String day;
-    private int hour;
+    private String hour;
 
-    public Schedule(String day, int hour) {
+    public Schedule(String day, String hour) {
         this.day = day;
         this.hour = hour;
     }
     
     public Schedule() {
         this.day = "";
-        this.hour = 0;
+        this.hour = "";
     }
 
     public String getDay() {
         return day;
     }
 
-    public int getHour() {
+    public String getHour() {
         return hour;
     }
 
@@ -37,7 +37,7 @@ public class Schedule {
         this.day = day;
     }
 
-    public void setHour(int hour) {
+    public void setHour(String hour) {
         this.hour = hour;
     }
 

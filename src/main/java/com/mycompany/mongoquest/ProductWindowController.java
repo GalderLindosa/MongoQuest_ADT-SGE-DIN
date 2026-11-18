@@ -64,7 +64,6 @@ private Spinner<Integer> amountToBuy;
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        //productimg.setImage(ShopWindowController.pr.getImage()); <---- Para cuando tengamos imagenes
         lblProductnName.setText(ShopWindowController.pr.getName());
         lblProductPrice.setText(Float.toString(ShopWindowController.pr.getPrice()) + "€");
         lblProductAmount.setText("Stock: " + Integer.toString(ShopWindowController.pr.getStock()));

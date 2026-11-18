@@ -93,7 +93,6 @@ public class ImplementacionBD {
     public Person buscar(String usuario, String contrasena) {
         Person persona = null;
         List<Integer> classes;
-        List<Object> workouts = new ArrayList<>();
         List<Document> workoutsDoc = new ArrayList<>();
         List<Training> workouts = new ArrayList<>();
         try {
@@ -203,14 +202,23 @@ public class ImplementacionBD {
             System.out.println(doc);
             Employee employee = new Employee();
 
-            employee.setUserName(doc.getString("username"));
-            try {
-                employee.setPassword(doc.getString("password"));
-            } catch (PasswordException e) {
-                System.out.println("Incorrect password: " + e.getMessage());
-                continue; // pasa al siguiente usuario
-            }
 
+           employee.setUserName(doc.getString("username"));
+
+try {
+    String passwordMongo = doc.getString("password");
+
+    System.out.println("Mongo: " + passwordMongo);
+
+    employee.setPassword(passwordMongo);
+
+    System.out.println("Objeto: " + employee.getPassword());
+
+} catch (PasswordException e) {
+    System.out.println("Incorrect password: " + e.getMessage());
+    continue;
+}
+  
             employee.setName(doc.getString("first_name"));
             employee.setLastName(doc.getString("last_name"));
 
@@ -350,6 +358,173 @@ public class ImplementacionBD {
         
         return lista;
     }
+
+public ArrayList<GymClass> getGymClasses() { //en general no mira el user 
+
+    ArrayList<GymClass> clases = new ArrayList<>();
+
+    MongoCollection<Document> collection = database.getCollection("classes");
+
+    for (Document doc : collection.find()) {
+
+        int id = doc.getInteger("_id");
+        String className = doc.getString("class_name");
+        String employeeUsername = doc.getString("employee_username");
+        int gymId = doc.getInteger("gym_id");
+
+        ArrayList<String> members = new ArrayList<>();
+
+        List<String> membersList =
+                (List<String>) doc.get("members");
+
+        if (membersList != null) {
+            members.addAll(membersList);
+        }
+
+        ArrayList<Schedule> schedules = new ArrayList<>();
+
+        List<Document> scheduleDocs =
+                (List<Document>) doc.get("schedule");
+
+        for (Document s : scheduleDocs) {
+           String day = s.getString("day");
+           String hour = s.getString("time");
+           schedules.add(new Schedule(day, hour));
+        }
+
+        GymClass gymClass = new GymClass(
+                id,
+                className,
+                schedules,
+                employeeUsername,
+                members,
+                gymId
+        );
+
+        clases.add(gymClass);
+    }
+
+    return clases;
+}
+public ArrayList<Integer> getClassIdsEmployee(String username) {
+
+    ArrayList<Integer> classIds = new ArrayList<>();
+
+    MongoCollection<Document> collection =
+            database.getCollection("employees");
+
+    Document employee =
+            collection.find(Filters.eq("username", username)).first();
+
+    if (employee != null) {
+
+        List<Document> classes =
+                (List<Document>) employee.get("classes");
+
+        for (Document c : classes) {
+
+            classIds.add(c.getInteger("class_id"));
+        }
+    }
+
+    return classIds;
+}
+
+public ArrayList<GymClass> getClassesForUser(String username, String role) {
+
+    ArrayList<GymClass> resultado = new ArrayList<>();
+
+    ArrayList<GymClass> todasLasClases = getGymClasses();
+
+    if (role.equals("member")) {
+
+        for (GymClass gymClass : todasLasClases) {
+
+            if (gymClass.getMembers().contains(username)) {
+
+                resultado.add(gymClass);
+            }
+        }
+    }
+
+    else if (role.equals("employee")) {
+
+        for (GymClass gymClass : todasLasClases) {
+
+            if (gymClass.getEmployeeUsername().equals(username)) {
+
+                resultado.add(gymClass);
+            }
+        }
+    }
+
+    return resultado;
+}
+
+public void createClass(GymClass gymClass) {
+    
+    MongoCollection<Document> collection =
+            database.getCollection("classes");
+
+    Document doc = new Document();
+
+    doc.append("_id", gymClass.getId());
+    doc.append("class_name", gymClass.getClassName());
+    doc.append("employee_username", gymClass.getEmployeeUsername());
+    doc.append("gym_id", gymClass.getGymId());
+
+    collection.insertOne(doc);
+}
+
+public void deleteClass(int classId) {
+
+    MongoCollection<Document> collection =
+            database.getCollection("classes");
+
+    collection.deleteOne(
+            Filters.eq("_id", classId)
+    );
+}
+
+public void updateClassTrainer(int classId,
+                               String employeeUsername) {
+
+    MongoCollection<Document> collection =
+            database.getCollection("classes");
+
+    collection.updateOne(
+            Filters.eq("_id", classId),
+            Updates.set(
+                    "employee_username",
+                    employeeUsername
+            )
+    );
+}
+public void addMemberToClass(
+        int classId,
+        String username) {
+
+    MongoCollection<Document> collection =
+            database.getCollection("classes");
+
+    collection.updateOne(
+            Filters.eq("_id", classId),
+            Updates.push("members", username)
+    );
+}
+
+public void removeMemberFromClass(
+        int classId,
+        String username) {
+
+    MongoCollection<Document> collection =
+            database.getCollection("classes");
+
+    collection.updateOne(
+            Filters.eq("_id", classId),
+            Updates.pull("members", username)
+    );
+}
     
     /**
      * Obtiene todos los productos almacenados en la colección de productos.
@@ -388,54 +563,5 @@ public class ImplementacionBD {
         person.updateOne(Filters.eq("username", userName),
                         Updates.push("purchases", newId));
         
-    }
-
-    /**
-     * Obtiene todas las clases registradas en la base de datos.
-     *
-     * @return lista de clases del gimnasio.
-     */
-    public ArrayList<GymClass> getAllClasses() {
-
-        ArrayList<GymClass> classes = new ArrayList<>();
-
-        MongoCollection<Document> collection
-                = database.getCollection("classes");
-
-        FindIterable<Document> documents = collection.find();
-
-        for (Document doc : documents) {
-
-            ArrayList<Schedule> schedules = new ArrayList<>();
-
-            List<Document> scheduleDocuments
-                    = doc.getList("schedule", Document.class);
-
-            for (Document s : scheduleDocuments) {
-
-                Schedule schedule = new Schedule(
-                        s.getString("day"),
-                        s.getInteger("hour")
-                );
-
-                schedules.add(schedule);
-            }
-
-            ArrayList<String> members
-                    = new ArrayList<>(doc.getList("members", String.class));
-
-            GymClass gymClass = new GymClass(
-                    doc.getInteger("_id"),
-                    doc.getString("class_name"),
-                    schedules,
-                    doc.getString("employee_username"),
-                    members,
-                    doc.getInteger("gym_id")
-            );
-
-            classes.add(gymClass);
-        }
-
-        return classes;
     }
 }

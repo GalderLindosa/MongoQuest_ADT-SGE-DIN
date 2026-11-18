@@ -19,7 +19,7 @@ public class App extends Application {
         scene = new Scene(loadFXML("LoginWindow"),650, 500);
         stage.setScene(scene);
         stage.show(); 
-        stage.setTitle("Inicio de sesion");
+        stage.setTitle("Login ");
         
     }
 

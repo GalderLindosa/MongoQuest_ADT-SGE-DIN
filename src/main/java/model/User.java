@@ -19,7 +19,7 @@ public class User extends Person implements WithCart{
     private List<Integer> classes;
     private HashMap<Product, Integer> cart;
 
-    public User(List<Object> trainings, List<Integer> classes, String userName, 
+    public User(List<Training> trainings, List<Integer> classes, String userName, 
                 String password, String name, String lastName, String dni, float balance, LocalDate start) {
         super(userName, password, name, lastName, dni, balance,start);
         this.trainings = trainings;
@@ -28,7 +28,6 @@ public class User extends Person implements WithCart{
     }
     
 
-    
     public User() {
         super();
         this.trainings = new ArrayList<>();
@@ -64,6 +63,6 @@ public class User extends Person implements WithCart{
 
     @Override
     public String toString() {
-        return "User{" + "trainings=" + trainings + ", classes=" + classes + ", cart=" + cart + '}';
+        return getUserName();
     }
 }

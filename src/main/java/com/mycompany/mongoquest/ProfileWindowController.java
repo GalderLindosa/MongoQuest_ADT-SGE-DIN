@@ -80,6 +80,9 @@ public class ProfileWindowController implements Initializable {
     private Button button3;
     @FXML
     private Button button4;
+    
+    private String username;
+    private String role;
 
    /**
  * Inicializa la ventana cargando los datos del usuario
@@ -166,27 +169,48 @@ public void setButtons(Person person) throws IOException {
  *
  * @throws IOException si ocurre un error al cargar la ventana.
  */
-public void setClassButton() throws IOException{
+public void setClassButton() throws IOException {
 
-        button2.setText("Classes");
-        button2.setOnAction(new EventHandler<ActionEvent>() {
-            private Scene scene;
-            Stage stage = new Stage();
+    button2.setText("Classes");
 
-            public void handle(ActionEvent e) {
+    button2.setOnAction(new EventHandler<ActionEvent>() {
 
-                try {
-                    scene = new Scene(loadFXML("HorarioWindow"), 819, 400);
-                } catch (IOException ex) {
-                    System.getLogger(ProfileWindowController.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        @Override
+        public void handle(ActionEvent e) {
+
+            try {
+                FXMLLoader loader = new FXMLLoader(
+                        App.class.getResource("ScheduleWindow.fxml")
+                );
+
+                Scene scene = new Scene(loader.load(), 819, 400);
+
+                ScheduleWindowController controller =
+                        loader.getController();
+
+                String username = LoginWindowController.usuario.getUserName();
+                String role = "";
+
+                if (LoginWindowController.usuario instanceof User) {
+                    role = "member";
+                } else if (LoginWindowController.usuario instanceof Employee) {
+                    role = "employee";
+                } else if (LoginWindowController.usuario instanceof Boss) {
+                    role = "boss";
                 }
-                stage.setScene(scene);
 
-                stage.show();
+                controller.setUser(username, role);
+                Stage stage = new Stage();
+                stage.setScene(scene);
                 stage.setTitle("Classes");
+                stage.show();
+
+            } catch (IOException ex) {
+                ex.printStackTrace();
             }
-        });
-    }
+        }
+    });
+}
 /**
  * Configura el botón de acceso a la tienda.
  *
@@ -223,7 +247,9 @@ public void setShopButton() throws IOException{
             public void handle(ActionEvent e) {
 
                 try {
+
                     scene = new Scene(loadFXML("WorkoutWindow"), 819, 400);
+
                 } catch (IOException ex) {
                     System.getLogger(ProfileWindowController.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
                 }

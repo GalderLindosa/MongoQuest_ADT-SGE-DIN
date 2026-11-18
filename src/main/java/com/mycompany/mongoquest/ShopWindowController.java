@@ -75,6 +75,7 @@ public class ShopWindowController implements Initializable  {
         }
     }
 
+
     /**
      * Crea la tarjeta gráfica asociada a un producto.
      *
@@ -88,7 +89,6 @@ public class ShopWindowController implements Initializable  {
         imagen.setFitHeight(120);
         imagen.setPreserveRatio(true);
 
-        // Nombre y precio
         Label lblNombre = new Label(p.getName());
         lblNombre.setStyle("-fx-font-weight: bold;");
         lblNombre.setWrapText(true);
@@ -96,7 +96,6 @@ public class ShopWindowController implements Initializable  {
 
         Label lblPrecio = new Label(p.getPrice() + " €");
 
-        // Contenedor de la tarjeta
         VBox tarjeta = new VBox(8, imagen, lblNombre, lblPrecio); //Se añaden los elementos del producto al VBox (la tarjetita del producto
         tarjeta.setAlignment(Pos.CENTER);
         tarjeta.setPadding(new Insets(10));
@@ -108,12 +107,7 @@ public class ShopWindowController implements Initializable  {
 
         // Toda la tarjeta clickable
         tarjeta.setOnMouseClicked(e -> product(p));
-        /*tarjeta.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent e) {
-                product(p);
-            }
-        });*/
+        
         
         return tarjeta;
     }
@@ -125,10 +119,9 @@ public class ShopWindowController implements Initializable  {
      */
     private Image cargarImagen(Product p) {
         try {
-            // Si guardas la ruta/URL como String en el producto:
-            return null ;//new Image(p.getImage(), 120, 120, true, true, true);  <---- Para cuando tengamos imagenes de productos
+               return null ;
         } catch (Exception ex) {
-            return null ;//new Image(getClass().getResourceAsStream("sin-imagen.png"));
+            return null ;
         }
     }
     
