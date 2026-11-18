@@ -142,6 +142,12 @@ public class ProductWindowController implements Initializable {
         ventanaActual.close();
     }
    
+   /**
+     * Crea una alerta.
+     *
+     * @param titulo titulo de la alerta.
+     * @param mensaje mensaje de la alerta.
+     */
    private void showAlert(String titulo, String mensaje) {
         Alert alert = new Alert(AlertType.WARNING);
         alert.setTitle(titulo);

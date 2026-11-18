@@ -196,6 +196,12 @@ public class CartWindowController implements Initializable {
         ventanaActual.close();
     }
     
+     /**
+     * Cierra la ventana actual, vuelve a la pantalla anterior, y efectua la compra.
+     *
+     * @param event evento generado al pulsar el botón volver.
+     * @throws java.io.IOException si ocurre un error durante el proceso.
+     */
     @FXML
     private void buy(ActionEvent event) throws java.io.IOException {
         if (!cart.isEmpty()) {
@@ -221,6 +227,12 @@ public class CartWindowController implements Initializable {
         }
     }
     
+    /**
+     * Crea una alerta.
+     *
+     * @param titulo titulo de la alerta.
+     * @param mensaje mensaje de la alerta.
+     */
     private void showAlert(String titulo, String mensaje) {
         Alert alert = new Alert(AlertType.WARNING);
         alert.setTitle(titulo);
@@ -229,6 +241,10 @@ public class CartWindowController implements Initializable {
         alert.showAndWait();
     }
     
+    /**
+     * Aplica el descuento al trabajador.
+     *
+     */
     private void applyDiscount() {
         Employee empleado = (Employee) p;
 

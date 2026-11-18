@@ -62,6 +62,13 @@ public class PurchaseHistoryController implements Initializable {
         }
     }
 
+    /**
+     * Crea la tarjeta gráfica asociada a una compra.
+     *
+     * @param compras lista de compras del usuario.
+     * @param products mapa de productos comprados..
+     * @return lista de tarjetas visuales de los productos.
+     */
     private List<VBox> crearTarjetasCompra(List<ShoppingHistory> compras, Map<Integer, Product> products) {
         ArrayList<VBox> lista = new ArrayList<>();
 
@@ -99,6 +106,12 @@ public class PurchaseHistoryController implements Initializable {
         return lista;
     }
 
+    /**
+     * Cierra la ventana actual y vuelve a la pantalla anterior.
+     *
+     * @param event evento generado al pulsar el botón volver.
+     * @throws java.io.IOException si ocurre un error durante el proceso.
+     */
     @FXML
     private void goBack(ActionEvent event) throws java.io.IOException {        
         Stage ventanaActual = (Stage) ((Node) event.getSource()).getScene().getWindow();

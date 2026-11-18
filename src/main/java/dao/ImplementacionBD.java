@@ -398,6 +398,11 @@ public class ImplementacionBD {
         return lista;
     }
 
+    /**
+     * Obtiene todos los gimnasios de la base de datos.
+     *
+     * @return lista de gimnasios.
+     */
     public ArrayList<Gym> obtenerGimnasios() {
         MongoCollection<Document> gyms = MongoConnection.getConnection().getCollection("gyms");
         ArrayList<Gym> lista = new ArrayList<>();
@@ -730,6 +735,11 @@ public class ImplementacionBD {
 
     }
 
+    /**
+     * Devuelve una lista de historial.
+     *
+     * @param userName del que hay que obtener el historial.
+     */
     public List<ShoppingHistory> findPurchasesByUser(String username) {
         MongoCollection<Document> purchases = MongoConnection.getConnection().getCollection("purchases");
 
@@ -755,6 +765,11 @@ public class ImplementacionBD {
         return result;
     }
 
+    /**
+     * Devuelve un Map de productos.
+     *
+     * @return Map<Integer, Product>.
+     */
     public Map<Integer, Product> loadProducts() {
         MongoCollection<Document> products = MongoConnection.getConnection().getCollection("products");
 
@@ -769,6 +784,12 @@ public class ImplementacionBD {
         return map;
     }
 
+    /**
+     * Busca un empleado.
+     *
+     * @param username busca por nombre de usuario
+     * @return true si se ha encontrado.
+     */
     public boolean employeeExists(String username) {
 
         MongoCollection<Document> collection
@@ -796,6 +817,12 @@ public class ImplementacionBD {
         return doc != null;
     }
 
+    /**
+     * Busca un gimnasio.
+     *
+     * @param gymId busca por id de gimnasio
+     * @return true si se ha encontrado.
+     */
     public boolean gymExists(int gymId) {
 
         MongoCollection<Document> collection
@@ -841,6 +868,13 @@ public class ImplementacionBD {
         return contenido.toString();
     }
     
+    /**
+     * Actualiza el stock.
+     *
+     * @param productId busca por id de producto.
+     * @param cantidad cantidad a restar.
+     * @return true si se ha modificado.
+     */
     public boolean decreaseProductStock(int productId, int cantidad) {
 
         MongoCollection<Document> productos = MongoConnection.getConnection().getCollection("products");
