@@ -131,9 +131,6 @@ public class ShopWindowController implements Initializable  {
         Stage stage = new Stage();
         stage.setScene(new Scene(root));
         stage.show();
-        
-        Stage ventanaActual = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        ventanaActual.close();
     }
     
     /**

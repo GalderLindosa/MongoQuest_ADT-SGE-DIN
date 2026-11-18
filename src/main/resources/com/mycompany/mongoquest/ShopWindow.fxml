@@ -9,8 +9,8 @@
 <AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.mycompany.mongoquest.ShopWindowController">
    <children>
 
-      <Button fx:id="btnHistorial" layoutX="489.0" layoutY="23.0" mnemonicParsing="false" onAction="#history" text="Historial" />
-      <Button fx:id="btnCarrito" layoutX="562.0" layoutY="23.0" mnemonicParsing="false" onAction="#cart" text="Carrito" />
+      <Button fx:id="btnHistorial" layoutX="489.0" layoutY="23.0" mnemonicParsing="false" onAction="#history" text="History" />
+      <Button fx:id="btnCarrito" layoutX="562.0" layoutY="23.0" mnemonicParsing="false" onAction="#cart" prefHeight="25.0" prefWidth="62.0" text="Cart" />
 
       <ScrollPane fx:id="scrollPane" fitToWidth="true" hbarPolicy="NEVER" layoutY="63.0" prefHeight="337.0" prefWidth="640.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="63.0">
          <content>
