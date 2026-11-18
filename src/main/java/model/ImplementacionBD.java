@@ -65,7 +65,7 @@ public class ImplementacionBD {
     private ImplementacionBD() {
         mongoClient = MongoClients.create("mongodb://localhost:27017");
         database = mongoClient.getDatabase("G2_Life");
-        PROFILES = database.getCollection("People");
+        PROFILES = database.getCollection("people");
 
     }
 

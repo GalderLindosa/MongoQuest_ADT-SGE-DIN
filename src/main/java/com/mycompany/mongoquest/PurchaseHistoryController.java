@@ -36,7 +36,7 @@ import model.ShoppingHistory;
  */
 public class PurchaseHistoryController implements Initializable {
 
-    Person p = LoginWindowController.usuario;
+    Person pr = LoginWindowController.usuario;
     ImplementacionBD implementacion = ImplementacionBD.getInstance();
 
     @FXML
@@ -48,7 +48,7 @@ public class PurchaseHistoryController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        List<ShoppingHistory> compras = implementacion.findPurchasesByUser(p.getUserName());
+        List<ShoppingHistory> compras = implementacion.findPurchasesByUser(pr.getUserName());
 
         if (compras.isEmpty()) {
             contenedorCompras.getChildren().add(new Label("Todavía no has hecho ninguna compra"));
