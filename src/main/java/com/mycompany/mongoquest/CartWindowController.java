@@ -173,6 +173,7 @@ public class CartWindowController implements Initializable {
      * @param event evento generado al pulsar el botón volver.
      * @throws java.io.IOException si ocurre un error durante el proceso.
      */
+    @FXML
     private void goBack(ActionEvent event) throws java.io.IOException {        
         Stage ventanaActual = (Stage) ((Node) event.getSource()).getScene().getWindow();
         ventanaActual.close();

@@ -16,11 +16,11 @@ public class ShoppingHistory {
     private int shoppingHistoryId;
     private int gymId;
     private String userName;
-    private int totalPrice;
+    private float totalPrice;
     private LocalDate date;
     private HashMap<Integer, Integer> products;
 
-    public ShoppingHistory(int shoppingHistoryId, int gymId, String userName, int totalPrice, LocalDate date, HashMap<Integer, Integer> products) {
+    public ShoppingHistory(int shoppingHistoryId, int gymId, String userName, float totalPrice, LocalDate date, HashMap<Integer, Integer> products) {
         this.shoppingHistoryId = shoppingHistoryId;
         this.gymId = gymId;
         this.userName = userName;
@@ -50,7 +50,7 @@ public class ShoppingHistory {
         return userName;
     }
 
-    public int getTotalPrice() {
+    public float getTotalPrice() {
         return totalPrice;
     }
 
@@ -74,7 +74,7 @@ public class ShoppingHistory {
         this.userName = userName;
     }
 
-    public void setTotalPrice(int totalPrice) {
+    public void setTotalPrice(float totalPrice) {
         this.totalPrice = totalPrice;
     }
 

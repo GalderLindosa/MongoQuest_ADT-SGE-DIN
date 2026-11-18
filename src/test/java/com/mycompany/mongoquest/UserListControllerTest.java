@@ -1,6 +1,5 @@
 
 package com.mycompany.mongoquest;
-package com.mycompany.mongoquest;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
