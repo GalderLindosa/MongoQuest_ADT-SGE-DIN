@@ -30,19 +30,31 @@ import com.mongodb.client.model.Projections;
 import com.mongodb.client.model.Sorts;
 import com.mongodb.client.model.Updates;
 import controller.MongoConnection;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import log.Logger;
+import model.Boss;
 import model.Boss;
 import model.Employee;
+import model.Employee;
+import model.Gym;
 import model.Gym;
 import model.GymClass;
+import model.GymClass;
+import model.Person;
 import model.Person;
 import model.Product;
+import model.Product;
+import model.Schedule;
 import model.Schedule;
 import model.Training;
+import model.Training;
+import model.User;
 import model.User;
 import org.bson.conversions.Bson;
 
@@ -108,10 +120,15 @@ public class ImplementacionBD {
             Document doc = PROFILES.find(and(eq("username", usuario), eq("password", contrasena))).first();
 
             if (doc == null || !contrasena.equals(doc.getString("password"))) {
+               Logger.log("FAILED LOGIN","User=" + usuario);
                 return null;
             } else {
                 String type = doc.getString("role");
-
+                Logger.log(
+                    "LOGIN",
+                    "User=" + usuario
+                    + ", Role=" + type
+                );
                 Date fechaMongo = doc.getDate("start_date");
                 LocalDate fecha = null;
 
@@ -141,6 +158,7 @@ public class ImplementacionBD {
                     return new Boss(doc.getInteger("gym_id"), doc.getString("username"), doc.getString("password"), doc.getString("first_name"), doc.getString("last_name"), doc.getString("national_id"), doc.getInteger("balance"), fecha);
                 } else if ("employee".equals(type)) {
                     classes = doc.getList("classes", Integer.class);
+                   
                     return new Employee(classes, doc.getString("discount_code"), doc.getInteger("gym_id"), doc.getString("username"), doc.getString("password"), doc.getString("first_name"), doc.getString("last_name"), doc.getString("national_id"), doc.getInteger("balance"), fecha);
                 }
             }
@@ -273,9 +291,17 @@ try {
             }
 
             collection.insertOne(doc);
+            Logger.log("INSERT PERSON",
+                    "User=" + p.getUserName()
+                            + ", Role=" + (p instanceof Employee ? "employee" : "member")
+            );
             return true;
 
         } catch (Exception e) {
+         Logger.log(
+        "ERROR",
+        "Metodo=insertarPerson, Error=" + e.getMessage()
+            );
             e.printStackTrace();
             return false;
         }
@@ -299,8 +325,13 @@ try {
                     Filters.eq("username", p.getUserName()), //busca el que tenga ese userName 
                     new Document("$set", cambios) //y con el $set actualiza los campo que le digo pero que deje lo demas igual 
             );
+            Logger.log("UPDATE PERSON","User=" + p.getUserName());
             return true;
         } catch (Exception e) {
+            Logger.log(
+        "ERROR",
+        "Metodo=modificarPerson, Error=" + e.getMessage()
+            );
             e.printStackTrace();
             return false;
         }
@@ -324,10 +355,14 @@ try {
 
             System.out.println("Documentos eliminados: "
                     + resultado.getDeletedCount());
-
+            Logger.log("DELETE PERSON","User=" + p.getUserName());
             return resultado.getDeletedCount() > 0;
 
         } catch (Exception e) {
+            Logger.log(
+        "ERROR",
+        "Metodo=eliminarPerson, Error=" + e.getMessage()
+            );
             e.printStackTrace();
             return false;
         }
@@ -499,6 +534,7 @@ public void createClass(GymClass gymClass) {
     doc.append("schedule", schedules);
 
     collection.insertOne(doc);
+    Logger.log("CREATE CLASS","ID=" + gymClass.getId()+ ", Name=" + gymClass.getClassName()+ ", Trainer=" + gymClass.getEmployeeUsername());
 }
 
 public void deleteClass(int classId) {
@@ -509,6 +545,10 @@ public void deleteClass(int classId) {
     collection.deleteOne(
             Filters.eq("_id", classId)
     );
+    Logger.log(
+    "DELETE CLASS",
+    "ID=" + classId
+);
 }
 
 public void updateClassTrainer(int classId,
@@ -524,6 +564,11 @@ public void updateClassTrainer(int classId,
                     employeeUsername
             )
     );
+    Logger.log(
+    "UPDATE TRAINER",
+    "Class=" + classId
+    + ", Trainer=" + employeeUsername
+);
 }
 public void addMemberToClass(
         int classId,
@@ -536,6 +581,11 @@ public void addMemberToClass(
             Filters.eq("_id", classId),
             Updates.push("members", username)
     );
+    Logger.log(
+    "ADD MEMBER",
+    "User=" + username
+    + ", Class=" + classId
+);
 }
 
 public void removeMemberFromClass(
@@ -549,6 +599,11 @@ public void removeMemberFromClass(
             Filters.eq("_id", classId),
             Updates.pull("members", username)
     );
+    Logger.log(
+    "REMOVE MEMBER",
+    "User=" + username
+    + ", Class=" + classId
+);
 }
     
     /**
@@ -587,6 +642,8 @@ public void removeMemberFromClass(
 
         person.updateOne(Filters.eq("username", userName),
                         Updates.push("purchases", newId));
+        Logger.log("PURCHASE","User=" + userName+ ", Gym=" + gymID+ ", Total=" + totalPrice
+);
         
     }
     
@@ -637,5 +694,26 @@ public void removeMemberFromClass(
     ).first();
 
     return doc != null;
+}
+   
+   public String leerLog() {
+
+    StringBuilder contenido = new StringBuilder();
+
+    try (BufferedReader br =
+            new BufferedReader(
+                    new FileReader("gym_log.txt"))) {
+
+        String linea;
+
+        while ((linea = br.readLine()) != null) {
+            contenido.append(linea).append("\n");
+        }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+
+    return contenido.toString();
 }
 }
