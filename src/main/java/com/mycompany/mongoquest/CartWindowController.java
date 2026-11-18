@@ -32,7 +32,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.Employee;
 import model.Gym;
-import model.ImplementacionBD;
+import dao.ImplementacionBD;
 import model.Person;
 import model.Product;
 import model.WithCart;

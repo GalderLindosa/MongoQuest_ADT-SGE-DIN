@@ -62,7 +62,8 @@
 
                 <Button fx:id="btnCreateClass"
                         text="Create Class"
-                        onAction="#createClass"/>
+                        onAction="#createClass"
+                        />
 
                 <Button fx:id="btnEditClass"
                         text="Edit Class"

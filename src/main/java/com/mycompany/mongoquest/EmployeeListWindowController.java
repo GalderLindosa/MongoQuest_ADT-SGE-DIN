@@ -4,7 +4,7 @@
  */
 package com.mycompany.mongoquest;
 
-import controller.GymControlador;
+import dao.ImplementacionBD;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -73,7 +73,7 @@ public class EmployeeListWindowController implements Initializable {
     @FXML
     private RadioButton cancelRegistration;
     
-    private GymControlador cont;
+  
     private Employee anadirEmployee;
     
     @FXML
@@ -92,6 +92,8 @@ public class EmployeeListWindowController implements Initializable {
     private TextField passVisibleField;
     @FXML
     private TextField passVisibleField1;
+    
+    private ImplementacionBD bd = ImplementacionBD.getInstance();
 /**
  * Inicializa la ventana cargando los empleados
  * existentes y la opción de añadir uno nuevo.
@@ -101,12 +103,12 @@ public class EmployeeListWindowController implements Initializable {
  */
 @Override
 public void initialize(URL url, ResourceBundle rb) {
-        cont = new GymControlador();
+        
         
         anadirEmployee = new Employee();
         anadirEmployee .setUserName("+Añadir");
         
-        for (Employee e : cont.getEmployee()) {
+        for (Employee e : bd.getEmployee()) {
             employeeList.getItems().add(e);
         }
        employeeList.getItems().add(anadirEmployee );
@@ -243,7 +245,7 @@ System.out.println("Nombre Campo: " + nameField.getText());
                    System.out.println("Usuario seleccionado: "
                 + seleccionado.getUserName());
                    
-                    boolean eliminado = cont.eliminarPerson(seleccionado);
+                    boolean eliminado = bd.eliminarPerson(seleccionado);
 
                     System.out.println("Resultado eliminación: " + eliminado);
                     if (eliminado) {
@@ -283,7 +285,7 @@ System.out.println("Nombre Campo: " + nameField.getText());
                             seleccionado.setName(nameField.getText());
                             seleccionado.setLastName(surField.getText());
 
-                            if (cont.modificarPerson(seleccionado)) {
+                            if (bd.modificarPerson(seleccionado)) {
                                 mostrarInfo("User updated");
                             } else {
                                 mostrarError("Error updating user");
@@ -364,7 +366,7 @@ private void anadirPerson() {
                         mostrarError("Error en la fecha");
                         System.out.print(e);
                     }
-                    if (cont.insertarPerson(nuevo)) {
+                    if (bd.insertarPerson(nuevo)) {
                         employeeList.getItems().remove(anadirEmployee);
                         employeeList.getItems().add(nuevo);
                         employeeList.getSelectionModel().selectFirst();
@@ -388,7 +390,7 @@ private void anadirPerson() {
  * @return true si ya existe.
  */
 private boolean userNameRepe(String userName) {
-        for (Employee u : cont.getEmployee()) {
+        for (Employee u : bd.getEmployee()) {
              if (u.getUserName().equalsIgnoreCase(userName)) {
                  return true;
              }
