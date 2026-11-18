@@ -202,7 +202,7 @@ public void setClassButton() throws IOException {
                 } else if (LoginWindowController.usuario instanceof Employee) {
                     role = "employee";
                 } else if (LoginWindowController.usuario instanceof Boss) {
-                    role = "boss";
+                    role = "manager";
                 }
 
                 controller.setUser(username, role);
@@ -277,7 +277,7 @@ public void setShopButton() throws IOException{
             public void handle(ActionEvent e) {
 
                 try {
-                    scene = new Scene(loadFXML("UserListWindow"), 819, 400);
+                    scene = new Scene(loadFXML("UserListWindow"), 790, 500);
                 } catch (IOException ex) {
                     System.getLogger(ProfileWindowController.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
                 }
@@ -299,7 +299,7 @@ public void setShopButton() throws IOException{
             public void handle(ActionEvent e) {
 
                 try {
-                    scene = new Scene(loadFXML("EmployeeListWindow"), 819, 400);
+                    scene = new Scene(loadFXML("EmployeeListWindow"), 790, 500);
                 } catch (IOException ex) {
                     System.getLogger(ProfileWindowController.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
                 }
